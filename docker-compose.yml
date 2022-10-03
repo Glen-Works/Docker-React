@@ -13,7 +13,7 @@ services:
       - -c
       - |
         npm install
-    #     yarn build
+        yarn build
     # tail -f /dev/null
     # stdin_open: true
     # tty: true
