@@ -1,0 +1,19 @@
+version: "3.7"
+services:
+  react_build:
+    build:
+      context: ./react
+      dockerfile: Dockerfile
+    container_name: react_compiler
+    volumes:
+      - ./cdn_client_react/:/opt/cdn_client_react
+    working_dir: "/opt/cdn_client_react"
+    command:
+      - /bin/bash
+      - -c
+      - |
+        npm install
+    #     yarn build
+    # tail -f /dev/null
+    # stdin_open: true
+    # tty: true

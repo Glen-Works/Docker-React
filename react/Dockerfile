@@ -1,0 +1,8 @@
+FROM centos:7
+CMD [ "/usr/sbin/init" ]
+RUN curl --silent --location https://rpm.nodesource.com/setup_14.x | bash -
+RUN yum install nodejs -y
+RUN curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | tee /etc/yum.repos.d/yarn.repo
+RUN rpm --import https://dl.yarnpkg.com/rpm/pubkey.gpg
+RUN yum install yarn -y
+RUN npm i @ant-design/pro-cli -g -y
