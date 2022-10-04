@@ -1,8 +1,4 @@
-/lambda/
-/scripts
-/config
-.history
-public
+# .estlintignore file
 dist
-.umi
-mock
+build
+node_modules/

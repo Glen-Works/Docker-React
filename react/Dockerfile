@@ -8,4 +8,3 @@ RUN curl --silent --location https://rpm.nodesource.com/setup_18.x | bash -
 RUN yum install nodejs -y
 RUN curl -sL https://dl.yarnpkg.com/rpm/yarn.repo | tee /etc/yum.repos.d/yarn.repo
 RUN yum -y install yarn
-RUN npm i @ant-design/pro-cli -g

@@ -12,7 +12,7 @@ services:
       - /bin/bash
       - -c
       - |
-        npm install
+        yarn install
         yarn build
     # tail -f /dev/null
     # stdin_open: true

@@ -1,41 +1,44 @@
-import { GithubOutlined } from '@ant-design/icons';
-import { DefaultFooter } from '@ant-design/pro-components';
-import { useIntl } from 'umi';
+import { Box, Container, Link, Typography, styled } from '@mui/material';
 
-const Footer: React.FC = () => {
-  const intl = useIntl();
-  const defaultMessage = intl.formatMessage({
-    id: 'app.copyright.produced',
-    defaultMessage: '蚂蚁集团体验技术部出品',
-  });
+const FooterWrapper = styled(Container)(
+  ({ theme }) => `
+        margin-top: ${theme.spacing(4)};
+`
+);
 
-  const currentYear = new Date().getFullYear();
-
+function Footer() {
   return (
-    <DefaultFooter
-      copyright={`${currentYear} ${defaultMessage}`}
-      links={[
-        {
-          key: 'Ant Design Pro',
-          title: 'Ant Design Pro',
-          href: 'https://pro.ant.design',
-          blankTarget: true,
-        },
-        {
-          key: 'github',
-          title: <GithubOutlined />,
-          href: 'https://github.com/ant-design/ant-design-pro',
-          blankTarget: true,
-        },
-        {
-          key: 'Ant Design',
-          title: 'Ant Design',
-          href: 'https://ant.design',
-          blankTarget: true,
-        },
-      ]}
-    />
+    <FooterWrapper className="footer-wrapper">
+      <Box
+        pb={4}
+        display={{ xs: 'block', md: 'flex' }}
+        alignItems="center"
+        textAlign={{ xs: 'center', md: 'left' }}
+        justifyContent="space-between"
+      >
+        <Box>
+          <Typography variant="subtitle1">
+            &copy; 2022 - Tokyo Free White React Typescript Admin Dashboard
+          </Typography>
+        </Box>
+        <Typography
+          sx={{
+            pt: { xs: 2, md: 0 }
+          }}
+          variant="subtitle1"
+        >
+          Crafted by{' '}
+          <Link
+            href="https://bloomui.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            BloomUI.com
+          </Link>
+        </Typography>
+      </Box>
+    </FooterWrapper>
   );
-};
+}
 
 export default Footer;
