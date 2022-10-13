@@ -27,7 +27,7 @@ instance.interceptors.request.use(config => {
     return err;
 })
 
-interface AxiosResponse<T = any, D = any> {
+export interface AxiosResponse<T = any, D = any> {
     data: T;
     msg?: string;
     success: boolean;
@@ -39,7 +39,7 @@ interface AxiosResponse<T = any, D = any> {
 }
 
 instance.interceptors.response.use(response => {
-    let data: AxiosResponse = { ...response.data, msg: response.data.msg, success: response.data.success };
+    let data: AxiosResponse = { ...response.data, msg: response.data.message, success: response.data.success };
     return data;
     // }, err => {
     //     if (err && err.response) {
@@ -97,5 +97,5 @@ export interface PageMutlSearchData {
 
 
 export const setAuthHeader = (auth: Auth) => {
-    return { headers: { Authorization: "Bearer " + auth.authorityJwt?.token } };
+    return { headers: { Authorization: "Bearer " + auth.authorisation?.accessToken } };
 }

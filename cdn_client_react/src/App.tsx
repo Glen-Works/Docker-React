@@ -5,18 +5,23 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
 import { CssBaseline } from '@mui/material';
+import UseAuthState from 'src/contexts/AuthContext';
 import ThemeProvider from './theme/ThemeProvider';
 
 function App() {
   const content = useRoutes(router);
 
   return (
+
     <ThemeProvider>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <CssBaseline />
-        {content}
+        <UseAuthState>
+          {content}
+        </UseAuthState>
       </LocalizationProvider>
     </ThemeProvider>
+
   );
 }
 export default App;

@@ -1,18 +1,18 @@
-import { Suspense, lazy } from 'react';
-import { Navigate } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
 import { RouteObject } from 'react-router';
+import { Navigate } from 'react-router-dom';
 
-import SidebarLayout from 'src/layouts/SidebarLayout';
 import BaseLayout from 'src/layouts/BaseLayout';
+import SidebarLayout from 'src/layouts/SidebarLayout';
 
 import SuspenseLoader from 'src/components/SuspenseLoader';
 
 const Loader = (Component) => (props) =>
-  (
-    <Suspense fallback={<SuspenseLoader />}>
-      <Component {...props} />
-    </Suspense>
-  );
+(
+  <Suspense fallback={<SuspenseLoader />}>
+    <Component {...props} />
+  </Suspense>
+);
 
 // Pages
 
