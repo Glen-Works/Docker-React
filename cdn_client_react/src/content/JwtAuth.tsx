@@ -1,6 +1,7 @@
 
+import { Box } from '@mui/material';
 import { FC, ReactNode, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useAuthStateContext } from "src/contexts/AuthContext";
 import { jwtAuthMiddleware } from "src/middleware/jwtAuthMiddleware";
 import { removeCookieUserInfo } from "src/stores/reducer/authReducer";
@@ -30,8 +31,10 @@ const JwtAuth: FC<JwtAuthBaseChild> = ({ children }) => {
     }, []);
 
     return (
-        // { children || <Outlet />}
-        <main>{children}</main>
+        <Box>
+            {children || <Outlet />}
+        </Box>
+        // <main>{children}</main>
     )
 }
 export default JwtAuth;
