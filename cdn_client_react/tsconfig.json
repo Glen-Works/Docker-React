@@ -1,29 +1,6 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    // "paths": {
-    //   "@components/*": [
-    //     "src/components/*"
-    //   ],
-    //   "@contexts/*": [
-    //     "src/contexts/*"
-    //   ],
-    //   "@content/*": [
-    //     "src/content/*"
-    //   ],
-    //   "@layouts/*": [
-    //     "src/layouts/*"
-    //   ],
-    //   "@models/*": [
-    //     "src/models/*"
-    //   ],
-    //   "@stores/*": [
-    //     "src/stores/*"
-    //   ],
-    //   "@theme/*": [
-    //     "src/theme/*"
-    //   ],
-    // },
     "target": "es6",
     "lib": [
       "dom",
