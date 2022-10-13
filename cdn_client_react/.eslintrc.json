@@ -18,7 +18,10 @@
     "project": "./tsconfig.json",
     "sourceType": "module"
   },
-  "plugins": ["react", "@typescript-eslint"],
+  "plugins": [
+    "react",
+    "@typescript-eslint"
+  ],
   "settings": {
     "react": {
       "pragma": "React",
@@ -57,13 +60,29 @@
       }
     ],
     "indent": "off",
-    "@typescript-eslint/indent": [0],
+    "@typescript-eslint/indent": [
+      0
+    ],
     "no-use-before-define": "off",
-    "@typescript-eslint/no-use-before-define": ["off"],
-    "@typescript-eslint/no-unused-vars": ["off"],
-    "@typescript-eslint/no-shadow": ["off"],
-    "@typescript-eslint/dot-notation": ["off"],
-    "react/prop-types": ["off"],
-    "@typescript-eslint/naming-convention": ["off"]
+    "@typescript-eslint/no-use-before-define": [
+      "off"
+    ],
+    "@typescript-eslint/no-unused-vars": [
+      "off"
+    ],
+    "@typescript-eslint/no-shadow": [
+      "off"
+    ],
+    "@typescript-eslint/dot-notation": [
+      "off"
+    ],
+    "react/prop-types": [
+      "off"
+    ],
+    "@typescript-eslint/naming-convention": [
+      "off"
+    ],
+    "no-return-await": "off",
+    "@typescript-eslint/return-await": "warn"
   }
 }
