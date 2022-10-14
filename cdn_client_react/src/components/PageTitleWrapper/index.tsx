@@ -1,6 +1,6 @@
-import { FC, ReactNode } from 'react';
-import PropTypes from 'prop-types';
 import { Box, Container, styled } from '@mui/material';
+import PropTypes from 'prop-types';
+import { FC, ReactNode } from 'react';
 
 const PageTitle = styled(Box)(
   ({ theme }) => `
@@ -15,7 +15,7 @@ interface PageTitleWrapperProps {
 const PageTitleWrapper: FC<PageTitleWrapperProps> = ({ children }) => {
   return (
     <PageTitle className="MuiPageTitle-wrapper">
-      <Container maxWidth="lg">{children}</Container>
+      <Container maxWidth="xl"> {children}</Container>
     </PageTitle>
   );
 };

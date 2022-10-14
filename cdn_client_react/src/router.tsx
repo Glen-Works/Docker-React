@@ -1,10 +1,10 @@
 import { lazy, Suspense } from 'react';
 import { RouteObject } from 'react-router';
 import { Navigate } from 'react-router-dom';
-
-import BaseLayout from 'src/layouts/BaseLayout';
-
 import SuspenseLoader from 'src/components/SuspenseLoader';
+import BaseLayout from 'src/layouts/BaseLayout';
+import Transactions from './content/applications/Transactions';
+import SidebarLayout from './layouts/SidebarLayout';
 
 const Loader = (Component) => (props) =>
 (
@@ -12,10 +12,6 @@ const Loader = (Component) => (props) =>
     <Component {...props} />
   </Suspense>
 );
-
-// Pages
-const Overview = Loader(lazy(() => import('src/content/overview')));
-
 // Status
 const Status404 = Loader(
   lazy(() => import('src/content/pages/Status/Status404'))
@@ -37,7 +33,7 @@ const SignInSide = Loader(
 
 //jwt Auth
 const JwtAuth = Loader(
-  lazy(() => import('src/content/JwtAuth'))
+  lazy(() => import('src/content/Auth'))
 );
 
 const routes: RouteObject[] = [
@@ -46,8 +42,20 @@ const routes: RouteObject[] = [
     element: <SignInSide />
   },
   {
-    path: '500',
-    element: <Status500 />
+    path: '',
+    element: <Navigate to="404" replace />
+  },
+  {
+    path: '404',
+    element: <Status404 />
+  },
+  {
+    path: 'maintenance',
+    element: <StatusMaintenance />
+  },
+  {
+    path: 'coming-soon',
+    element: <StatusComingSoon />
   },
   {
     path: '',
@@ -58,32 +66,22 @@ const routes: RouteObject[] = [
         element: <JwtAuth />, // jwt權限 判斷
         children: [
           {
-            path: '/',
-            element: <Overview />
-          },
-          {
-            path: 'overview',
-            element: <Navigate to="/" replace />
-          },
-          {
             path: '',
-            element: <Navigate to="404" replace />
-          },
-          {
-            path: '404',
-            element: <Status404 />
-          },
-          {
-            path: 'maintenance',
-            element: <StatusMaintenance />
-          },
-          {
-            path: 'coming-soon',
-            element: <StatusComingSoon />
-          },
-          {
-            path: '*',
-            element: <Status404 />
+            element: <SidebarLayout />,
+            children: [
+              {
+                path: 'transactions',
+                element: <Transactions />
+              },
+              {
+                path: '500',
+                element: <Status500 />
+              },
+              {
+                path: '*',
+                element: <Status404 />
+              }
+            ]
           }
         ]
       }

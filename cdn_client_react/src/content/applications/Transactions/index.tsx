@@ -1,12 +1,24 @@
+import { Container, Grid } from '@mui/material';
+import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import PageHeader from './PageHeader';
-import PageTitleWrapper from 'src/components/PageTitleWrapper';
-import { Grid, Container } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import Footer from 'src/components/Footer';
+import PageTitleWrapper from 'src/components/PageTitleWrapper';
+import { useAuthStateContext } from 'src/contexts/AuthContext';
+import PageHeader from './PageHeader';
 
 import RecentOrders from './RecentOrders';
 
 function ApplicationsTransactions() {
+
+  let navigate = useNavigate();
+  const { state } = useAuthStateContext();
+  useEffect(() => {
+
+  }, []);
+
+
+
   return (
     <>
       <Helmet>
@@ -15,7 +27,7 @@ function ApplicationsTransactions() {
       <PageTitleWrapper>
         <PageHeader />
       </PageTitleWrapper>
-      <Container maxWidth="lg">
+      <Container maxWidth="xl">
         <Grid
           container
           direction="row"
