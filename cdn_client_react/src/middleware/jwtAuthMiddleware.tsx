@@ -1,9 +1,10 @@
 
 import api, { AxiosResponse, setAuthHeader } from "src/api/baseApi";
-import { Auth, setCookieUserInfo } from "src/stores/reducer/authReducer";
+import SetUserInfo from "src/stores/action/actions";
+import { Auth } from "src/stores/reducer/authReducer";
 
 // 身份驗證
-export const jwtAuthMiddleware = async (auth: Auth): Promise<boolean> => {
+export const jwtAuthMiddleware = async (dispatch, auth: Auth): Promise<boolean> => {
 
     //無 token 踢出
     var jwt: string = auth.authorisation?.accessToken ?? "";
@@ -18,7 +19,7 @@ export const jwtAuthMiddleware = async (auth: Auth): Promise<boolean> => {
     var expireCheck: boolean = jwtExpireCheck(jwt);
     if (!expireCheck) {
         //refresh token 更新
-        if (await jwtRefesh(auth)) {
+        if (await jwtRefesh(dispatch, auth)) {
             // 成功  return true;
             console.log("refresh token 更新成功");
             return true;
@@ -33,14 +34,14 @@ export const jwtAuthMiddleware = async (auth: Auth): Promise<boolean> => {
 }
 
 //更新 時間
-export async function jwtRefesh(auth: Auth): Promise<boolean> {
+export async function jwtRefesh(dispatch, auth: Auth): Promise<boolean> {
 
     console.log({ params: { refreshtoken: auth.authorisation?.refreshToken } });
     var apiData = api("get", "/jwt", { params: { refreshtoken: auth.authorisation?.refreshToken } }, null);
     var returnBool = false
     try {
         return await apiData?.then(res => {
-            setCookieUserInfo({ ...res.data, type: 'LOGIN_SUCCESS' });
+            SetUserInfo(dispatch, res.data);
             console.log("更新 jwt成功");
             return Promise.resolve(true);
         }).catch(error => {
