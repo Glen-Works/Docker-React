@@ -1,4 +1,4 @@
-import { Box, Container, Link, Typography, styled } from '@mui/material';
+import { Box, Container, styled, Typography } from '@mui/material';
 
 const FooterWrapper = styled(Container)(
   ({ theme }) => `
@@ -11,31 +11,15 @@ function Footer() {
     <FooterWrapper className="footer-wrapper">
       <Box
         pb={4}
-        display={{ xs: 'block', md: 'flex' }}
+        display={{ xs: 'block' }}
         alignItems="center"
-        textAlign={{ xs: 'center', md: 'left' }}
-        justifyContent="space-between"
+        textAlign={{ xs: 'center' }}
       >
-        <Box>
+        <Box alignItems="center">
           <Typography variant="subtitle1">
-            &copy; 2022 - Tokyo Free White React Typescript Admin Dashboard
+            &copy; 2022 - wvt Dashboard
           </Typography>
         </Box>
-        <Typography
-          sx={{
-            pt: { xs: 2, md: 0 }
-          }}
-          variant="subtitle1"
-        >
-          Crafted by{' '}
-          <Link
-            href="https://bloomui.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            BloomUI.com
-          </Link>
-        </Typography>
       </Box>
     </FooterWrapper>
   );

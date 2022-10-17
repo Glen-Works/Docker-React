@@ -17,8 +17,6 @@ function ApplicationsTransactions() {
 
   }, []);
 
-
-
   return (
     <>
       <Helmet>
@@ -27,7 +25,7 @@ function ApplicationsTransactions() {
       <PageTitleWrapper>
         <PageHeader />
       </PageTitleWrapper>
-      <Container maxWidth="xl">
+      <Container maxWidth={false} >
         <Grid
           container
           direction="row"

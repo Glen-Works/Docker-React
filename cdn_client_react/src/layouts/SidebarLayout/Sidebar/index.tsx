@@ -46,7 +46,7 @@ function Sidebar() {
         }}
       >
         <Scrollbar>
-          <Box mt={3}>
+          <Box alignItems="center">
             <Box
               mx={2}
               sx={{

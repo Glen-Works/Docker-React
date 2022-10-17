@@ -72,7 +72,7 @@ export default function SignInSide() {
 
     loginApi(loginData)?.then(res => {
       SetUserInfo(dispatch, res.data);
-      return navigate("/maintenance");
+      return navigate("/transactions");
     }).catch(error => {
       console.log("error:" + error.response?.data?.msg);
     });
