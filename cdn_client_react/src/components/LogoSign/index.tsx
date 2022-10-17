@@ -6,7 +6,6 @@ const LogoWrapper = styled(Link)(
         color: ${theme.palette.text.primary};
         display: flex;
         text-decoration: none;
-        width: 53px;
         margin: 0 auto;
         font-weight: ${theme.typography.fontWeightBold};
 `
@@ -16,6 +15,7 @@ const LogoSignWrapper = styled(Box)(
   () => `
         width: 120px;
         height: 38px;
+        background-image: url('https://upload.wikimedia.org/wikipedia/en/6/62/Kermit_the_Frog.jpg');
 `
 );
 
@@ -30,7 +30,7 @@ const TooltipWrapper = styled(({ className, ...props }: TooltipProps) => (
     fontWeight: 'bold',
     borderRadius: theme.general.borderRadiusSm,
     boxShadow:
-      '0 .2rem .8rem rgba(7,9,25,.18), 0 .08rem .15rem rgba(7,9,25,.15)'
+      '0 .2rem .8rem rgba(7,9,25,.18), 0 .08rem .15rem rgba(7,9,25,.15)',
   },
   [`& .${tooltipClasses.arrow}`]: {
     color: theme.colors.alpha.trueWhite[100]
@@ -45,9 +45,8 @@ function Logo() {
       title="wvt Dashboard"
       arrow
     >
-      <LogoWrapper to="/transactions">
-
-        <LogoSignWrapper justifyContent="center">
+      <LogoWrapper to="/transactions" >
+        <LogoSignWrapper component={"span"} >
         </LogoSignWrapper>
       </LogoWrapper>
     </TooltipWrapper>

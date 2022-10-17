@@ -46,19 +46,16 @@ function Sidebar() {
         }}
       >
         <Scrollbar>
-          <Box alignItems="center">
-            <Box
-              mx={2}
-              sx={{
-                width: 52
-              }}
-            >
-              <Logo />
-            </Box>
+          <Box
+            sx={{ mt: theme.spacing(2) }}
+            display="flex"
+            justifyContent="center"
+            alignItems="center">
+            <Logo />
           </Box>
           <Divider
             sx={{
-              mt: theme.spacing(3),
+              mt: theme.spacing(2),
               mx: theme.spacing(2),
               background: theme.colors.alpha.trueWhite[10]
             }}

@@ -1,5 +1,5 @@
-import { alpha, createTheme, lighten, darken } from '@mui/material';
 import '@mui/lab/themeAugmentation';
+import { alpha, createTheme, darken, lighten } from '@mui/material';
 
 const themeColors = {
   primary: '#5569ff',
@@ -905,9 +905,9 @@ export const PureLightTheme = createTheme({
         },
         root: {
           '.MuiAutocomplete-inputRoot.MuiOutlinedInput-root .MuiAutocomplete-endAdornment':
-            {
-              right: 14
-            }
+          {
+            right: 14
+          }
         },
         clearIndicator: {
           background: colors.error.lighter,
