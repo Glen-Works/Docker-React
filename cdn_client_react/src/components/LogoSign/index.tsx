@@ -1,4 +1,4 @@
-import { Box, styled, Tooltip, tooltipClasses, TooltipProps, useTheme } from '@mui/material';
+import { Box, styled, Tooltip, tooltipClasses, TooltipProps, useTheme, CardMedia } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 const LogoWrapper = styled(Link)(
@@ -10,15 +10,6 @@ const LogoWrapper = styled(Link)(
         font-weight: ${theme.typography.fontWeightBold};
 `
 );
-
-const LogoSignWrapper = styled(Box)(
-  () => `
-        width: 120px;
-        height: 38px;
-        background-image: url('https://upload.wikimedia.org/wikipedia/en/6/62/Kermit_the_Frog.jpg');
-`
-);
-
 
 const TooltipWrapper = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -46,8 +37,12 @@ function Logo() {
       arrow
     >
       <LogoWrapper to="/transactions" >
-        <LogoSignWrapper component={"span"} >
-        </LogoSignWrapper>
+        <CardMedia
+          component="img"
+          height="100"
+          image="/static/images/logo/wvt.png"
+          alt=""
+        />
       </LogoWrapper>
     </TooltipWrapper>
   );
