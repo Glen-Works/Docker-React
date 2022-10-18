@@ -72,7 +72,7 @@ export default function SignInSide() {
 
     loginApi(loginData)?.then(res => {
       SetUserInfo(dispatch, res.data);
-      return navigate("/transactions");
+      return navigate("/SampleDatatable");
     }).catch(error => {
       console.log("error:" + error.response?.data?.msg);
     });
