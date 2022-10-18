@@ -8,7 +8,7 @@ import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import PageHeader from './PageHeader';
 
-import MUIDataTable from "mui-datatables";
+import MUIDataTable from "@types/mui-datatables";
 
 import createCache from "@emotion/cache";
 import RecentOrders from './RecentOrders';
