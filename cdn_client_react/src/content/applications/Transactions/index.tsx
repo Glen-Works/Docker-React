@@ -1,5 +1,5 @@
 import { Container, Grid } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, Theme, ThemeProvider } from '@mui/material/styles';
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
@@ -12,6 +12,35 @@ import MUIDataTable from "mui-datatables";
 
 import createCache from "@emotion/cache";
 import RecentOrders from './RecentOrders';
+
+declare module '@mui/material/styles' {
+  interface Components {
+    [key: string]: any
+  }
+}
+
+declare module '@mui/material/styles' {
+  interface Theme {
+    MUIDataTableBodyCell?: {
+      styleOverrides: {
+        root?: {
+          backgroundColor: String,
+        },
+      },
+    }
+  }
+  // allow configuration using `createTheme`
+  interface ThemeOptions {
+    MUIDataTableBodyCell?: {
+      styleOverrides: {
+        root?: {
+          backgroundColor: String,
+        },
+      },
+    }
+
+  }
+}
 
 function ApplicationsTransactions() {
 
@@ -91,13 +120,32 @@ function ApplicationsTransactions() {
         >
           <Grid item xs={12}>
             {/* <CacheProvider value={muiCache}> */}
-            <ThemeProvider theme={createTheme()}>
+
+            <ThemeProvider theme={(baseTheme: Theme) =>
+              createTheme({
+                ...baseTheme,
+                components: {
+                  ...baseTheme.components,
+                  MUIDataTableBodyCell: {
+                    styleOverrides: {
+                      root: {
+                        backgroundColor: '#FF0000',
+                      },
+                    },
+                  },
+                },
+              })
+            }>
+
+              {/* <ThemeProvider theme={createTheme()}> */}
+
               <MUIDataTable
                 title={"Employee List"}
                 data={data}
                 columns={columns}
                 options={options}
               />
+              {/* </ThemeProvider> */}
             </ThemeProvider>
             {/* </CacheProvider> */}
             <RecentOrders />
