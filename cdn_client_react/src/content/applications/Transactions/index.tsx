@@ -1,46 +1,15 @@
 import { Container, Grid } from '@mui/material';
-import { createTheme, Theme, ThemeProvider } from '@mui/material/styles';
+import MUIDataTable, { MUIDataTableOptions } from "mui-datatables";
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
+import DataTableThemeProvider from 'src/components/DataTableTheme';
+import getTextLabels from 'src/components/DataTableTheme/TextLabels';
 import Footer from 'src/components/Footer';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import PageHeader from './PageHeader';
-
-import MUIDataTable from "@types/mui-datatables";
-
-import createCache from "@emotion/cache";
 import RecentOrders from './RecentOrders';
-
-declare module '@mui/material/styles' {
-  interface Components {
-    [key: string]: any
-  }
-}
-
-declare module '@mui/material/styles' {
-  interface Theme {
-    MUIDataTableBodyCell?: {
-      styleOverrides: {
-        root?: {
-          backgroundColor: String,
-        },
-      },
-    }
-  }
-  // allow configuration using `createTheme`
-  interface ThemeOptions {
-    MUIDataTableBodyCell?: {
-      styleOverrides: {
-        root?: {
-          backgroundColor: String,
-        },
-      },
-    }
-
-  }
-}
 
 function ApplicationsTransactions() {
 
@@ -92,15 +61,12 @@ function ApplicationsTransactions() {
     { name: "James Houston", company: "Test Corp", city: "Dallas", state: "TX" },
   ];
 
-  const options = {
-    filterType: 'checkbox',
-    sort: true,
+  const options: MUIDataTableOptions = {
+    search: false,
+    print: false,
+    filter: false,
+    textLabels: getTextLabels()
   };
-
-  const muiCache = createCache({
-    "key": "mui",
-    "prepend": true
-  });
 
   return (
     <>
@@ -119,35 +85,14 @@ function ApplicationsTransactions() {
           spacing={3}
         >
           <Grid item xs={12}>
-            {/* <CacheProvider value={muiCache}> */}
-
-            <ThemeProvider theme={(baseTheme: Theme) =>
-              createTheme({
-                ...baseTheme,
-                components: {
-                  ...baseTheme.components,
-                  MUIDataTableBodyCell: {
-                    styleOverrides: {
-                      root: {
-                        backgroundColor: '#FF0000',
-                      },
-                    },
-                  },
-                },
-              })
-            }>
-
-              {/* <ThemeProvider theme={createTheme()}> */}
-
+            <DataTableThemeProvider>
               <MUIDataTable
                 title={"Employee List"}
                 data={data}
                 columns={columns}
                 options={options}
               />
-              {/* </ThemeProvider> */}
-            </ThemeProvider>
-            {/* </CacheProvider> */}
+            </DataTableThemeProvider>
             <RecentOrders />
           </Grid>
         </Grid>
