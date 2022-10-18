@@ -8,7 +8,7 @@ import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import PageHeader from './PageHeader';
 
-import MUIDataTable from "@types/mui-datatables";
+import MUIDataTable,{ MUIDataTableOptions } from "mui-datatables";
 
 import createCache from "@emotion/cache";
 import RecentOrders from './RecentOrders';
@@ -92,7 +92,7 @@ function ApplicationsTransactions() {
     { name: "James Houston", company: "Test Corp", city: "Dallas", state: "TX" },
   ];
 
-  const options = {
+  const options: MUIDataTableOptions = {
     filterType: 'checkbox',
     sort: true,
   };
