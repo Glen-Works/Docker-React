@@ -9,6 +9,8 @@ import Footer from 'src/components/Footer';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import PageHeader from './PageHeader';
+
+
 import RecentOrders from './RecentOrders';
 
 function ApplicationsTransactions() {
