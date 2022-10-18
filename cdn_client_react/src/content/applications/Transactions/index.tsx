@@ -3,7 +3,7 @@ import MUIDataTable, { MUIDataTableOptions } from "mui-datatables";
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
-import DataTableThemeProvider from 'src/components/DataTableTheme';
+import DataTableThemeProvider from 'src/components/DataTableTheme/DataTableThemeProvider';
 import getTextLabels from 'src/components/DataTableTheme/TextLabels';
 import Footer from 'src/components/Footer';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
@@ -11,7 +11,6 @@ import { useAuthStateContext } from 'src/contexts/AuthContext';
 import PageHeader from './PageHeader';
 
 
-import RecentOrders from './RecentOrders';
 
 function ApplicationsTransactions() {
 
@@ -67,7 +66,25 @@ function ApplicationsTransactions() {
     search: false,
     print: false,
     filter: false,
-    textLabels: getTextLabels()
+    textLabels: getTextLabels(),
+    serverSide: true,
+    onTableChange: (action, tableState) => {
+      console.log(action, tableState);
+
+      // a developer could react to change on an action basis or
+      // examine the state as a whole and do whatever they want
+
+      switch (action) {
+        case 'changePage':
+          this.changePage(tableState.page, tableState.sortOrder);
+          break;
+        case 'sort':
+          this.sort(tableState.page, tableState.sortOrder);
+          break;
+        default:
+          console.log('action not handled.');
+      }
+    },
   };
 
   return (
@@ -95,7 +112,7 @@ function ApplicationsTransactions() {
                 options={options}
               />
             </DataTableThemeProvider>
-            <RecentOrders />
+            {/* <RecentOrders /> */}
           </Grid>
         </Grid>
       </Container>
