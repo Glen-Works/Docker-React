@@ -8,11 +8,10 @@ import getTextLabels from 'src/components/DataTableTheme/TextLabels';
 import Footer from 'src/components/Footer';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
-import PageHeader from './PageHeader';
+import PageHeader from '../PageBase/PageHeader';
 
 
-
-function ApplicationsTransactions() {
+function SampleDatatable() {
 
   let navigate = useNavigate();
   const { state } = useAuthStateContext();
@@ -112,7 +111,6 @@ function ApplicationsTransactions() {
                 options={options}
               />
             </DataTableThemeProvider>
-            {/* <RecentOrders /> */}
           </Grid>
         </Grid>
       </Container>
@@ -121,4 +119,4 @@ function ApplicationsTransactions() {
   );
 }
 
-export default ApplicationsTransactions;
+export default SampleDatatable;

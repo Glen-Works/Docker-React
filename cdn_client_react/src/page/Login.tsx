@@ -55,7 +55,7 @@ export default function SignInSide() {
       //判斷 是否已登入
       const check = await jwtValidate(state);
       if (check == true) {
-        navigate('/maintenance');
+        navigate('/SampleDatatable');
       }
     };
     fetchData();

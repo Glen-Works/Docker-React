@@ -11,7 +11,7 @@ interface JwtAuthBaseChild {
 }
 
 
-const JwtAuth: FC<JwtAuthBaseChild> = ({ children }) => {
+const AuthLayout: FC<JwtAuthBaseChild> = ({ children }) => {
 
     let navigate = useNavigate();
     const { dispatch, state } = useAuthStateContext();
@@ -37,4 +37,4 @@ const JwtAuth: FC<JwtAuthBaseChild> = ({ children }) => {
         // <main>{children}</main>
     )
 }
-export default JwtAuth;
+export default AuthLayout;

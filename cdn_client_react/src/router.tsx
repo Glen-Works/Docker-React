@@ -3,7 +3,6 @@ import { RouteObject } from 'react-router';
 import { Navigate } from 'react-router-dom';
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import BaseLayout from 'src/layouts/BaseLayout';
-import Transactions from './content/applications/Transactions';
 import SidebarLayout from './layouts/SidebarLayout';
 
 const Loader = (Component) => (props) =>
@@ -14,26 +13,36 @@ const Loader = (Component) => (props) =>
 );
 // Status
 const Status404 = Loader(
-  lazy(() => import('src/content/pages/Status/Status404'))
+  lazy(() => import('src/page/Status/Status404'))
 );
 const Status500 = Loader(
-  lazy(() => import('src/content/pages/Status/Status500'))
+  lazy(() => import('src/page/Status/Status500'))
 );
 const StatusComingSoon = Loader(
-  lazy(() => import('src/content/pages/Status/ComingSoon'))
+  lazy(() => import('src/page/Status/ComingSoon'))
 );
 const StatusMaintenance = Loader(
-  lazy(() => import('src/content/pages/Status/Maintenance'))
+  lazy(() => import('src/page/Status/Maintenance'))
 );
 
 //login
 const SignInSide = Loader(
-  lazy(() => import('src/content/Login'))
+  lazy(() => import('src/page/Login'))
 );
 
-//jwt Auth
-const JwtAuth = Loader(
-  lazy(() => import('src/content/Auth'))
+//AuthLayout
+const AuthLayout = Loader(
+  lazy(() => import('src/layouts/AuthLayout'))
+);
+
+// SampleContent
+const SampleContent = Loader(
+  lazy(() => import('src/page/Sample/SampleContent'))
+);
+
+// SampleDatatable
+const SampleDatatable = Loader(
+  lazy(() => import('src/page/Sample/SampleDatatable'))
 );
 
 const routes: RouteObject[] = [
@@ -63,15 +72,19 @@ const routes: RouteObject[] = [
     children: [
       {
         path: '',
-        element: <JwtAuth />, // jwt權限 判斷
+        element: <AuthLayout />, // jwt權限 判斷
         children: [
           {
             path: '',
             element: <SidebarLayout />,
             children: [
               {
-                path: 'transactions',
-                element: <Transactions />
+                path: 'SampleContent',
+                element: <SampleContent />
+              },
+              {
+                path: 'SampleDatatable',
+                element: <SampleDatatable />
               },
               {
                 path: '500',
