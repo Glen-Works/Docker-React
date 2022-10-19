@@ -42,7 +42,7 @@ const DataTableThemeProvider: React.FC = (props) => {
             MUIDataTableBodyCell: {
               styleOverrides: {
                 root: {
-                  backgroundColor: '#FF0000',
+                  backgroundColor: '#FFFFFF',
                 },
               },
             },

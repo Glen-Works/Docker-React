@@ -40,9 +40,9 @@ const SampleContent = Loader(
   lazy(() => import('src/page/Sample/SampleContent'))
 );
 
-// SampleDatatable
-const SampleDatatable = Loader(
-  lazy(() => import('src/page/Sample/SampleDatatable'))
+// SampleDataTable
+const SampleDataTable = Loader(
+  lazy(() => import('src/page/Sample/SampleDataTable'))
 );
 
 const routes: RouteObject[] = [
@@ -79,12 +79,12 @@ const routes: RouteObject[] = [
             element: <SidebarLayout />,
             children: [
               {
-                path: 'SampleContent',
+                path: 'samplecontent',
                 element: <SampleContent />
               },
               {
-                path: 'SampleDatatable',
-                element: <SampleDatatable />
+                path: 'sampledatatable',
+                element: <SampleDataTable />
               },
               {
                 path: '500',

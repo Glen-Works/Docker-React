@@ -1,15 +1,24 @@
 import axios, { AxiosRequestConfig, AxiosResponseHeaders } from 'axios';
 import { Auth } from "src/stores/reducer/authReducer";
 
-const TIMEOUT = Number(process.env.TIME_OUT) ?? 5000;
+const timeout = Number(process.env.TIME_OUT) ?? 5000;
 const devBaseURL = process.env.REACT_APP_DEVELOP_BASEURL;
 const proBaseURL = process.env.REACT_APP_PRODUCTION_BASE_URL;
 const baseUrl = process.env.NODE_ENV === 'development' ? devBaseURL : proBaseURL;
 
 export const fileURL = baseUrl + "/file/"
+// export const pageSizeOption = process.env.REACT_APP_PAGE_SIZE.split(",").map(Number);
+
+export const pageSizeOption = () => {
+    let pageSize: string = process.env.REACT_APP_PAGE_SIZE;
+    return pageSize.split(",").map(Number);
+};
+
+export const pageSizeDefault = Number(process.env.REACT_APP_PAGE_SIZE_DEFAULT);
+
 
 const instance = axios.create({
-    timeout: TIMEOUT,
+    timeout: timeout,
     baseURL: baseUrl,
     headers: { 'Content-Type': 'application/json' },
     responseType: 'json',
@@ -86,16 +95,12 @@ export default function api(method: string, url: string, config: AxiosRequestCon
     }
 }
 
-export interface PageMutlSearchData {
-    count: number,
-    page: number,
-    pageLimit: number,
-    sort: string,
-    sortColumn: string,
-    search?: any,
-}
-
-
 export const setAuthHeader = (auth: Auth) => {
-    return { headers: { Authorization: "Bearer " + auth.authorisation?.accessToken } };
+    return { headers: { Authorization: "Bearer " + auth.authorisation?.accessToken ?? "" } };
 }
+
+//todo Language set by sidebar , need use useReducer setting in header
+// type Language = 'En' | 'Tw';
+// export const setAuthHeader = (auth: Auth, lang: Language = "Tw") => {
+//     return { headers: { Authorization: "Bearer " + auth.authorisation?.accessToken ?? "", Language: lang } };
+// }
