@@ -1,9 +1,12 @@
-import { Container, Grid } from '@mui/material';
+import { Box, Button, CircularProgress, Container, Grid, Typography, useTheme } from '@mui/material';
+import TextField from '@mui/material/TextField';
 import MUIDataTable, { MUIDataTableColumn, MUIDataTableOptions, MUIDataTableState } from "mui-datatables";
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useForm } from "react-hook-form";
 import { userListApi } from 'src/api/Sample/sampleDataTableApi';
-import getDataTableState, { PageManagement, setPageManagement } from 'src/components/DataTableTheme/DataTableState';
+import { customBodySwitchBool, customBodyTime } from 'src/components/DataTableTheme/CustomerRender';
+import getDataTableState, { PageManagement, Search, setPageManagement } from 'src/components/DataTableTheme/DataTableState';
 import DataTableThemeProvider from 'src/components/DataTableTheme/DataTableThemeProvider';
 import getTextLabels from 'src/components/DataTableTheme/TextLabels';
 import Footer from 'src/components/Footer';
@@ -40,6 +43,7 @@ function SampleDataTable() {
       label: "status",
       options: {
         sort: true,
+        customBodyRender: customBodySwitchBool
       }
     },
     {
@@ -61,6 +65,7 @@ function SampleDataTable() {
       label: "loginTime",
       options: {
         sort: true,
+        customBodyRender: customBodyTime
       }
     },
     {
@@ -68,6 +73,7 @@ function SampleDataTable() {
       label: "createdAt",
       options: {
         sort: true,
+        customBodyRender: customBodyTime
       }
     },
     {
@@ -75,12 +81,23 @@ function SampleDataTable() {
       label: "updatedAt",
       options: {
         sort: true,
+        customBodyRender: customBodyTime
+      }
+    },
+    {
+      name: "option",
+      label: "option",
+      options: {
+        sort: false,
       }
     },
   ];
 
+
+  const theme = useTheme();
   const { state } = useAuthStateContext();
   const [tableState, setTableState] = useState(getDataTableState());
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
   useEffect(() => {
     getData(null);
@@ -89,7 +106,7 @@ function SampleDataTable() {
   function getData(ds: PageManagement | null) {
     userListApi(ds, state)
       .then(res => {
-        setTableState({ data: res.data.userList, pageManagement: res.data.pageManagement });
+        setTableState({ data: res.data.userList, pageManagement: res.data.pageManagement, isLoading: false });
       })
       .catch(error => {
         console.log("error:" + error.response?.data?.msg);
@@ -97,21 +114,31 @@ function SampleDataTable() {
   }
 
   const changePage = (ds: MUIDataTableState) => {
+    setTableState({ ...tableState, isLoading: true });
     getData(setPageManagement(ds));
-    // userListApi(setPageManagement(ds), state)
-    //   .then(res => {
-    //     setTableState({ data: res.data.userList, pageManagement: res.data.pageManagement });
-    //   })
-    //   .catch(error => {
-    //     console.log("error:" + error.response?.data?.msg);
-    //   });
   };
+
+  //search submit 
+  const onFormSubmit = (formObj, event) => {
+    const data = new FormData(event.target);
+
+    var searchData: Search = {
+      name: data.get("name").toString(),
+      email: data.get("email").toString(),
+    }
+
+    var pageManagement: PageManagement = { ...tableState.pageManagement, search: searchData };
+    getData(pageManagement);
+  };
+
 
   let { count, limit, sort, sortColumn } = tableState.pageManagement;
   const options: MUIDataTableOptions = {
     search: false,
     print: false,
     filter: false,
+    resizableColumns: true,
+
     textLabels: getTextLabels(),
     serverSide: true,
     count: count,
@@ -141,7 +168,7 @@ function SampleDataTable() {
       <PageTitleWrapper>
         <PageHeader />
       </PageTitleWrapper>
-      <Container maxWidth={false} >
+      <Container maxWidth={false} sx={{ background: `${theme.colors.alpha.white[100]}` }} >
         <Grid
           container
           direction="row"
@@ -149,10 +176,59 @@ function SampleDataTable() {
           alignItems="stretch"
           spacing={3}
         >
+          <Box component="form" noValidate onSubmit={handleSubmit(onFormSubmit)} sx={{ width: 1 }} >
+            <Grid
+              // xs={12}
+              container
+              spacing={2}
+              direction="row"
+              justifyContent="flex-start"
+              alignItems="center"
+            >
+              <Grid item >
+                <TextField
+                  id="name"
+                  label="name"
+                  name="name"
+                  autoComplete="name"
+                  margin="normal"
+                  autoFocus
+                  {...register("name", {})}
+                />
+              </Grid>
+              <Grid item >
+                <TextField
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                  margin="normal"
+
+                  autoFocus
+                  {...register("email", {})}
+                />
+              </Grid>
+              <Grid item >
+                <Button
+                  sx={{ width: '70px' }}
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                >
+                  search
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
           <Grid item xs={12}>
             <DataTableThemeProvider>
               <MUIDataTable
-                title={"Sample List"}
+                title={
+                  <Typography variant="h6">
+                    Sample List
+                    {tableState.isLoading && <CircularProgress size={24} style={{ marginLeft: 15, position: 'relative', top: 4 }} />}
+                  </Typography>
+                }
                 data={tableState.data}
                 columns={columns}
                 options={options}

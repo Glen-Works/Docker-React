@@ -1,18 +1,23 @@
 import { MUIDataTableState } from "mui-datatables";
 
+export interface Search {
+  [key: string]: string
+}
+
 export interface PageManagement {
   page: number,
   pageCount: number,
   count: number,
   limit: number,
-  search: { [key: string]: string },
+  search: Search,
   sort: 'asc' | 'desc',
   sortColumn: string
 }
 
 interface DataTableStatus {
   data: any,
-  pageManagement: PageManagement
+  pageManagement: PageManagement,
+  isLoading: boolean
 }
 
 export function setPageManagement(tableState: MUIDataTableState): PageManagement {
@@ -41,7 +46,8 @@ function getDataTableState(): DataTableStatus {
       search: {},
       sort: "asc",
       sortColumn: "",
-    }
+    },
+    isLoading: false
   }
   return dataTableStatus;
 };
