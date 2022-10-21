@@ -4,6 +4,7 @@ import { FC, ReactElement, ReactNode } from 'react';
 interface ColumnIconProp {
   title: string,
   color: string,
+  background: string,
   children: ReactNode,
   handleClickOpen: () => void,
 }
@@ -16,14 +17,14 @@ interface ColumnTooltipProp {
 
 export const ColumnIconButton: FC<ColumnIconProp> = (props) => {
   const theme = useTheme();
-  const { title = "修改", color, children, handleClickOpen } = props;
+  const { title, color, background, children, handleClickOpen } = props;
 
   return (
     <Tooltip title={title} arrow>
       <IconButton
         sx={{
           '&:hover': {
-            background: theme.colors.primary.lighter
+            background: background
           },
           color: color
         }}

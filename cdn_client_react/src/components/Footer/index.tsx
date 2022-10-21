@@ -1,19 +1,18 @@
 import { Box, Container, styled, Typography } from '@mui/material';
 
 const FooterWrapper = styled(Container)(
-  ({ theme }) => `
-        margin-top: ${theme.spacing(4)};
-`
+  ({ theme }) => ``
 );
 
 function Footer() {
   return (
-    <FooterWrapper className="footer-wrapper">
+  <FooterWrapper sx={{ position: 'fixed' }}>
       <Box
-        pb={4}
+        py={1}
         display={{ xs: 'block' }}
         alignItems="center"
         textAlign={{ xs: 'center' }}
+        sx={{ alignContent: 'flex-end' }}
       >
         <Box alignItems="center">
           <Typography variant="subtitle1">

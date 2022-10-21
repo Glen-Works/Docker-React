@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 import { FC, ReactNode } from 'react';
 
 const PageTitle = styled(Box)(
-  ({ theme }) => `
-        padding: ${theme.spacing(4)};
-`
+  ({ theme }) => ``
 );
 
 interface PageTitleWrapperProps {
@@ -14,7 +12,7 @@ interface PageTitleWrapperProps {
 
 const PageTitleWrapper: FC<PageTitleWrapperProps> = ({ children }) => {
   return (
-    <PageTitle className="MuiPageTitle-wrapper">
+    <PageTitle className="MuiPageTitle-wrapper" sx={{ p:2 }}>
       <Container maxWidth={false}> {children}</Container>
     </PageTitle>
   );
