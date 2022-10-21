@@ -3,7 +3,7 @@ import Switch from '@mui/material/Switch';
 import moment from 'moment';
 import { MUIDataTableMeta } from "mui-datatables";
 
-export const customBodyTime = (value: any, tableMeta: MUIDataTableMeta, updateValue: (value: string) => void): string | React.ReactNode => {
+export const CustomBodyTime = (value: any, tableMeta: MUIDataTableMeta, updateValue: (value: string) => void): string | React.ReactNode => {
   let dateTime = "";
 
   if (value != null) {
@@ -17,7 +17,7 @@ export const customBodyTime = (value: any, tableMeta: MUIDataTableMeta, updateVa
   );
 }
 
-export const customBodySwitchBool = (value: any, tableMeta: MUIDataTableMeta, updateValue: (value: string) => void): string | React.ReactNode => {
+export const CustomBodySwitchBool = (value: any, tableMeta: MUIDataTableMeta, updateValue: (value: string) => void): string | React.ReactNode => {
 
   return (
     <div>

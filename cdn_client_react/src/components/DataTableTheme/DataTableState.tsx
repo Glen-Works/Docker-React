@@ -14,7 +14,7 @@ export interface PageManagement {
   sortColumn: string
 }
 
-interface DataTableStatus {
+export interface DataTableStatus {
   data: any,
   pageManagement: PageManagement,
   isLoading: boolean
@@ -35,7 +35,7 @@ export function setPageManagement(tableState: MUIDataTableState): PageManagement
 }
 
 
-function getDataTableState(): DataTableStatus {
+export default function getDataTableState(): DataTableStatus {
   let dataTableStatus: DataTableStatus = {
     data: [],
     pageManagement: {
@@ -52,4 +52,3 @@ function getDataTableState(): DataTableStatus {
   return dataTableStatus;
 };
 
-export default getDataTableState;

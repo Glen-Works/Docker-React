@@ -37,7 +37,7 @@ export const jwtAuthMiddleware = async (dispatch, auth: Auth): Promise<boolean> 
 export async function jwtRefesh(dispatch, auth: Auth): Promise<boolean> {
 
     console.log({ params: { refreshtoken: auth.authorisation?.refreshToken } });
-    var apiData = api("get", "/jwt", { params: { refreshtoken: auth.authorisation?.refreshToken } }, null);
+    var apiData = api("get", "/api/v1/jwt", { params: { refreshtoken: auth.authorisation?.refreshToken } }, null);
     var returnBool = false
     try {
         return await apiData?.then(res => {
@@ -56,7 +56,7 @@ export async function jwtRefesh(dispatch, auth: Auth): Promise<boolean> {
 
 //驗證 jwt
 export async function jwtValidate(auth: Auth): Promise<boolean> {
-    var apiData = api("get", "/jwt/check", setAuthHeader(auth), null);
+    var apiData = api("get", "/api/v1/jwt/check", setAuthHeader(auth), null);
     var returnBool = false
     try {
         return await apiData?.then((res: AxiosResponse) => {

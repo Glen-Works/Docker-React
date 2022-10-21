@@ -1,12 +1,15 @@
-import { Box, Button, CircularProgress, Container, Grid, Typography, useTheme } from '@mui/material';
+import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
+import { Box, Button, CircularProgress, Container, Dialog, DialogActions, DialogTitle, Grid, Typography, useTheme } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import MUIDataTable, { MUIDataTableColumn, MUIDataTableOptions, MUIDataTableState } from "mui-datatables";
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from "react-hook-form";
 import { userListApi } from 'src/api/Sample/sampleDataTableApi';
-import { customBodySwitchBool, customBodyTime } from 'src/components/DataTableTheme/CustomerRender';
-import getDataTableState, { PageManagement, Search, setPageManagement } from 'src/components/DataTableTheme/DataTableState';
+import { ColumnIconButton } from 'src/components/DataTableTheme/CustomerIconRender';
+import { CustomBodySwitchBool, CustomBodyTime } from 'src/components/DataTableTheme/CustomerRender';
+import getDataTableState, { DataTableStatus, PageManagement, Search, setPageManagement } from 'src/components/DataTableTheme/DataTableState';
 import DataTableThemeProvider from 'src/components/DataTableTheme/DataTableThemeProvider';
 import getTextLabels from 'src/components/DataTableTheme/TextLabels';
 import Footer from 'src/components/Footer';
@@ -16,92 +19,46 @@ import PageHeader from '../PageBase/PageHeader';
 
 function SampleDataTable() {
 
-  const columns: MUIDataTableColumn[] = [
-    {
-      name: "id",
-      label: "id",
-      options: {
-        sort: true,
-      }
-    },
-    {
-      name: "name",
-      label: "name",
-      options: {
-        sort: true,
-      }
-    },
-    {
-      name: "email",
-      label: "email",
-      options: {
-        sort: true,
-      }
-    },
-    {
-      name: "status",
-      label: "status",
-      options: {
-        sort: true,
-        customBodyRender: customBodySwitchBool
-      }
-    },
-    {
-      name: "userType",
-      label: "userType",
-      options: {
-        sort: true,
-      }
-    },
-    {
-      name: "loginIp",
-      label: "loginIp",
-      options: {
-        sort: true,
-      }
-    },
-    {
-      name: "loginTime",
-      label: "loginTime",
-      options: {
-        sort: true,
-        customBodyRender: customBodyTime
-      }
-    },
-    {
-      name: "createdAt",
-      label: "createdAt",
-      options: {
-        sort: true,
-        customBodyRender: customBodyTime
-      }
-    },
-    {
-      name: "updatedAt",
-      label: "updatedAt",
-      options: {
-        sort: true,
-        customBodyRender: customBodyTime
-      }
-    },
-    {
-      name: "option",
-      label: "option",
-      options: {
-        sort: false,
-      }
-    },
-  ];
-
-
   const theme = useTheme();
   const { state } = useAuthStateContext();
-  const [tableState, setTableState] = useState(getDataTableState());
+  const [tableState, setTableState] = useState<DataTableStatus>(getDataTableState());
   const { register, handleSubmit, formState: { errors } } = useForm();
+  const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+
+  const handleEditClickOpen = () => {
+    setEditOpen(true);
+  };
+
+  const handleEditClose = () => {
+    setEditOpen(false);
+  };
+
+  const handleDeleteClickOpen = () => {
+    setDeleteOpen(true);
+  };
+
+  const handleDeleteClose = () => {
+    setDeleteOpen(false);
+  };
+
 
   useEffect(() => {
     getData(null);
   }, []);
+
+  function setDelete(id: number) {
+    console.log(id);
+    // userDeleteApi(id, state)
+    //   .then(res => {
+    // getData({ ...tableState.pageManagement });
+    // handleDeleteClose();
+    //   })
+    //   .catch(error => {
+    //     console.log("error:" + error.response?.data?.msg);
+    //   });
+  }
+
 
   function getData(ds: PageManagement | null) {
     userListApi(ds, state)
@@ -130,6 +87,119 @@ function SampleDataTable() {
     var pageManagement: PageManagement = { ...tableState.pageManagement, search: searchData };
     getData(pageManagement);
   };
+
+  const columns: MUIDataTableColumn[] = [
+    {
+      name: "id",
+      label: "id",
+      options: {
+        sort: true,
+      }
+    },
+    {
+      name: "name",
+      label: "name",
+      options: {
+        sort: true,
+      }
+    },
+    {
+      name: "email",
+      label: "email",
+      options: {
+        sort: true,
+      }
+    },
+    {
+      name: "status",
+      label: "status",
+      options: {
+        sort: true,
+        customBodyRender: CustomBodySwitchBool
+      }
+    },
+    {
+      name: "userType",
+      label: "userType",
+      options: {
+        sort: true,
+      }
+    },
+    {
+      name: "loginIp",
+      label: "loginIp",
+      options: {
+        sort: true,
+      }
+    },
+    {
+      name: "loginTime",
+      label: "loginTime",
+      options: {
+        sort: true,
+        customBodyRender: CustomBodyTime
+      }
+    },
+    {
+      name: "createdAt",
+      label: "createdAt",
+      options: {
+        sort: true,
+        customBodyRender: CustomBodyTime
+      }
+    },
+    {
+      name: "updatedAt",
+      label: "updatedAt",
+      options: {
+        sort: true,
+        customBodyRender: CustomBodyTime
+      }
+    },
+    {
+      name: "option",
+      label: "option",
+      options: {
+        sort: false,
+        customBodyRenderLite: (dataIndex: number, rowIndex: number) => {
+          console.log(dataIndex, rowIndex);
+          let id = tableState.data[dataIndex].id ?? 0;
+          return (
+            <Box>
+              {/* <ColumnTooltip title="修改"> */}
+              <ColumnIconButton
+                title="修改"
+                handleClickOpen={() => { handleEditClickOpen() }}
+                color={theme.palette.primary.main}
+              >
+                <EditTwoToneIcon fontSize="small" />
+              </ColumnIconButton>
+              {/* </ColumnTooltip> */}
+              {/* <SampleDataTableUserInfo /> */}
+
+              {/* <ColumnTooltip title="刪除"> */}
+              <ColumnIconButton
+                title="刪除"
+                handleClickOpen={handleDeleteClickOpen}
+                color={theme.palette.error.main}
+              >
+                <DeleteTwoToneIcon fontSize="small" />
+              </ColumnIconButton>
+              {/* </ColumnTooltip> */}
+              <Dialog open={deleteOpen} onClose={handleDeleteClose}>
+                <DialogTitle>刪除使用者</DialogTitle>
+                <DialogActions>
+                  <Button onClick={handleDeleteClose}>取消</Button>
+                  <Button onClick={() => { console.log(dataIndex) }}>確定</Button>
+                </DialogActions>
+              </Dialog>
+              <Button onClick={() => { setDelete(dataIndex) }}>確定</Button>
+            </Box>
+          );
+        }
+      }
+    },
+  ];
 
 
   let { count, limit, sort, sortColumn } = tableState.pageManagement;
