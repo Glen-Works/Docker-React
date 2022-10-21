@@ -97,7 +97,7 @@ const TableTheme = (baseTheme: Theme) =>
             margin: '0px 27px 0px 27px',
             paddingTop: '10px !important',
           }, titleText: {
-            fontWeight: 'bold',
+            //fontWeight: 'bold',
           },
         },
       }/*,MUIDataTableBodyRow: {
@@ -113,14 +113,15 @@ const TableTheme = (baseTheme: Theme) =>
       }*/,MUIDataTableResize: {
         styleOverrides: {
           root: {
-            "& div": { 
-              width: '5px',
-              height: '1em',
-              paddingTop: '22px',
-              fontSize: '1.5rem',
+            "& div": {
+              width: '3px',
+              height: '20px',
+              paddingTop: '23px',
+              '&:hover, &:focus': { background: "black" },
+              '&:active': { opacity: 0 },
             },
           },resizer:{
-            backgroundColor: 'red',
+            backgroundColor: 'rgba(224, 224, 224, 1)',
           }
         },
       },MUIDataTableFooter: {

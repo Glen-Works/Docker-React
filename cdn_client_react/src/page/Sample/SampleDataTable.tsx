@@ -73,22 +73,6 @@ function SampleDataTable() {
       }
     },
     {
-      name: "createdAt",
-      label: "createdAt",
-      options: {
-        sort: true,
-        customBodyRender: customBodyTime
-      }
-    },
-    {
-      name: "updatedAt",
-      label: "updatedAt",
-      options: {
-        sort: true,
-        customBodyRender: customBodyTime
-      }
-    },
-    {
       name: "option",
       label: "option",
       options: {
@@ -216,22 +200,21 @@ function SampleDataTable() {
       <PageTitleWrapper>
         <PageHeader />
       </PageTitleWrapper>
-      <Container maxWidth={false} sx={{ background: `${theme.colors.alpha.white[100]}` }} >
+      <Container maxWidth={false} sx={{ width:1,background: `${theme.colors.alpha.white[100]}` }} >
         <Grid
           container
           direction="row"
           justifyContent="center"
           alignItems="stretch"
           spacing={3}
+          sx={{ pb:2 }}
         >
-          <Box component="form" noValidate onSubmit={handleSubmit(onFormSubmit)} sx={{ width: 1 }} >
+          <Box component="form" noValidate onSubmit={handleSubmit(onFormSubmit)} sx={{ width: 1,mt:1 }} >
             <Grid
-              // xs={12}
               container
-              spacing={2}
+              spacing={1}
               direction="row"
-              justifyContent="flex-start"
-              alignItems="center"
+              justifyContent="flex-end"
             >
               <Grid item >
                 <TextField
@@ -239,8 +222,6 @@ function SampleDataTable() {
                   label="name"
                   name="name"
                   autoComplete="name"
-                  margin="normal"
-                  autoFocus
                   {...register("name", {})}
                 />
               </Grid>
@@ -250,21 +231,11 @@ function SampleDataTable() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
-                  margin="normal"
-
-                  autoFocus
                   {...register("email", {})}
                 />
               </Grid>
-              <Grid item >
-                <Button
-                  sx={{ width: '70px' }}
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                >
-                  search
-                </Button>
+              <Grid item alignItems="stretch" style={{ display: "flex" }}>
+                <Button type="submit" variant="contained"> search</Button>
               </Grid>
             </Grid>
           </Box>
@@ -272,7 +243,7 @@ function SampleDataTable() {
             <DataTableThemeProvider>
               <MUIDataTable
                 title={
-                  <Typography variant="h6">
+                  <Typography variant="h4">
                     Sample List
                     {tableState.isLoading && <CircularProgress size={24} style={{ marginLeft: 15, position: 'relative', top: 4 }} />}
                   </Typography>
