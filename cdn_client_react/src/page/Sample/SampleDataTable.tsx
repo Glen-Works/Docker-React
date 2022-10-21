@@ -13,6 +13,10 @@ import Footer from 'src/components/Footer';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import PageHeader from '../PageBase/PageHeader';
+import {Tooltip, IconButton} from '@mui/material';
+import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
+import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+import Label from 'src/components/Label';
 
 function SampleDataTable() {
 
@@ -88,7 +92,51 @@ function SampleDataTable() {
       name: "option",
       label: "option",
       options: {
+        download: false,
+        viewColumns: false,
         sort: false,
+        customBodyRenderLite: (dataIndex) => {
+          return (
+            <Box>
+              <Tooltip title="Edit Order" arrow>
+                <IconButton
+                  sx={{
+                    '&:hover': {
+                      background: theme.colors.primary.lighter
+                    },
+                    color: theme.palette.primary.main
+                  }}
+                  color="inherit"
+                  size="small"
+                  onClick={
+                    () =>{
+
+                    }
+                  }
+                >
+                  <EditTwoToneIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Delete Order" arrow>
+                <IconButton
+                  sx={{
+                    '&:hover': { background: theme.colors.error.lighter },
+                    color: theme.palette.error.main
+                  }}
+                  color="inherit"
+                  size="small"
+                  onClick={
+                    () =>{
+
+                    }
+                  }
+                >
+                  <DeleteTwoToneIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            </Box>
+          );
+        }
       }
     },
   ];
