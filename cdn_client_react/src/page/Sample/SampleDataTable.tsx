@@ -73,6 +73,22 @@ function SampleDataTable() {
       }
     },
     {
+      name: "createdAt",
+      label: "createdAt",
+      options: {
+        sort: true,
+        customBodyRender: customBodyTime
+      }
+    },
+    {
+      name: "updatedAt",
+      label: "updatedAt",
+      options: {
+        sort: true,
+        customBodyRender: customBodyTime
+      }
+    },
+    {
       name: "option",
       label: "option",
       options: {

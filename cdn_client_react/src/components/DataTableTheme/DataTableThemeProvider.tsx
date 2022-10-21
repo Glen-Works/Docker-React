@@ -96,8 +96,6 @@ const TableTheme = (baseTheme: Theme) =>
           root: {
             margin: '0px 27px 0px 27px',
             paddingTop: '10px !important',
-          }, titleText: {
-            //fontWeight: 'bold',
           },
         },
       }/*,MUIDataTableBodyRow: {
