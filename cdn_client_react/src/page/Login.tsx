@@ -55,7 +55,7 @@ export default function SignInSide() {
       //判斷 是否已登入
       const check = await jwtValidate(state);
       if (check == true) {
-        navigate('/SampleDatatable');
+        navigate('/SampleDataTable');
       }
     };
     fetchData();
@@ -72,7 +72,7 @@ export default function SignInSide() {
 
     loginApi(loginData)?.then(res => {
       SetUserInfo(dispatch, res.data);
-      return navigate("/SampleDatatable");
+      return navigate("/SampleDataTable");
     }).catch(error => {
       console.log("error:" + error.response?.data?.msg);
     });
