@@ -39,7 +39,6 @@ function Logo() {
       <LogoWrapper to="/transactions" >
         <CardMedia
           component="img"
-          height="100"
           image="/static/images/logo/wvt.png"
           alt=""
         />

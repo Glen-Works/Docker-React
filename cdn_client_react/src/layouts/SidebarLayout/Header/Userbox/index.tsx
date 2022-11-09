@@ -80,17 +80,17 @@ function HeaderUserbox() {
     <>
       <UserBoxButton color="secondary" ref={ref} onClick={handleOpen}>
         {/* <Avatar variant="rounded" alt={user.name} src={user.avatar} /> */}
-        <Hidden mdDown>
+        <Box>
           <UserBoxText>
             <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
             <UserBoxDescription variant="body2">
               {user.jobtitle}
             </UserBoxDescription>
           </UserBoxText>
-        </Hidden>
-        <Hidden smDown>
+        </Box>
+        <Box>
           <ExpandMoreTwoToneIcon sx={{ ml: 1 }} />
-        </Hidden>
+        </Box>
       </UserBoxButton>
       <Popover
         anchorEl={ref.current}

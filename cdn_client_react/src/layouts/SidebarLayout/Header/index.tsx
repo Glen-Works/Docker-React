@@ -69,10 +69,7 @@ function Header() {
         spacing={2}
       >
         {/* <HeaderMenu /> */}
-      </Stack>
-      <Box display="flex" alignItems="center">
-        {/* <HeaderButtons /> */}
-        <HeaderUserbox />
+
         <Box
           component="span"
           sx={{
@@ -90,6 +87,11 @@ function Header() {
             </IconButton>
           </Tooltip>
         </Box>
+
+      </Stack>
+      <Box display="flex" alignItems="center">
+        {/* <HeaderButtons /> */}
+        <HeaderUserbox />
       </Box>
     </HeaderWrapper>
   );
