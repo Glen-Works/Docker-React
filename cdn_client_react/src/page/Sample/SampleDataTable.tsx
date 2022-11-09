@@ -221,7 +221,7 @@ function SampleDataTable() {
           let id = rowData.id;
           let data = `id:${rowData.id},email:${rowData.email}`;
           return (
-            <Box>
+            <Box sx={{ display: 'inline-flex' }}>
               <ColumnIconButton
                 title="修改"
                 handleClickOpen={() => { handleEditClickOpen(id) }}
@@ -282,13 +282,20 @@ function SampleDataTable() {
       <PageTitleWrapper>
         <PageHeader />
       </PageTitleWrapper>
-      <Container maxWidth={false} sx={{ width: 1, background: `${theme.colors.alpha.white[100]}` }} >
+      <Container maxWidth={false}
+        sx={{
+          width: 1,
+          background: `${theme.colors.alpha.white[100]}`,
+          minHeight: 'calc(100vh - 200px)',
+          pb: '50px'
+        }}
+      >
         <Grid
           container
           direction="row"
           justifyContent="center"
           alignItems="stretch"
-          spacing={3}
+          spacing={1}
         >
           <Box component="form" noValidate onSubmit={handleSubmit(onFormSubmit)} sx={{ width: 1, mt: 1 }} >
             <Grid
