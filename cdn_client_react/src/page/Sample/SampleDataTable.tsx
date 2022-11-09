@@ -92,32 +92,6 @@ function SampleDataTable() {
     setDeleteOpen(false);
   };
 
-  //login submit 
-  const onUserFormSubmit = (formObj, event) => {
-    const data = new FormData(event.target);
-
-    var userData: UserData = {
-      name: data.get("name").toString(),
-      email: data.get("email").toString(),
-      // status: data.get("status"),
-      // userType: data.get("userType"),
-      status: true,
-      userType: true,
-      remark: data.get("remark").toString(),
-    }
-
-    // var userData: UserData = {
-    //   name: getUserValue("name"),
-    //   email: getUserValue("email"),
-    //   status: Boolean(Number(getUserValue("status"))),
-    //   userType: Boolean(Number(getUserValue("userType"))),
-    //   remark: getUserValue("remark"),
-    // }
-
-    console.log(userData);
-    editUser(userData);
-  };
-
   function getEditDataById(id: number) {
     userInfoApi(id, state)
       .then(res => {
@@ -133,12 +107,26 @@ function SampleDataTable() {
       });
   }
 
+  const checkEditUser = (formObj, event) => {
+
+    var userData: UserData = {
+      name: getUserValue("name"),
+      email: getUserValue("email"),
+      status: Boolean(Number(getUserValue("status"))),
+      userType: Boolean(Number(getUserValue("userType"))),
+      remark: getUserValue("remark"),
+    }
+
+    console.log(userData);
+    editUser(userData);
+  };
+
   function editUser(data: any) {
     console.log(data);
-    userEditApi(selectedIndex, null, state)
+    userEditApi(selectedIndex, data, state)
       .then(res => {
-        // getData({ ...tableState.pageManagement });
         handleEditClose();
+        getData({ ...tableState.pageManagement });
       })
       .catch(error => {
         console.log("error:" + error.response?.data?.msg);
@@ -149,8 +137,8 @@ function SampleDataTable() {
     console.log(selectedIndex);
     userDeleteApi(selectedIndex, state)
       .then(res => {
-        getData({ ...tableState.pageManagement });
         handleDeleteClose();
+        getData({ ...tableState.pageManagement });
       })
       .catch(error => {
         console.log("error:" + error.response?.data?.msg);
@@ -375,11 +363,11 @@ function SampleDataTable() {
             <SampleDataTableDailog
               title={"修改使用者"}
               isOpen={editOpen}
-              buttonType="submit"
               handleClose={handleEditClose}
-              submit={() => { }}
+              submit={handleSubmitUser(checkEditUser)}
             >
-              <Box component="form" noValidate onSubmit={handleSubmitUser(onUserFormSubmit)} sx={{ width: 1, height: 1, mt: 1 }} >
+              {/* onSubmit={handleSubmitUser(checkEditUser)} */}
+              <Box component="form" noValidate sx={{ width: 1, height: 1, mt: 1 }} >
                 <Grid
                   container
                   display="flex"
@@ -493,7 +481,8 @@ function SampleDataTable() {
                         })}
                       />
                     </Grid>
-                  </Grid>       <Grid
+                  </Grid>
+                  <Grid
                     container
                     spacing={1}
                     direction="row"
@@ -522,13 +511,12 @@ function SampleDataTable() {
             {/* 刪除 */}
             <SampleDataTableDailog
               title={"刪除使用者"}
-              content={"是否確定要刪除"}
               isOpen={deleteOpen}
-              data={selectedData}
-              buttonType="button"
               handleClose={handleDeleteClose}
               submit={deleteUser}
-            />
+            >
+              <h2>{"是否確定要刪除" + selectedData}</h2>
+            </SampleDataTableDailog >
           </Grid >
         </Grid >
       </Container >

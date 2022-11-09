@@ -3,9 +3,6 @@ import { ReactElement } from 'react';
 
 interface DataTableInfoProp {
   title?: string,
-  content?: string,
-  data?: string,
-  buttonType: "button" | "submit" | "reset",
   isOpen: boolean,
   children?: ReactElement,
   handleClose: () => void,
@@ -13,18 +10,18 @@ interface DataTableInfoProp {
 }
 
 export default function SampleDataTableDailog(props: DataTableInfoProp) {
-  const { title, content, data, buttonType, isOpen, children, handleClose, submit } = props;
+  const { title, isOpen, children, handleClose, submit } = props;
 
   return (
     <>
       <Dialog open={isOpen} onClose={handleClose}>
         <DialogTitle>{title}</DialogTitle>
         <DialogContent>
-          {(content == undefined) ? children : `${content} ${data} ?`}
+          {children}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>取消</Button>
-          <Button type={buttonType} onClick={submit}>確定</Button>
+          <Button onClick={submit}>確定</Button>
         </DialogActions>
       </Dialog>
     </>
