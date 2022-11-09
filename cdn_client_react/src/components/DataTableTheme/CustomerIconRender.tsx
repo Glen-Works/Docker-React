@@ -37,15 +37,3 @@ export const ColumnIconButton: FC<ColumnIconProp> = (props) => {
     </Tooltip>
   );
 }
-
-export const ColumnTooltip: FC<ColumnTooltipProp> = (props) => {
-  const { title, children } = props;
-
-  return (
-    <>
-      <Tooltip title={title} arrow>
-        {children}
-      </Tooltip>
-    </>
-  );
-}
