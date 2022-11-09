@@ -1,9 +1,10 @@
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
-import { Box, Button, CircularProgress, Container, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Button, CircularProgress, Container, Grid, Switch, TextareaAutosize, Typography, useTheme } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import MUIDataTable, { MUIDataTableColumn, MUIDataTableOptions, MUIDataTableState } from "mui-datatables";
 import { useEffect, useState } from 'react';
+import { unstable_batchedUpdates } from "react-dom";
 import { Helmet } from 'react-helmet-async';
 import { useForm } from "react-hook-form";
 import { userDeleteApi, userEditApi, userInfoApi, userListApi } from 'src/api/Sample/sampleDataTableApi';
@@ -31,12 +32,22 @@ function SampleDataTable() {
   const theme = useTheme();
   const { state } = useAuthStateContext();
   const [tableState, setTableState] = useState<DataTableStatus>(getDataTableState());
-  const { register, handleSubmit, formState: { errors } } = useForm();
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [selectedData, setSelectedData] = useState<string>("");
   const [editOpen, setEditOpen] = useState<boolean>(false);
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
-  const [userDataState, setUserDataState] = useState<UserData>();
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register: registerUser, handleSubmit: handleSubmitUser, setValue: setUserValue, getValues: getUserValue,
+    reset: resetUser, formState: { errors: userErrors } } = useForm<UserData>(
+      {
+        defaultValues: {
+          name: "",
+          email: "",
+          status: true,
+          userType: false,
+          remark: "",
+        }
+      });
 
   useEffect(() => {
     getData(null);
@@ -53,52 +64,77 @@ function SampleDataTable() {
   }
 
   const handleEditClickOpen = (id: number) => {
-    setEditOpen(true);
-    getEditDataById(id);
-    setSelectedIndex(id);
+    unstable_batchedUpdates(() => {
+      setEditOpen(true);
+      getEditDataById(id);
+      setSelectedIndex(id);
+    });
+
   };
 
   const handleEditClose = () => {
-    setEditOpen(false);
+    unstable_batchedUpdates(() => {
+      setEditOpen(false);
+      resetUser();
+    });
   };
 
   const handleDeleteClickOpen =
     (id: number, data: string) => {
-      setDeleteOpen(true);
-      setSelectedIndex(id);
-      setSelectedData(data);
+      unstable_batchedUpdates(() => {
+        setDeleteOpen(true);
+        setSelectedIndex(id);
+        setSelectedData(data);
+      });
     };
 
   const handleDeleteClose = () => {
     setDeleteOpen(false);
   };
 
+  //login submit 
+  const onUserFormSubmit = (formObj, event) => {
+    const data = new FormData(event.target);
+
+    var userData: UserData = {
+      name: data.get("name").toString(),
+      email: data.get("email").toString(),
+      // status: data.get("status"),
+      // userType: data.get("userType"),
+      status: true,
+      userType: true,
+      remark: data.get("remark").toString(),
+    }
+
+    // var userData: UserData = {
+    //   name: getUserValue("name"),
+    //   email: getUserValue("email"),
+    //   status: Boolean(Number(getUserValue("status"))),
+    //   userType: Boolean(Number(getUserValue("userType"))),
+    //   remark: getUserValue("remark"),
+    // }
+
+    console.log(userData);
+    editUser(userData);
+  };
 
   function getEditDataById(id: number) {
     userInfoApi(id, state)
       .then(res => {
         let data = res.data[0];
-        if (data == null || data == undefined) {
-          console.log("error:" + "無此使用者");
-        }
-        setUserDataState({
-          name: data[0].name,
-          email: data[0].email,
-          status: data[0].status,
-          userType: data[0].userType,
-          remark: data[0].remark,
-        });
+        setUserValue("name", data.name, { shouldValidate: true });
+        setUserValue("email", data.email, { shouldValidate: true });
+        setUserValue("status", data.status, { shouldValidate: true });
+        setUserValue("userType", data.userType, { shouldValidate: true });
+        setUserValue("remark", data.remark, { shouldValidate: true });
       })
       .catch(error => {
         console.log("error:" + error.response?.data?.msg);
       });
   }
 
-  function EditUser() {
-    console.log(selectedIndex);
-    console.log(userDataState);
-
-    // userEditApi(selectedIndex, data, state)
+  function editUser(data: any) {
+    console.log(data);
     userEditApi(selectedIndex, null, state)
       .then(res => {
         // getData({ ...tableState.pageManagement });
@@ -339,10 +375,11 @@ function SampleDataTable() {
             <SampleDataTableDailog
               title={"修改使用者"}
               isOpen={editOpen}
+              buttonType="submit"
               handleClose={handleEditClose}
-              submit={EditUser}
+              submit={() => { }}
             >
-              <Box component="form" noValidate sx={{ width: 1, height: 1, mt: 1 }} >
+              <Box component="form" noValidate onSubmit={handleSubmitUser(onUserFormSubmit)} sx={{ width: 1, height: 1, mt: 1 }} >
                 <Grid
                   container
                   display="flex"
@@ -365,11 +402,16 @@ function SampleDataTable() {
                     <Grid item xs={8} >
                       <TextField
                         id="name"
-                        label="name"
+                        label="Name"
                         name="name"
                         autoComplete="name"
-                        {...register("name", {})}
+                        defaultValue={getUserValue("name")}
+                        {...registerUser("name", {
+                          required: "Required field"
+                        })}
                         fullWidth={true}
+                        error={!!userErrors?.name}
+                        helperText={userErrors?.name ? userErrors.name.message : null}
                       />
                     </Grid>
                   </Grid>
@@ -387,12 +429,23 @@ function SampleDataTable() {
                     </Grid>
                     <Grid item xs={8} >
                       <TextField
-                        id="name"
-                        label="name"
-                        name="name"
-                        autoComplete="name"
-                        {...register("name", {})}
+                        id="email"
+                        label="Email Address"
+                        name="email"
+                        defaultValue={getUserValue("status")}
+                        autoComplete="email"
+                        {...registerUser("email", {
+                          required: "Required field",
+                          minLength: { value: 5, message: "at least 5 letter" },
+                          maxLength: { value: 100, message: "need less 100 length" },
+                          pattern: {
+                            value: /^[A-Z0-9._%+-]+@[A-Z0-9._]+\.[A-Z]{2,}$/i,
+                            message: "Invalid email address",
+                          }
+                        })}
                         fullWidth={true}
+                        error={!!userErrors?.email}
+                        helperText={userErrors?.email ? userErrors.email.message : null}
                       />
                     </Grid>
                   </Grid>
@@ -409,13 +462,13 @@ function SampleDataTable() {
                       </Typography>
                     </Grid>
                     <Grid item xs={8} >
-                      <TextField
-                        id="name"
-                        label="name"
-                        name="name"
-                        autoComplete="name"
-                        {...register("name", {})}
-                        fullWidth={true}
+                      <Switch
+                        id="status"
+                        name="status"
+                        checked={Boolean(Number(getUserValue("status")))}
+                        {...registerUser("status", {
+                          required: "Required field"
+                        })}
                       />
                     </Grid>
                   </Grid>       <Grid
@@ -431,13 +484,13 @@ function SampleDataTable() {
                       </Typography>
                     </Grid>
                     <Grid item xs={8} >
-                      <TextField
-                        id="name"
-                        label="name"
-                        name="name"
-                        autoComplete="name"
-                        {...register("name", {})}
-                        fullWidth={true}
+                      <Switch
+                        id="userType"
+                        name="userType"
+                        checked={Boolean(Number(getUserValue("userType")))}
+                        {...registerUser("userType", {
+                          required: "Required field"
+                        })}
                       />
                     </Grid>
                   </Grid>       <Grid
@@ -453,13 +506,12 @@ function SampleDataTable() {
                       </Typography>
                     </Grid>
                     <Grid item xs={8} >
-                      <TextField
-                        id="name"
-                        label="name"
-                        name="name"
-                        autoComplete="name"
-                        {...register("name", {})}
-                        fullWidth={true}
+                      <TextareaAutosize
+                        minRows={3}
+                        id="remark"
+                        name="remark"
+                        autoComplete="remark"
+                        {...registerUser("remark", {})}
                       />
                     </Grid>
                   </Grid>
@@ -473,6 +525,7 @@ function SampleDataTable() {
               content={"是否確定要刪除"}
               isOpen={deleteOpen}
               data={selectedData}
+              buttonType="button"
               handleClose={handleDeleteClose}
               submit={deleteUser}
             />
