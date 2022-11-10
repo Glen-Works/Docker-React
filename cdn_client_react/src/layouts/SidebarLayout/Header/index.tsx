@@ -89,7 +89,7 @@ function Header() {
         </Box>
 
       </Stack>
-      <Box display="flex" alignItems="center">
+      <Box display="flex" alignItems="center" sx={{ minWidth: '170px' }}>
         {/* <HeaderButtons /> */}
         <HeaderUserbox />
       </Box>
