@@ -1,5 +1,7 @@
+import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
+import SearchIcon from '@mui/icons-material/Search';
 import { Box, Button, CircularProgress, Container, Grid, Switch, TextareaAutosize, Typography, useTheme } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import MUIDataTable, { MUIDataTableColumn, MUIDataTableOptions, MUIDataTableState } from "mui-datatables";
@@ -7,7 +9,7 @@ import { useEffect, useState } from 'react';
 import { unstable_batchedUpdates } from "react-dom";
 import { Helmet } from 'react-helmet-async';
 import { useForm } from "react-hook-form";
-import { userDeleteApi, userEditApi, userInfoApi, userListApi } from 'src/api/Sample/sampleDataTableApi';
+import { userAddApi, userDeleteApi, userEditApi, userInfoApi, userListApi } from 'src/api/Sample/sampleDataTableApi';
 import { ColumnIconButton } from 'src/components/DataTableTheme/CustomerIconRender';
 import { CustomBodySwitchBool, CustomBodyTime } from 'src/components/DataTableTheme/CustomerRender';
 import getDataTableState, { DataTableStatus, PageManagement, Search, setPageManagement } from 'src/components/DataTableTheme/DataTableState';
@@ -27,22 +29,28 @@ interface UserData {
   remark: string,
 }
 
+interface UserAdd extends UserData {
+  password: string,
+}
+
 function SampleDataTable() {
 
   const theme = useTheme();
   const { state } = useAuthStateContext();
   const [tableState, setTableState] = useState<DataTableStatus>(getDataTableState());
-  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const [selectedId, setSelectedId] = useState<number>(0);
   const [selectedData, setSelectedData] = useState<string>("");
-  const [editOpen, setEditOpen] = useState<boolean>(false);
+  const [addAndEditStatus, setAddAndEditStatus] = useState<"edit" | "add" | "">("");
+  const [addAndEditOpen, setAddAndEditOpen] = useState<boolean>(false);
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { register: registerUser, handleSubmit: handleSubmitUser, setValue: setUserValue, getValues: getUserValue,
-    reset: resetUser, formState: { errors: userErrors } } = useForm<UserData>(
+    reset: resetUser, formState: { errors: userErrors } } = useForm(
       {
         defaultValues: {
           name: "",
           email: "",
+          password: "",
           status: true,
           userType: false,
           remark: "",
@@ -52,6 +60,9 @@ function SampleDataTable() {
   useEffect(() => {
     getData(null);
   }, []);
+
+  // useEffect(() => {
+  // }, [getUserValue("name")]);
 
   function getData(ds: PageManagement | null) {
     userListApi(ds, state)
@@ -63,30 +74,37 @@ function SampleDataTable() {
       });
   }
 
-  const handleEditClickOpen = (id: number) => {
+  const handleAddClickOpen = () => {
     unstable_batchedUpdates(() => {
-      setEditOpen(true);
-      getEditDataById(id);
-      setSelectedIndex(id);
-    });
-
-  };
-
-  const handleEditClose = () => {
-    unstable_batchedUpdates(() => {
-      setEditOpen(false);
+      setAddAndEditStatus("add");
+      setAddAndEditOpen(true);
       resetUser();
     });
   };
 
-  const handleDeleteClickOpen =
-    (id: number, data: string) => {
-      unstable_batchedUpdates(() => {
-        setDeleteOpen(true);
-        setSelectedIndex(id);
-        setSelectedData(data);
-      });
-    };
+  const handleEditClickOpen = (id: number) => {
+    unstable_batchedUpdates(() => {
+      setAddAndEditStatus("edit");
+      setAddAndEditOpen(true);
+      getEditDataById(id);
+      setSelectedId(id);
+    });
+  };
+
+  const handleAddAndEditClose = () => {
+    unstable_batchedUpdates(() => {
+      setAddAndEditOpen(false);
+      resetUser();
+    });
+  };
+
+  const handleDeleteClickOpen = (id: number, data: string) => {
+    unstable_batchedUpdates(() => {
+      setDeleteOpen(true);
+      setSelectedId(id);
+      setSelectedData(data);
+    });
+  };
 
   const handleDeleteClose = () => {
     setDeleteOpen(false);
@@ -107,8 +125,7 @@ function SampleDataTable() {
       });
   }
 
-  const checkEditUser = (formObj, event) => {
-
+  function getDialogUserData(): UserData {
     var userData: UserData = {
       name: getUserValue("name"),
       email: getUserValue("email"),
@@ -116,16 +133,44 @@ function SampleDataTable() {
       userType: Boolean(Number(getUserValue("userType"))),
       remark: getUserValue("remark"),
     }
+    return userData;
+  }
 
+  const checkAddUser = (formObj, event) => {
+
+    let userData = getDialogUserData();
+    var userAddData: UserAdd = {
+      ...userData,
+      password: getUserValue("password"),
+    }
+    console.log(userAddData);
+    addUser(userAddData);
+  };
+
+  const checkEditUser = (formObj, event) => {
+
+    let userData = getDialogUserData();
     console.log(userData);
     editUser(userData);
   };
 
-  function editUser(data: any) {
-    console.log(data);
-    userEditApi(selectedIndex, data, state)
+  function addUser(data: any) {
+    // console.log(data);
+    userAddApi(data, state)
       .then(res => {
-        handleEditClose();
+        handleAddAndEditClose();
+        getData({ ...tableState.pageManagement });
+      })
+      .catch(error => {
+        console.log("error:" + error.response?.data?.msg);
+      });
+  }
+
+  function editUser(data: any) {
+    // console.log(data);
+    userEditApi(selectedId, data, state)
+      .then(res => {
+        handleAddAndEditClose();
         getData({ ...tableState.pageManagement });
       })
       .catch(error => {
@@ -134,8 +179,8 @@ function SampleDataTable() {
   }
 
   function deleteUser() {
-    console.log(selectedIndex);
-    userDeleteApi(selectedIndex, state)
+    // console.log(selectedIndex);
+    userDeleteApi(selectedId, state)
       .then(res => {
         handleDeleteClose();
         getData({ ...tableState.pageManagement });
@@ -144,7 +189,6 @@ function SampleDataTable() {
         console.log("error:" + error.response?.data?.msg);
       });
   }
-
 
   const changePage = (ds: MUIDataTableState) => {
     setTableState({ ...tableState, isLoading: true });
@@ -327,6 +371,7 @@ function SampleDataTable() {
               spacing={1}
               direction="row"
               justifyContent="flex-end"
+              alignItems="stretch"
             >
               <Grid item >
                 <TextField
@@ -334,20 +379,38 @@ function SampleDataTable() {
                   label="name"
                   name="name"
                   autoComplete="name"
+                  size="small"
                   {...register("name", {})}
                 />
               </Grid>
-              <Grid item >
+              <Grid item alignItems="stretch">
                 <TextField
                   id="email"
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  size="small"
                   {...register("email", {})}
                 />
               </Grid>
-              <Grid item alignItems="stretch" style={{ display: "flex" }}>
-                <Button type="submit" variant="contained"> search</Button>
+              <Grid item  >
+                <Button
+                  type="submit"
+                  color='success'
+                  variant="contained"
+                  startIcon={<SearchIcon fontSize="small" />}
+                >
+                  Search</Button>
+              </Grid>
+              <Grid item >
+                <Button
+                  variant="contained"
+                  color='warning'
+                  startIcon={<AddTwoToneIcon fontSize="small" />}
+                  onClick={handleAddClickOpen}
+                >
+                  Create
+                </Button>
               </Grid>
             </Grid>
           </Box>
@@ -368,10 +431,10 @@ function SampleDataTable() {
 
             {/* 修改 */}
             <SampleDataTableDailog
-              title={"修改使用者"}
-              isOpen={editOpen}
-              handleClose={handleEditClose}
-              submit={handleSubmitUser(checkEditUser)}
+              title={(addAndEditStatus == "add") ? "新增使用者" : "修改使用者"}
+              isOpen={addAndEditOpen}
+              handleClose={handleAddAndEditClose}
+              submit={handleSubmitUser((addAndEditStatus == "add") ? checkAddUser : checkEditUser)}
             >
               {/* onSubmit={handleSubmitUser(checkEditUser)} */}
               <Box component="form" noValidate sx={{ width: 1, height: 1, mt: 1 }} >
@@ -382,6 +445,28 @@ function SampleDataTable() {
                   justifyContent="flex-start"
                   alignItems="center"
                 >
+
+                  {(addAndEditStatus == "edit") &&
+                    <Grid
+                      container
+                      spacing={1}
+                      direction="row"
+                      justifyContent="flex-start"
+                      alignItems="center"
+                    >
+                      <Grid item xs={4} >
+                        <Typography variant="h2" sx={{ pb: 1 }}>
+                          ID：
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={8} >
+                        <Typography variant="h2" sx={{ pb: 1 }}>
+                          {selectedId}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  }
+
                   <Grid
                     container
                     spacing={1}
@@ -399,7 +484,7 @@ function SampleDataTable() {
                         id="name"
                         label="Name"
                         name="name"
-                        autoComplete="name"
+                        // autoComplete="name"
                         defaultValue={getUserValue("name")}
                         {...registerUser("name", {
                           required: "Required field"
@@ -428,7 +513,7 @@ function SampleDataTable() {
                         label="Email Address"
                         name="email"
                         defaultValue={getUserValue("status")}
-                        autoComplete="email"
+                        // autoComplete="email"
                         {...registerUser("email", {
                           required: "Required field",
                           minLength: { value: 5, message: "at least 5 letter" },
@@ -444,6 +529,40 @@ function SampleDataTable() {
                       />
                     </Grid>
                   </Grid>
+
+                  {(addAndEditStatus == "add") &&
+                    <Grid
+                      container
+                      spacing={1}
+                      direction="row"
+                      justifyContent="flex-start"
+                      alignItems="center"
+                    >
+                      <Grid item xs={4} >
+                        <Typography variant="h2" sx={{ pb: 1 }}>
+                          密碼：
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={8} >
+                        <TextField
+                          id="password"
+                          label="Password"
+                          name="password"
+                          type="password"
+                          // autoComplete="password"
+                          {...registerUser("password", {
+                            required: "Required field",
+                            minLength: { value: 5, message: "at least 5 letter" },
+                            maxLength: { value: 100, message: "need less 100 length" },
+                          })}
+                          fullWidth={true}
+                          error={!!userErrors?.password}
+                          helperText={userErrors?.password ? userErrors.password.message : null}
+                        />
+                      </Grid>
+                    </Grid>
+                  }
+
                   <Grid
                     container
                     spacing={1}
@@ -466,7 +585,8 @@ function SampleDataTable() {
                         })}
                       />
                     </Grid>
-                  </Grid>       <Grid
+                  </Grid>
+                  <Grid
                     container
                     spacing={1}
                     direction="row"
@@ -506,7 +626,8 @@ function SampleDataTable() {
                         minRows={3}
                         id="remark"
                         name="remark"
-                        autoComplete="remark"
+                        // autoComplete="remark"
+                        defaultValue={getUserValue("remark")}
                         {...registerUser("remark", {})}
                       />
                     </Grid>
@@ -522,7 +643,10 @@ function SampleDataTable() {
               handleClose={handleDeleteClose}
               submit={deleteUser}
             >
-              <h2>{"是否確定要刪除" + selectedData}</h2>
+              <Typography variant="h2" sx={{ pb: 1 }}>
+                {"是否確定要刪除" + selectedData}
+              </Typography>
+
             </SampleDataTableDailog >
           </Grid >
         </Grid >
