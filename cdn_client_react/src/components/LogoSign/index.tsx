@@ -41,6 +41,12 @@ function Logo() {
           component="img"
           image="/static/images/logo/wvt.png"
           alt=""
+          sx={{
+            width: '60%',
+            margin: 'auto',
+            left: 0,
+            right: 0,
+          }}
         />
       </LogoWrapper>
     </TooltipWrapper>
