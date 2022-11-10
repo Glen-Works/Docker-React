@@ -44,8 +44,6 @@ function Logo() {
           sx={{
             width: '60%',
             margin: 'auto',
-            left: 0,
-            right: 0,
           }}
         />
       </LogoWrapper>

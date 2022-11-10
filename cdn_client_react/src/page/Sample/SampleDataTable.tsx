@@ -20,6 +20,7 @@ import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import PageHeader from '../PageBase/PageHeader';
 import SampleDataTableDailog from './SampleDataTableDailog';
+import InputLabel from '@mui/material/InputLabel';
 
 interface UserData {
   name: string,
@@ -432,13 +433,115 @@ function SampleDataTable() {
             {/* 修改 */}
             <SampleDataTableDailog
               title={(addAndEditStatus == "add") ? "新增使用者" : "修改使用者"}
+              maxWidth={(addAndEditStatus == "add") ? "xs" : "md"}
               isOpen={addAndEditOpen}
               handleClose={handleAddAndEditClose}
               submit={handleSubmitUser((addAndEditStatus == "add") ? checkAddUser : checkEditUser)}
             >
               {/* onSubmit={handleSubmitUser(checkEditUser)} */}
-              <Box component="form" noValidate sx={{ width: 1, height: 1, mt: 1 }} >
-                <Grid
+              <Box component="form" noValidate sx={{ width: 1, height: 1, mt: 1, justifyContent: 'center', display: 'flex' }} >
+                <Grid container xs={11} rowSpacing={2} columnSpacing={{ xs: 1 }} sx={{ justifyContent: "center" }}>
+                  <Grid item xs={12} alignItems="center" display="flex">
+                    <Grid>
+                      <InputLabel sx={{ typography: "h4", mr: 1 }}>ID :</InputLabel>
+                    </Grid>
+                    <Grid xs={12}>
+                      <InputLabel sx={{ typography: "h4", mr: 1 }}>{selectedId}</InputLabel>
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={12} alignItems="center" display="flex">
+                    <Grid>
+                      <InputLabel sx={{ typography: "h4", mr: 1 }}>名稱 :</InputLabel>
+                    </Grid>
+                    <Grid xs={12}>
+                      <TextField
+                        id="name"
+                        label="Name"
+                        name="name"
+                        defaultValue={getUserValue("name")}
+                        {...registerUser("name", {
+                          required: "Required field"
+                        })}
+                        fullWidth={true}
+                        error={!!userErrors?.name}
+                        helperText={userErrors?.name ? userErrors.name.message : null}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={12} alignItems="center" display="flex">
+                    <Grid>
+                      <InputLabel sx={{ typography: "h4", mr: 1 }}>信箱 :</InputLabel>
+                    </Grid>
+                    <Grid xs={12}>
+                      <TextField
+                        id="email"
+                        label="Email Address"
+                        name="email"
+                        defaultValue={getUserValue("status")}
+                        {...registerUser("email", {
+                          required: "Required field",
+                          minLength: { value: 5, message: "at least 5 letter" },
+                          maxLength: { value: 100, message: "need less 100 length" },
+                          pattern: {
+                            value: /^[A-Z0-9._%+-]+@[A-Z0-9._]+\.[A-Z]{2,}$/i,
+                            message: "Invalid email address",
+                          }
+                        })}
+                        fullWidth={true}
+                        error={!!userErrors?.email}
+                        helperText={userErrors?.email ? userErrors.email.message : null}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={12} alignItems="center" display="flex">
+                    <Grid>
+                      <InputLabel sx={{ typography: "h4", mr: 1 }}>狀態 :</InputLabel>
+                    </Grid>
+                    <Grid xs={12}>
+                      <Switch
+                        id="status"
+                        name="status"
+                        //checked={Boolean(Number(getUserValue("status")))}
+                        {...registerUser("status", {
+                          required: "Required field"
+                        })}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={12} alignItems="center" display="flex">
+                    <Grid>
+                      <InputLabel sx={{ typography: "h4", mr: 1 }}>管理者 :</InputLabel>
+                    </Grid>
+                    <Grid xs={12}>
+                      <Switch
+                        id="userType"
+                        name="userType"
+                        //checked={Boolean(Number(getUserValue("userType")))}
+                        {...registerUser("userType", {
+                          required: "Required field"
+                        })}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={12} alignItems="center" display="flex">
+                    <Grid>
+                      <InputLabel sx={{ typography: "h4", mr: 1 }}>備註 :</InputLabel>
+                    </Grid>
+                    <Grid xs={12}>
+                      <TextField
+                        id="remark"
+                        label="Remark"
+                        name="remark"
+                        // autoComplete="remark"
+                        defaultValue={getUserValue("remark")}
+                        {...registerUser("remark", {})}
+                        fullWidth={true}
+                      />
+                    </Grid>
+                  </Grid>
+                </Grid>
+
+                {/* <Grid
                   container
                   display="flex"
                   direction="column"
@@ -632,7 +735,7 @@ function SampleDataTable() {
                       />
                     </Grid>
                   </Grid>
-                </Grid>
+                </Grid> */}
               </Box>
             </SampleDataTableDailog>
 

@@ -1,8 +1,9 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { Breakpoint, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { ReactElement } from 'react';
 
 interface DataTableInfoProp {
   title?: string,
+  maxWidth?: Breakpoint,
   isOpen: boolean,
   children?: ReactElement,
   handleClose: () => void,
@@ -10,11 +11,11 @@ interface DataTableInfoProp {
 }
 
 export default function SampleDataTableDailog(props: DataTableInfoProp) {
-  const { title, isOpen, children, handleClose, submit } = props;
+  const { title, maxWidth, isOpen, children, handleClose, submit } = props;
 
   return (
     <>
-      <Dialog open={isOpen} onClose={handleClose}>
+      <Dialog open={isOpen} onClose={handleClose} fullWidth maxWidth={maxWidth}>
         <DialogTitle>{title}</DialogTitle>
         <DialogContent>
           {children}
