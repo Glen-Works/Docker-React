@@ -433,7 +433,7 @@ function SampleDataTable() {
             {/* 修改 */}
             <SampleDataTableDailog
               title={(addAndEditStatus == "add") ? "新增使用者" : "修改使用者"}
-              maxWidth={(addAndEditStatus == "add") ? "xs" : "md"}
+              maxWidth="md"
               isOpen={addAndEditOpen}
               handleClose={handleAddAndEditClose}
               submit={handleSubmitUser((addAndEditStatus == "add") ? checkAddUser : checkEditUser)}
@@ -523,19 +523,30 @@ function SampleDataTable() {
                       />
                     </Grid>
                   </Grid>
-                  <Grid item xs={12} alignItems="center" display="flex">
+                  <Grid item xs={12} alignItems="flex-start" display="flex">
                     <Grid>
                       <InputLabel sx={{ typography: "h4", mr: 1 }}>備註 :</InputLabel>
                     </Grid>
                     <Grid xs={12}>
-                      <TextField
+                      <TextareaAutosize
+                        aria-label="minimum height"
+                        style={{
+                          width: '100%',
+                          border: '1px solid rgba(0, 0, 0, 0.23)',
+                          borderRadius: '10px',
+                          margin: 0,
+                          padding: '16px 14px',
+                          fontSize: '14px',
+                          fontFamily: '"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji"',
+                          fontWeight: 400,
+                          lineHeight: '1.4375em',
+                        }}
+                        minRows={5}
+                        maxRows={8}
                         id="remark"
-                        label="Remark"
                         name="remark"
-                        // autoComplete="remark"
                         defaultValue={getUserValue("remark")}
                         {...registerUser("remark", {})}
-                        fullWidth={true}
                       />
                     </Grid>
                   </Grid>
@@ -742,13 +753,14 @@ function SampleDataTable() {
             {/* 刪除 */}
             <SampleDataTableDailog
               title={"刪除使用者"}
+              maxWidth="xs"
               isOpen={deleteOpen}
               handleClose={handleDeleteClose}
               submit={deleteUser}
             >
-              <Typography variant="h2" sx={{ pb: 1 }}>
+              <Box component="span" sx={{ typography: "h4" }}>
                 {"是否確定要刪除" + selectedData}
-              </Typography>
+              </Box>
 
             </SampleDataTableDailog >
           </Grid >
