@@ -98,31 +98,31 @@ const TableTheme = (baseTheme: Theme) =>
             paddingTop: '10px !important',
           },
         },
-      }/*,MUIDataTableBodyRow: {
+      }/*, MUIDataTableBodyRow: {
         styleOverrides: {
           root: {
-            "& td": { 
-              border: 'none', 
-              borderBottom: '1px solid rgba(224, 224, 224, 1)', 
-              borderBottomColor: 'rgba(34, 51, 84, 0.1)' 
+            backgroundColor: 'red',
+            "& td": {
+              border: 'none',
+              borderBottom: '1px solid rgba(224, 224, 224, 1)',
+              borderBottomColor: 'rgba(34, 51, 84, 0.1)'
             },
           },
         },
-      }*/,MUIDataTableResize: {
+      }*/, MUIDataTableResize: {
         styleOverrides: {
           root: {
             "& div": {
               width: '3px',
               height: '20px',
               paddingTop: '23px',
-              '&:hover, &:focus': { background: "black" },
-              '&:active': { opacity: 0 },
             },
-          },resizer:{
+          }, resizer: {
             backgroundColor: 'rgba(224, 224, 224, 1)',
+            '&:hover, &:focus': { background: "black" },
           }
         },
-      },MUIDataTableFooter: {
+      }, MUIDataTableFooter: {
         styleOverrides: {
           root: {
             "& td": { border: 'none' }

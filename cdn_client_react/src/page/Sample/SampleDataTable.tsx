@@ -22,6 +22,11 @@ import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import PageHeader from '../PageBase/PageHeader';
 
+const userTypeArray = [
+  { value: '1', label: '管理者', },
+  { value: '2', label: '一般使用者', },
+];
+
 interface UserData {
   name: string,
   email: string,
@@ -253,9 +258,10 @@ function SampleDataTable() {
       label: "userType",
       options: {
         sort: true,
+        customBodyRender: CustomBodySwitchBool
       }
     },
-    {
+    /*{
       name: "loginIp",
       label: "loginIp",
       options: {
@@ -277,7 +283,7 @@ function SampleDataTable() {
         sort: true,
         customBodyRender: CustomBodyTime
       }
-    },
+    },*/
     {
       name: "updatedAt",
       label: "updatedAt",
@@ -449,23 +455,25 @@ function SampleDataTable() {
             >
               {/* onSubmit={handleSubmitUser(checkEditUser)} */}
               <Box component="form" noValidate sx={{ width: 1, height: 1, mt: 1, justifyContent: 'center', display: 'flex' }} >
-                <Grid container xs={11} rowSpacing={2} columnSpacing={{ xs: 1 }} sx={{ justifyContent: "center" }}>
-                  <Grid item xs={12} alignItems="center" display="flex">
-                    <Grid>
-                      <InputLabel sx={{ typography: "h4", mr: 1 }}>ID :</InputLabel>
+                <Grid container rowSpacing={2} columnSpacing={{ xs: 1 }} sx={{ justifyContent: "center" }}>
+                  {(addAndEditStatus == "edit") &&
+                    <Grid item xs={12} alignItems="center" display="flex">
+                      <Grid>
+                        <InputLabel sx={{ typography: "h4", mr: 1 }}>ID :</InputLabel>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <InputLabel sx={{ typography: "h4", mr: 1 }}>{selectedId}</InputLabel>
+                      </Grid>
                     </Grid>
-                    <Grid xs={12}>
-                      <InputLabel sx={{ typography: "h4", mr: 1 }}>{selectedId}</InputLabel>
-                    </Grid>
-                  </Grid>
+                  }
                   <Grid item xs={12} alignItems="center" display="flex">
                     <Grid>
                       <InputLabel sx={{ typography: "h4", mr: 1 }}>名稱 :</InputLabel>
                     </Grid>
-                    <Grid xs={12}>
+                    <Grid item xs={12}>
                       <TextField
                         id="name"
-                        label="Name"
+                        //label="Name"
                         name="name"
                         defaultValue={getUserValue("name")}
                         {...registerUser("name", {
@@ -481,10 +489,10 @@ function SampleDataTable() {
                     <Grid>
                       <InputLabel sx={{ typography: "h4", mr: 1 }}>信箱 :</InputLabel>
                     </Grid>
-                    <Grid xs={12}>
+                    <Grid item xs={12}>
                       <TextField
                         id="email"
-                        label="Email Address"
+                        //label="Email Address"
                         name="email"
                         defaultValue={getUserValue("status")}
                         {...registerUser("email", {
@@ -506,7 +514,7 @@ function SampleDataTable() {
                     <Grid>
                       <InputLabel sx={{ typography: "h4", mr: 1 }}>狀態 :</InputLabel>
                     </Grid>
-                    <Grid xs={12}>
+                    <Grid item xs={12}>
                       <Switch
                         id="status"
                         name="status"
@@ -521,24 +529,37 @@ function SampleDataTable() {
                     <Grid>
                       <InputLabel sx={{ typography: "h4", mr: 1 }}>管理者 :</InputLabel>
                     </Grid>
-                    <Grid xs={12}>
-                      <Switch
+                    <Grid item xs={12}>
+                      <TextField
                         id="userType"
                         name="userType"
-                        //checked={Boolean(Number(getUserValue("userType")))}
+                        select
+                        label="userType"
+                        SelectProps={{
+                          native: true,
+                        }}
+                        defaultValue={getUserValue("userType")}
                         {...registerUser("userType", {
                           required: "Required field"
                         })}
-                      />
+                        fullWidth={true}
+                        error={!!userErrors?.userType}
+                        helperText={userErrors?.userType ? userErrors.userType.message : null}
+                      >
+                        {userTypeArray.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </TextField>
                     </Grid>
                   </Grid>
                   <Grid item xs={12} alignItems="flex-start" display="flex">
                     <Grid>
                       <InputLabel sx={{ typography: "h4", mr: 1 }}>備註 :</InputLabel>
                     </Grid>
-                    <Grid xs={12}>
+                    <Grid item xs={12}>
                       <TextareaAutosize
-                        aria-label="minimum height"
                         style={{
                           width: '100%',
                           border: '1px solid rgba(0, 0, 0, 0.23)',
@@ -560,205 +581,6 @@ function SampleDataTable() {
                     </Grid>
                   </Grid>
                 </Grid>
-
-                {/* <Grid
-                  container
-                  display="flex"
-                  direction="column"
-                  justifyContent="flex-start"
-                  alignItems="center"
-                >
-
-                  {(addAndEditStatus == "edit") &&
-                    <Grid
-                      container
-                      spacing={1}
-                      direction="row"
-                      justifyContent="flex-start"
-                      alignItems="center"
-                    >
-                      <Grid item xs={4} >
-                        <Typography variant="h2" sx={{ pb: 1 }}>
-                          ID：
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={8} >
-                        <Typography variant="h2" sx={{ pb: 1 }}>
-                          {selectedId}
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                  }
-
-                  <Grid
-                    container
-                    spacing={1}
-                    direction="row"
-                    justifyContent="flex-start"
-                    alignItems="center"
-                  >
-                    <Grid item xs={4} >
-                      <Typography variant="h2" sx={{ pb: 1 }}>
-                        名稱：
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={8} >
-                      <TextField
-                        id="name"
-                        label="Name"
-                        name="name"
-                        // autoComplete="name"
-                        {...registerUser("name", {
-                          required: "Required field"
-                        })}
-                        defaultValue={getUserValue("name")}
-                        fullWidth={true}
-                        error={!!userErrors?.name}
-                        helperText={userErrors?.name ? userErrors.name.message : null}
-                      />
-                    </Grid>
-                  </Grid>
-                  <Grid
-                    container
-                    spacing={1}
-                    direction="row"
-                    justifyContent="flex-start"
-                    alignItems="center"
-                  >
-                    <Grid item xs={4} >
-                      <Typography variant="h2" sx={{ pb: 1 }}>
-                        信箱：
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={8} >
-                      <TextField
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        // autoComplete="email"
-                        {...registerUser("email", {
-                          required: "Required field",
-                          minLength: { value: 5, message: "at least 5 letter" },
-                          maxLength: { value: 100, message: "need less 100 length" },
-                          pattern: {
-                            value: /^[A-Z0-9._%+-]+@[A-Z0-9._]+\.[A-Z]{2,}$/i,
-                            message: "Invalid email address",
-                          }
-                        })}
-                        defaultValue={getUserValue("status")}
-                        fullWidth={true}
-                        error={!!userErrors?.email}
-                        helperText={userErrors?.email ? userErrors.email.message : null}
-                      />
-                    </Grid>
-                  </Grid>
-
-                  {(addAndEditStatus == "add") &&
-                    <Grid
-                      container
-                      spacing={1}
-                      direction="row"
-                      justifyContent="flex-start"
-                      alignItems="center"
-                    >
-                      <Grid item xs={4} >
-                        <Typography variant="h2" sx={{ pb: 1 }}>
-                          密碼：
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={8} >
-                        <TextField
-                          id="password"
-                          label="Password"
-                          name="password"
-                          type="password"
-                          // autoComplete="password"
-                          {...registerUser("password", {
-                            required: "Required field",
-                            minLength: { value: 5, message: "at least 5 letter" },
-                            maxLength: { value: 100, message: "need less 100 length" },
-                          })}
-                          fullWidth={true}
-                          error={!!userErrors?.password}
-                          helperText={userErrors?.password ? userErrors.password.message : null}
-                        />
-                      </Grid>
-                    </Grid>
-                  }
-
-                  <Grid
-                    container
-                    spacing={1}
-                    direction="row"
-                    justifyContent="flex-start"
-                    alignItems="center"
-                  >
-                    <Grid item xs={4} >
-                      <Typography variant="h2" sx={{ pb: 1 }}>
-                        狀態：
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={8} >
-                      <Switch
-                        id="status"
-                        name="status"
-                        checked={Boolean(Number(getUserValue("status")))}
-                        {...registerUser("status", {})}
-                      />
-                    </Grid>
-                  </Grid>
-                  <Grid
-                    container
-                    spacing={1}
-                    direction="row"
-                    justifyContent="flex-start"
-                    alignItems="center"
-                  >
-                    <Grid item xs={4} >
-                      <Typography variant="h2" sx={{ pb: 1 }}>
-                        使用者區分：
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={8} >
-                      <Select
-                        labelId="demo-select-small"
-                        label=""
-                        size="small"
-                        id="userType"
-                        name="userType"
-                        value={Number(getUserValue("userType"))}
-                        {...registerUser("userType", {
-                          required: "Required field",
-                        })}
-                      >
-                        <MenuItem value={1}>管理者</MenuItem>
-                        <MenuItem value={2}>一般使用者</MenuItem>
-                      </Select>
-                    </Grid>
-                  </Grid>
-                  <Grid
-                    container
-                    spacing={1}
-                    direction="row"
-                    justifyContent="flex-start"
-                    alignItems="center"
-                  >
-                    <Grid item xs={4} >
-                      <Typography variant="h2" sx={{ pb: 1 }}>
-                        備註：
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={8} >
-                      <TextareaAutosize
-                        minRows={3}
-                        id="remark"
-                        name="remark"
-                        {...registerUser("remark", {})}
-                        defaultValue={getUserValue("remark")}
-                      />
-                    </Grid>
-                  </Grid>
-                </Grid> */}
               </Box>
             </DataTableDailog>
 
