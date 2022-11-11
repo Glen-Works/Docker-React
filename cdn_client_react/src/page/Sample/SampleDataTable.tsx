@@ -2,7 +2,7 @@ import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
-import { Box, Button, CircularProgress, Container, Grid, Switch, TextareaAutosize, Typography, useTheme } from '@mui/material';
+import { Box, Button, CircularProgress, Container, Grid, MenuItem, Select, Switch, TextareaAutosize, Typography, useTheme } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import MUIDataTable, { MUIDataTableColumn, MUIDataTableOptions, MUIDataTableState } from "mui-datatables";
 import { useEffect, useState } from 'react';
@@ -26,7 +26,7 @@ interface UserData {
   name: string,
   email: string,
   status: boolean,
-  userType: boolean,
+  userType: number,
   remark: string,
 }
 
@@ -44,26 +44,36 @@ function SampleDataTable() {
   const [addAndEditStatus, setAddAndEditStatus] = useState<"edit" | "add" | "">("");
   const [addAndEditOpen, setAddAndEditOpen] = useState<boolean>(false);
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
+  const onError = (errors, e) => console.log(errors, e);
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { register: registerUser, handleSubmit: handleSubmitUser, setValue: setUserValue, getValues: getUserValue,
-    reset: resetUser, formState: { errors: userErrors } } = useForm(
+    watch: watchUser, reset: resetUser, formState: { errors: userErrors } } = useForm(
       {
         defaultValues: {
           name: "",
           email: "",
           password: "",
           status: true,
-          userType: false,
+          userType: 2,
           remark: "",
         }
       });
+
 
   useEffect(() => {
     getData(null);
   }, []);
 
-  // useEffect(() => {
-  // }, [getUserValue("name")]);
+  useEffect(() => {
+    // console.log(
+    //   getUserValue("name") + "," +
+    //   getUserValue("email") + "," +
+    //   getUserValue("status") + "," +
+    //   getUserValue("userType") + "," +
+    //   getUserValue("remark") + "," +
+    //   getUserValue("password") + ","
+    // );
+  }, [watchUser()]);
 
   function getData(ds: PageManagement | null) {
     userListApi(ds, state)
@@ -86,8 +96,7 @@ function SampleDataTable() {
   const handleEditClickOpen = (id: number) => {
     unstable_batchedUpdates(() => {
       setAddAndEditStatus("edit");
-      setAddAndEditOpen(true);
-      getEditDataById(id);
+      getEditDataById(id).then(async () => { setAddAndEditOpen(true) });
       setSelectedId(id);
     });
   };
@@ -111,8 +120,8 @@ function SampleDataTable() {
     setDeleteOpen(false);
   };
 
-  function getEditDataById(id: number) {
-    userInfoApi(id, state)
+  async function getEditDataById(id: number) {
+    await userInfoApi(id, state)
       .then(res => {
         let data = res.data[0];
         setUserValue("name", data.name, { shouldValidate: true });
@@ -131,7 +140,7 @@ function SampleDataTable() {
       name: getUserValue("name"),
       email: getUserValue("email"),
       status: Boolean(Number(getUserValue("status"))),
-      userType: Boolean(Number(getUserValue("userType"))),
+      userType: Number(getUserValue("userType")),
       remark: getUserValue("remark"),
     }
     return userData;
@@ -338,7 +347,7 @@ function SampleDataTable() {
           changePage(tableState);
           break;
         default:
-          console.log('action not handled.');
+        // console.log('action not handled.');
       }
     },
   };
@@ -436,7 +445,7 @@ function SampleDataTable() {
               maxWidth="md"
               isOpen={addAndEditOpen}
               handleClose={handleAddAndEditClose}
-              submit={handleSubmitUser((addAndEditStatus == "add") ? checkAddUser : checkEditUser)}
+              submit={handleSubmitUser((addAndEditStatus == "add") ? checkAddUser : checkEditUser, onError)}
             >
               {/* onSubmit={handleSubmitUser(checkEditUser)} */}
               <Box component="form" noValidate sx={{ width: 1, height: 1, mt: 1, justifyContent: 'center', display: 'flex' }} >
@@ -599,10 +608,10 @@ function SampleDataTable() {
                         label="Name"
                         name="name"
                         // autoComplete="name"
-                        defaultValue={getUserValue("name")}
                         {...registerUser("name", {
                           required: "Required field"
                         })}
+                        defaultValue={getUserValue("name")}
                         fullWidth={true}
                         error={!!userErrors?.name}
                         helperText={userErrors?.name ? userErrors.name.message : null}
@@ -626,7 +635,6 @@ function SampleDataTable() {
                         id="email"
                         label="Email Address"
                         name="email"
-                        defaultValue={getUserValue("status")}
                         // autoComplete="email"
                         {...registerUser("email", {
                           required: "Required field",
@@ -637,6 +645,7 @@ function SampleDataTable() {
                             message: "Invalid email address",
                           }
                         })}
+                        defaultValue={getUserValue("status")}
                         fullWidth={true}
                         error={!!userErrors?.email}
                         helperText={userErrors?.email ? userErrors.email.message : null}
@@ -694,9 +703,7 @@ function SampleDataTable() {
                         id="status"
                         name="status"
                         checked={Boolean(Number(getUserValue("status")))}
-                        {...registerUser("status", {
-                          required: "Required field"
-                        })}
+                        {...registerUser("status", {})}
                       />
                     </Grid>
                   </Grid>
@@ -709,18 +716,24 @@ function SampleDataTable() {
                   >
                     <Grid item xs={4} >
                       <Typography variant="h2" sx={{ pb: 1 }}>
-                        管理者：
+                        使用者區分：
                       </Typography>
                     </Grid>
                     <Grid item xs={8} >
-                      <Switch
+                      <Select
+                        labelId="demo-select-small"
+                        label=""
+                        size="small"
                         id="userType"
                         name="userType"
-                        checked={Boolean(Number(getUserValue("userType")))}
+                        value={Number(getUserValue("userType"))}
                         {...registerUser("userType", {
-                          required: "Required field"
+                          required: "Required field",
                         })}
-                      />
+                      >
+                        <MenuItem value={1}>管理者</MenuItem>
+                        <MenuItem value={2}>一般使用者</MenuItem>
+                      </Select>
                     </Grid>
                   </Grid>
                   <Grid
@@ -740,9 +753,8 @@ function SampleDataTable() {
                         minRows={3}
                         id="remark"
                         name="remark"
-                        // autoComplete="remark"
-                        defaultValue={getUserValue("remark")}
                         {...registerUser("remark", {})}
+                        defaultValue={getUserValue("remark")}
                       />
                     </Grid>
                   </Grid>
