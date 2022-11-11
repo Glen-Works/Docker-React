@@ -2,7 +2,8 @@ import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
-import { Box, Button, CircularProgress, Container, Grid, MenuItem, Select, Switch, TextareaAutosize, Typography, useTheme } from '@mui/material';
+import { Box, Button, CircularProgress, Container, Grid, Switch, TextareaAutosize, Typography, useTheme } from '@mui/material';
+import InputLabel from '@mui/material/InputLabel';
 import TextField from '@mui/material/TextField';
 import MUIDataTable, { MUIDataTableColumn, MUIDataTableOptions, MUIDataTableState } from "mui-datatables";
 import { useEffect, useState } from 'react';
@@ -10,17 +11,16 @@ import { unstable_batchedUpdates } from "react-dom";
 import { Helmet } from 'react-helmet-async';
 import { useForm } from "react-hook-form";
 import { userAddApi, userDeleteApi, userEditApi, userInfoApi, userListApi } from 'src/api/Sample/sampleDataTableApi';
-import { ColumnIconButton } from 'src/components/DataTableTheme/CustomerIconRender';
-import { CustomBodySwitchBool, CustomBodyTime } from 'src/components/DataTableTheme/CustomerRender';
-import getDataTableState, { DataTableStatus, PageManagement, Search, setPageManagement } from 'src/components/DataTableTheme/DataTableState';
-import DataTableThemeProvider from 'src/components/DataTableTheme/DataTableThemeProvider';
-import getTextLabels from 'src/components/DataTableTheme/TextLabels';
+import { ColumnIconButton } from 'src/components/DataTable/CustomerIconRender';
+import { CustomBodySwitchBool, CustomBodyTime } from 'src/components/DataTable/CustomerRender';
+import DataTableDailog from 'src/components/DataTable/DataTableDailog';
+import getDataTableState, { DataTableStatus, PageManagement, Search, setPageManagement } from 'src/components/DataTable/DataTableState';
+import DataTableThemeProvider from 'src/components/DataTable/DataTableThemeProvider';
+import getTextLabels from 'src/components/DataTable/TextLabels';
 import Footer from 'src/components/Footer';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import PageHeader from '../PageBase/PageHeader';
-import SampleDataTableDailog from './SampleDataTableDailog';
-import InputLabel from '@mui/material/InputLabel';
 
 interface UserData {
   name: string,
@@ -393,7 +393,7 @@ function SampleDataTable() {
                   {...register("name", {})}
                 />
               </Grid>
-              <Grid item alignItems="stretch">
+              <Grid item >
                 <TextField
                   id="email"
                   label="Email Address"
@@ -440,7 +440,7 @@ function SampleDataTable() {
             </DataTableThemeProvider>
 
             {/* 修改 */}
-            <SampleDataTableDailog
+            <DataTableDailog
               title={(addAndEditStatus == "add") ? "新增使用者" : "修改使用者"}
               maxWidth="md"
               isOpen={addAndEditOpen}
@@ -760,10 +760,10 @@ function SampleDataTable() {
                   </Grid>
                 </Grid> */}
               </Box>
-            </SampleDataTableDailog>
+            </DataTableDailog>
 
             {/* 刪除 */}
-            <SampleDataTableDailog
+            <DataTableDailog
               title={"刪除使用者"}
               maxWidth="xs"
               isOpen={deleteOpen}
@@ -774,7 +774,7 @@ function SampleDataTable() {
                 {"是否確定要刪除" + selectedData}
               </Box>
 
-            </SampleDataTableDailog >
+            </DataTableDailog >
           </Grid >
         </Grid >
       </Container >
