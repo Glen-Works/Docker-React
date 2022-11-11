@@ -43,6 +43,7 @@ function SampleDataTable() {
   const [addAndEditStatus, setAddAndEditStatus] = useState<"edit" | "add" | "">("");
   const [addAndEditOpen, setAddAndEditOpen] = useState<boolean>(false);
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
+  const onError = (errors, e) => console.log(errors, e);
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { register: registerUser, handleSubmit: handleSubmitUser, setValue: setUserValue, getValues: getUserValue,
     watch: watchUser, reset: resetUser, formState: { errors: userErrors } } = useForm(
@@ -57,21 +58,21 @@ function SampleDataTable() {
         }
       });
 
-  const onError = (errors, e) => console.log(errors, e);
-
 
   useEffect(() => {
     getData(null);
   }, []);
 
   useEffect(() => {
-    setUserValue("name", watchUser("name"));
-    setUserValue("email", watchUser("email"));
-    setUserValue("status", watchUser("status"));
-    setUserValue("userType", watchUser("userType"));
-    setUserValue("remark", watchUser("remark"));
-    setUserValue("password", watchUser("password"));
-  }, [watchUser]);
+    // console.log(
+    //   getUserValue("name") + "," +
+    //   getUserValue("email") + "," +
+    //   getUserValue("status") + "," +
+    //   getUserValue("userType") + "," +
+    //   getUserValue("remark") + "," +
+    //   getUserValue("password") + ","
+    // );
+  }, [watchUser()]);
 
   function getData(ds: PageManagement | null) {
     userListApi(ds, state)
@@ -94,8 +95,7 @@ function SampleDataTable() {
   const handleEditClickOpen = (id: number) => {
     unstable_batchedUpdates(() => {
       setAddAndEditStatus("edit");
-      setAddAndEditOpen(true);
-      getEditDataById(id);
+      getEditDataById(id).then(async () => { setAddAndEditOpen(true) });
       setSelectedId(id);
     });
   };
@@ -119,8 +119,8 @@ function SampleDataTable() {
     setDeleteOpen(false);
   };
 
-  function getEditDataById(id: number) {
-    userInfoApi(id, state)
+  async function getEditDataById(id: number) {
+    await userInfoApi(id, state)
       .then(res => {
         let data = res.data[0];
         setUserValue("name", data.name, { shouldValidate: true });
@@ -160,7 +160,7 @@ function SampleDataTable() {
 
     let userData = getDialogUserData();
     console.log(userData);
-    // editUser(userData);
+    editUser(userData);
   };
 
   function addUser(data: any) {
@@ -346,7 +346,7 @@ function SampleDataTable() {
           changePage(tableState);
           break;
         default:
-          console.log('action not handled.');
+        // console.log('action not handled.');
       }
     },
   };
