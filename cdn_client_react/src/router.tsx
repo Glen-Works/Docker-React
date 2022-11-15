@@ -7,7 +7,7 @@ import SidebarLayout from './layouts/SidebarLayout';
 
 const Loader = (Component) => (props) =>
 (
-  <Suspense fallback={<SuspenseLoader />}>
+  <Suspense fallback={<SuspenseLoader isOpen={true} />}>
     <Component {...props} />
   </Suspense>
 );
@@ -52,7 +52,7 @@ const routes: RouteObject[] = [
   },
   {
     path: '',
-    element: <Navigate to="404" replace />
+    element: <Navigate to="login" replace />
   },
   {
     path: '404',

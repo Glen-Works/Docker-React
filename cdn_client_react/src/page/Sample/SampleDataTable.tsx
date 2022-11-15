@@ -19,12 +19,13 @@ import DataTableThemeProvider from 'src/components/DataTable/DataTableThemeProvi
 import getTextLabels from 'src/components/DataTable/TextLabels';
 import Footer from 'src/components/Footer';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
+import SuspenseLoader from 'src/components/SuspenseLoader';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import PageHeader from '../PageBase/PageHeader';
 
-const userTypeArray = [
-  { value: '1', label: '管理者', },
-  { value: '2', label: '一般使用者', },
+const userTypeMap = [
+  { id: 1, label: '管理者', color: 'primary' },
+  { id: 2, label: '一般使用者', color: 'secondary' }
 ];
 
 interface UserData {
@@ -69,16 +70,7 @@ function SampleDataTable() {
     getData(null);
   }, []);
 
-  useEffect(() => {
-    // console.log(
-    //   getUserValue("name") + "," +
-    //   getUserValue("email") + "," +
-    //   getUserValue("status") + "," +
-    //   getUserValue("userType") + "," +
-    //   getUserValue("remark") + "," +
-    //   getUserValue("password") + ","
-    // );
-  }, [watchUser()]);
+  useEffect(() => { }, [watchUser()]);
 
   function getData(ds: PageManagement | null) {
     userListApi(ds, state)
@@ -101,7 +93,7 @@ function SampleDataTable() {
   const handleEditClickOpen = (id: number) => {
     unstable_batchedUpdates(() => {
       setAddAndEditStatus("edit");
-      getEditDataById(id).then(async () => { setAddAndEditOpen(true) });
+      getEditDataById(id).then(() => { setAddAndEditOpen(true) });
       setSelectedId(id);
     });
   };
@@ -360,6 +352,7 @@ function SampleDataTable() {
 
   return (
     <>
+      <SuspenseLoader isOpen={tableState.isLoading} />
       <Helmet>
         <title>Transactions - Applications</title>
       </Helmet>
@@ -534,7 +527,6 @@ function SampleDataTable() {
                         id="userType"
                         name="userType"
                         select
-                        label="userType"
                         SelectProps={{
                           native: true,
                         }}
@@ -546,8 +538,8 @@ function SampleDataTable() {
                         error={!!userErrors?.userType}
                         helperText={userErrors?.userType ? userErrors.userType.message : null}
                       >
-                        {userTypeArray.map((option) => (
-                          <option key={option.value} value={option.value}>
+                        {userTypeMap.map((option) => (
+                          <option key={option.id} value={option.id}>
                             {option.label}
                           </option>
                         ))}

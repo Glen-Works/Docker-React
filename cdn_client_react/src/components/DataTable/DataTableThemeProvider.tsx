@@ -119,7 +119,7 @@ const TableTheme = (baseTheme: Theme) =>
             },
           }, resizer: {
             backgroundColor: 'rgba(224, 224, 224, 1)',
-            '&:hover, &:focus': { background: "black" },
+            '&:hover, &:focus, &:active': { background: 'black', width: '5px' },
           }
         },
       }, MUIDataTableFooter: {

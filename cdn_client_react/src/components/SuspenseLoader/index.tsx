@@ -1,32 +1,25 @@
-import { useEffect } from 'react';
-import NProgress from 'nprogress';
-import { Box, CircularProgress } from '@mui/material';
+import { CircularProgress, Modal } from '@mui/material';
 
-function SuspenseLoader() {
-  useEffect(() => {
-    NProgress.start();
-
-    return () => {
-      NProgress.done();
-    };
-  }, []);
-
-  return (
-    <Box
-      sx={{
-        position: 'fixed',
-        left: 0,
-        top: 0,
-        width: '100%',
-        height: '100%'
-      }}
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-    >
-      <CircularProgress size={64} disableShrink thickness={3} />
-    </Box>
-  );
+interface LodingProp {
+  isOpen: boolean,
 }
 
-export default SuspenseLoader;
+export default function SuspenseLoader(props: LodingProp) {
+  const { isOpen } = props;
+
+  return (
+    <Modal open={isOpen} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+      <CircularProgress
+        disableShrink
+        size={64}
+        thickness={3}
+        sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          outline: 'none',
+        }} />
+    </Modal>
+  );
+}
