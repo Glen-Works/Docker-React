@@ -10,7 +10,7 @@ interface DataTableInfoProp {
   submit: () => void,
 }
 
-export default function DataTableDailog(props: DataTableInfoProp) {
+export default function DataTableDialog(props: DataTableInfoProp) {
   const { title, maxWidth, isOpen, children, handleClose, submit } = props;
 
   return (

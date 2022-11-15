@@ -13,7 +13,7 @@ import { useForm } from "react-hook-form";
 import { userAddApi, userDeleteApi, userEditApi, userInfoApi, userListApi } from 'src/api/Sample/sampleDataTableApi';
 import { ColumnIconButton } from 'src/components/DataTable/CustomerIconRender';
 import { CustomBodySwitchBool, CustomBodyTime } from 'src/components/DataTable/CustomerRender';
-import DataTableDailog from 'src/components/DataTable/DataTableDailog';
+import DataTableDialog from 'src/components/DataTable/DataTableDialog';
 import getDataTableState, { DataTableStatus, PageManagement, Search, setPageManagement } from 'src/components/DataTable/DataTableState';
 import DataTableThemeProvider from 'src/components/DataTable/DataTableThemeProvider';
 import getTextLabels from 'src/components/DataTable/TextLabels';
@@ -439,7 +439,7 @@ function SampleDataTable() {
             </DataTableThemeProvider>
 
             {/* 修改 */}
-            <DataTableDailog
+            <DataTableDialog
               title={(addAndEditStatus == "add") ? "新增使用者" : "修改使用者"}
               maxWidth="md"
               isOpen={addAndEditOpen}
@@ -574,10 +574,10 @@ function SampleDataTable() {
                   </Grid>
                 </Grid>
               </Box>
-            </DataTableDailog>
+            </DataTableDialog>
 
             {/* 刪除 */}
-            <DataTableDailog
+            <DataTableDialog
               title={"刪除使用者"}
               maxWidth="xs"
               isOpen={deleteOpen}
@@ -588,7 +588,7 @@ function SampleDataTable() {
                 {"是否確定要刪除" + selectedData}
               </Box>
 
-            </DataTableDailog >
+            </DataTableDialog >
           </Grid >
         </Grid >
       </Container >
