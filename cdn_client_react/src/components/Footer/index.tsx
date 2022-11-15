@@ -6,7 +6,7 @@ const FooterWrapper = styled(Container)(
 
 function Footer() {
   return (
-    <FooterWrapper sx={{ position: 'absolute' }}>
+    <FooterWrapper>
       <Box
         py={1}
         display={{ xs: 'block' }}
