@@ -1,6 +1,7 @@
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
+import KeyTwoToneIcon from '@mui/icons-material/KeyTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
 import { Box, Button, CircularProgress, Container, Grid, Switch, Typography, useTheme } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
@@ -105,6 +106,13 @@ function SampleDataTable() {
     unstable_batchedUpdates(() => {
       setAddAndEditStatus("edit");
       getEditDataById(id).then(() => { setAddAndEditOpen(true) });
+      setSelectedId(id);
+    });
+  };
+
+  const handleKeyClickOpen = (id: number) => {
+    unstable_batchedUpdates(() => {
+      setAddAndEditOpen(true);
       setSelectedId(id);
     });
   };
@@ -342,6 +350,14 @@ function SampleDataTable() {
               >
                 <DeleteTwoToneIcon fontSize="small" />
               </ColumnIconButton>
+              <ColumnIconButton
+                title="修改密碼"
+                handleClickOpen={() => { handleKeyClickOpen(id) }}
+                color={theme.palette.info.main}
+                background={theme.colors.error.lighter}
+              >
+                <KeyTwoToneIcon fontSize="small" />
+              </ColumnIconButton>
             </Box>
           );
         }
@@ -417,6 +433,7 @@ function SampleDataTable() {
                   name="name"
                   autoComplete="name"
                   size="small"
+                  type="search"
                   {...register("name", {})}
                 />
               </Grid>
@@ -427,6 +444,7 @@ function SampleDataTable() {
                   name="email"
                   autoComplete="email"
                   size="small"
+                  type="search"
                   {...register("email", {})}
                 />
               </Grid>
@@ -494,7 +512,6 @@ function SampleDataTable() {
                     <Grid item xs={12}>
                       <TextField
                         id="name"
-                        //label="Name"
                         name="name"
                         defaultValue={getUserValue("name")}
                         {...registerUser("name", {
@@ -531,6 +548,28 @@ function SampleDataTable() {
                       />
                     </Grid>
                   </Grid>
+                  {(addAndEditStatus == "add") &&
+                    <Grid item xs={12} alignItems="center" display="flex">
+                      <Grid>
+                        <InputLabel sx={{ typography: "h4", mr: 1 }}>密碼 :</InputLabel>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          id="password"
+                          name="password"
+                          type="password"
+                          {...registerUser("password", {
+                            required: "Required field",
+                            minLength: { value: 5, message: "at least 5 letter" },
+                            maxLength: { value: 100, message: "need less 100 length" },
+                          })}
+                          fullWidth={true}
+                          error={!!userErrors?.password}
+                          helperText={userErrors?.password ? userErrors.password.message : null}
+                        />
+                      </Grid>
+                    </Grid>
+                  }
                   <Grid item xs={12} alignItems="center" display="flex">
                     <Grid>
                       <InputLabel sx={{ typography: "h4", mr: 1 }}>狀態 :</InputLabel>
@@ -539,7 +578,7 @@ function SampleDataTable() {
                       <Switch
                         id="status"
                         name="status"
-                        //checked={Boolean(Number(getUserValue("status")))}
+                        checked={Boolean(Number(getUserValue("status")))}
                         {...registerUser("status", {
                           required: "Required field"
                         })}
