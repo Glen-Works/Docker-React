@@ -1,90 +1,9 @@
 import { createTheme, Theme, ThemeProvider } from '@mui/material/styles';
 
-declare module '@mui/material/styles' {
-  interface Components {
-    [key: string]: any
-  }
-}
-
-/*declare module '@mui/material/styles' {
-  interface Theme {
-    MUIDataTable: {
-      styleOverrides: {
-        paper: {
-          borderRadius: number,
-       },
-      },
-    },MUIDataTableToolbar: {
-      styleOverrides: {
-        root: {
-          padding: string,
-        },titleText: {
-          fontWeight: string,
-       },
-      },
-    },MUIDataTableFooter: {
-      styleOverrides: {
-        root: {
-          "& td": { border: string }
-        },
-      },
-    }
-  }
-  // allow configuration using `createTheme`
-  interface ThemeOptions {
-    MUIDataTable: {
-      styleOverrides: {
-        paper: {
-          borderRadius: number,
-       },
-      },
-    },MUIDataTableToolbar: {
-      styleOverrides: {
-        root: {
-          padding: string,
-        },titleText: {
-          fontWeight: string,
-       },
-      },
-    },MUIDataTableFooter: {
-      styleOverrides: {
-        root: {
-          "& td": { border: string }
-        },
-      },
-    }
-
-  }
-}*/
-
-declare module '@mui/material/styles' {
-  interface Theme {
-    MUIDataTableBodyCell?: {
-      styleOverrides: {
-        root?: {
-          backgroundColor: String,
-        },
-      },
-    }
-  }
-  // allow configuration using `createTheme`
-  interface ThemeOptions {
-    MUIDataTableBodyCell?: {
-      styleOverrides: {
-        root?: {
-          backgroundColor: String,
-        },
-      },
-    }
-
-  }
-}
-
-const TableTheme = (baseTheme: Theme) =>
+const TableTheme = (Theme) =>
   createTheme({
-    ...baseTheme,
+    ...Theme,
     components: {
-      ...baseTheme.components,
       MUIDataTable: {
         styleOverrides: {
           paper: {
@@ -131,7 +50,7 @@ const TableTheme = (baseTheme: Theme) =>
       }
 
     },
-  })
+  });
 
 const DataTableThemeProvider: React.FC = (props) => {
 

@@ -2,7 +2,7 @@ import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
-import { Box, Button, CircularProgress, Container, Grid, Switch, TextareaAutosize, Typography, useTheme } from '@mui/material';
+import { Box, Button, CircularProgress, Container, Grid, styled, Switch, TextareaAutosize, Typography, useTheme } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import TextField from '@mui/material/TextField';
 import MUIDataTable, { MUIDataTableColumn, MUIDataTableOptions, MUIDataTableState } from "mui-datatables";
@@ -12,31 +12,33 @@ import { Helmet } from 'react-helmet-async';
 import { useForm } from "react-hook-form";
 import { userAddApi, userDeleteApi, userEditApi, userInfoApi, userListApi } from 'src/api/Sample/sampleDataTableApi';
 import { ColumnIconButton } from 'src/components/DataTable/CustomerIconRender';
-import { CustomBodyTime } from 'src/components/DataTable/CustomerRender';
-import DataTableDialog from 'src/components/DataTable/DataTableDialog';
+import { CustomBodySwitchBool, CustomBodyTime } from 'src/components/DataTable/CustomerRender';
+import DataTableDailog from 'src/components/DataTable/DataTableDailog';
 import getDataTableState, { DataTableStatus, PageManagement, Search, setPageManagement } from 'src/components/DataTable/DataTableState';
 import DataTableThemeProvider from 'src/components/DataTable/DataTableThemeProvider';
 import getTextLabels from 'src/components/DataTable/TextLabels';
 import Footer from 'src/components/Footer';
-import Label from 'src/components/Label';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import PageHeader from '../PageBase/PageHeader';
 
-interface MapStyle {
-  [key: number]: { label: string, color: "primary" | "secondary" | "error" | "black" | "warning" | "success" | "info" }
+const TextareaStyle = {
+  width: '100%',
+  border: '1px solid rgba(0, 0, 0, 0.23)',
+  borderRadius: '10px',
+  margin: 0,
+  padding: '16px 14px',
+  fontSize: '14px',
+  fontFamily: '"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji"',
+  fontWeight: 400,
+  lineHeight: '1.4375em',
 }
 
-const userTypeMap: MapStyle = {
-  1: { label: '管理者', color: 'primary' },
-  2: { label: '一般使用者', color: 'secondary' }
-}
-
-const statusMap: MapStyle = {
-  0: { label: '停用', color: 'error' },
-  1: { label: '啟用', color: 'primary' }
-}
+const userTypeMap = [
+  { id: 1, label: '管理者', color: 'primary' },
+  { id: 2, label: '一般使用者', color: 'secondary' }
+];
 
 interface UserData {
   name: string,
@@ -252,13 +254,7 @@ function SampleDataTable() {
       label: "status",
       options: {
         sort: true,
-        customBodyRender: (value, tableMeta, updateValue) => (
-          <>
-            {(statusMap[value]) &&
-              < Label color={statusMap[value].color}>{statusMap[value].label}</Label>
-            }
-          </>
-        )
+        customBodyRender: CustomBodySwitchBool
       }
     },
     {
@@ -266,13 +262,7 @@ function SampleDataTable() {
       label: "userType",
       options: {
         sort: true,
-        customBodyRender: (value, tableMeta, updateValue) => (
-          <>
-            {(userTypeMap[value] != undefined) &&
-              < Label color={userTypeMap[value].color}>{userTypeMap[value].label}</Label>
-            }
-          </>
-        )
+        customBodyRender: CustomBodySwitchBool
       }
     },
     /*{
@@ -461,7 +451,7 @@ function SampleDataTable() {
             </DataTableThemeProvider>
 
             {/* 修改 */}
-            <DataTableDialog
+            <DataTableDailog
               title={(addAndEditStatus == "add") ? "新增使用者" : "修改使用者"}
               maxWidth="md"
               isOpen={addAndEditOpen}
@@ -560,12 +550,11 @@ function SampleDataTable() {
                         error={!!userErrors?.userType}
                         helperText={userErrors?.userType ? userErrors.userType.message : null}
                       >
-                        {Object.keys(userTypeMap).map((value) => (
-                          <option key={value} value={value}>
-                            {userTypeMap[value].label}
+                        {userTypeMap.map((option) => (
+                          <option key={option.id} value={option.id}>
+                            {option.label}
                           </option>
-                        ))
-                        }
+                        ))}
                       </TextField>
                     </Grid>
                   </Grid>
@@ -575,17 +564,7 @@ function SampleDataTable() {
                     </Grid>
                     <Grid item xs={12}>
                       <TextareaAutosize
-                        style={{
-                          width: '100%',
-                          border: '1px solid rgba(0, 0, 0, 0.23)',
-                          borderRadius: '10px',
-                          margin: 0,
-                          padding: '16px 14px',
-                          fontSize: '14px',
-                          fontFamily: '"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji"',
-                          fontWeight: 400,
-                          lineHeight: '1.4375em',
-                        }}
+                        style={TextareaStyle}
                         minRows={5}
                         maxRows={8}
                         id="remark"
@@ -597,10 +576,10 @@ function SampleDataTable() {
                   </Grid>
                 </Grid>
               </Box>
-            </DataTableDialog>
+            </DataTableDailog>
 
             {/* 刪除 */}
-            <DataTableDialog
+            <DataTableDailog
               title={"刪除使用者"}
               maxWidth="xs"
               isOpen={deleteOpen}
@@ -611,7 +590,7 @@ function SampleDataTable() {
                 {"是否確定要刪除" + selectedData}
               </Box>
 
-            </DataTableDialog >
+            </DataTableDailog >
           </Grid >
         </Grid >
       </Container >
