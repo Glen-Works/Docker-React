@@ -276,11 +276,12 @@ function SampleDataTable() {
         )
       }
     },
-    /*{
+    {
       name: "loginIp",
       label: "loginIp",
       options: {
         sort: true,
+        display: false,
       }
     },
     {
@@ -288,6 +289,7 @@ function SampleDataTable() {
       label: "loginTime",
       options: {
         sort: true,
+        display: false,
         customBodyRender: CustomBodyTime
       }
     },
@@ -296,14 +298,16 @@ function SampleDataTable() {
       label: "createdAt",
       options: {
         sort: true,
+        display: false,
         customBodyRender: CustomBodyTime
       }
-    },*/
+    },
     {
       name: "updatedAt",
       label: "updatedAt",
       options: {
         sort: true,
+        display: false,
         customBodyRender: CustomBodyTime
       }
     },
