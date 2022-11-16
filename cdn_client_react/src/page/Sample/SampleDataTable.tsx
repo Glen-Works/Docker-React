@@ -314,6 +314,7 @@ function SampleDataTable() {
         download: false,
         viewColumns: false,
         sort: false,
+        // customHeadLabelRender: CustomHeadLabelLowerCase,
         customBodyRenderLite: (dataIndex: number, rowIndex: number) => {
           // console.log(dataIndex, rowIndex);
           let rowData = tableState.data[dataIndex];

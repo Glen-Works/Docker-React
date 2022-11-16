@@ -14,3 +14,8 @@ export const CustomBodyTime = (value: any, tableMeta: MUIDataTableMeta, updateVa
     </div>
   );
 }
+
+// export const CustomHeadLabelLowerCase = (options: CustomHeadLabelRenderOptions): string | React.ReactNode => {
+//   let label = options.label?.toLowerCase() ?? "";
+//   return label;
+// }

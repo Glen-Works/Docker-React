@@ -1,9 +1,10 @@
-import { createTheme, Theme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const TableTheme = (Theme) =>
   createTheme({
     ...Theme,
     components: {
+      ...Theme.components,
       MUIDataTable: {
         styleOverrides: {
           paper: {
