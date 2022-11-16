@@ -2,7 +2,7 @@ import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
-import { Box, Button, CircularProgress, Container, Grid, styled, Switch, TextareaAutosize, Typography, useTheme } from '@mui/material';
+import { Box, Button, CircularProgress, Container, Grid, Switch, TextareaAutosize, Typography, useTheme } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import TextField from '@mui/material/TextField';
 import MUIDataTable, { MUIDataTableColumn, MUIDataTableOptions, MUIDataTableState } from "mui-datatables";
@@ -12,12 +12,13 @@ import { Helmet } from 'react-helmet-async';
 import { useForm } from "react-hook-form";
 import { userAddApi, userDeleteApi, userEditApi, userInfoApi, userListApi } from 'src/api/Sample/sampleDataTableApi';
 import { ColumnIconButton } from 'src/components/DataTable/CustomerIconRender';
-import { CustomBodySwitchBool, CustomBodyTime } from 'src/components/DataTable/CustomerRender';
-import DataTableDailog from 'src/components/DataTable/DataTableDailog';
+import { CustomBodyTime } from 'src/components/DataTable/CustomerRender';
+import DataTableDialog from 'src/components/DataTable/DataTableDialog';
 import getDataTableState, { DataTableStatus, PageManagement, Search, setPageManagement } from 'src/components/DataTable/DataTableState';
 import DataTableThemeProvider from 'src/components/DataTable/DataTableThemeProvider';
 import getTextLabels from 'src/components/DataTable/TextLabels';
 import Footer from 'src/components/Footer';
+import Label from 'src/components/Label';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
@@ -35,10 +36,19 @@ const TextareaStyle = {
   lineHeight: '1.4375em',
 }
 
-const userTypeMap = [
-  { id: 1, label: '管理者', color: 'primary' },
-  { id: 2, label: '一般使用者', color: 'secondary' }
-];
+interface MapStyle {
+  [key: number]: { label: string, color: "primary" | "secondary" | "error" | "black" | "warning" | "success" | "info" }
+}
+
+const userTypeMap: MapStyle = {
+  1: { label: '管理者', color: 'primary' },
+  2: { label: '一般使用者', color: 'secondary' }
+}
+
+const statusMap: MapStyle = {
+  0: { label: '停用', color: 'error' },
+  1: { label: '啟用', color: 'primary' }
+}
 
 interface UserData {
   name: string,
@@ -254,7 +264,13 @@ function SampleDataTable() {
       label: "status",
       options: {
         sort: true,
-        customBodyRender: CustomBodySwitchBool
+        customBodyRender: (value, tableMeta, updateValue) => (
+          <>
+            {(statusMap[value]) &&
+              < Label color={statusMap[value].color}>{statusMap[value].label}</Label>
+            }
+          </>
+        )
       }
     },
     {
@@ -262,7 +278,13 @@ function SampleDataTable() {
       label: "userType",
       options: {
         sort: true,
-        customBodyRender: CustomBodySwitchBool
+        customBodyRender: (value, tableMeta, updateValue) => (
+          <>
+            {(userTypeMap[value] != undefined) &&
+              < Label color={userTypeMap[value].color}>{userTypeMap[value].label}</Label>
+            }
+          </>
+        )
       }
     },
     /*{
@@ -451,7 +473,7 @@ function SampleDataTable() {
             </DataTableThemeProvider>
 
             {/* 修改 */}
-            <DataTableDailog
+            <DataTableDialog
               title={(addAndEditStatus == "add") ? "新增使用者" : "修改使用者"}
               maxWidth="md"
               isOpen={addAndEditOpen}
@@ -550,11 +572,12 @@ function SampleDataTable() {
                         error={!!userErrors?.userType}
                         helperText={userErrors?.userType ? userErrors.userType.message : null}
                       >
-                        {userTypeMap.map((option) => (
-                          <option key={option.id} value={option.id}>
-                            {option.label}
+                        {Object.keys(userTypeMap).map((value) => (
+                          <option key={value} value={value}>
+                            {userTypeMap[value].label}
                           </option>
-                        ))}
+                        ))
+                        }
                       </TextField>
                     </Grid>
                   </Grid>
@@ -576,10 +599,10 @@ function SampleDataTable() {
                   </Grid>
                 </Grid>
               </Box>
-            </DataTableDailog>
+            </DataTableDialog>
 
             {/* 刪除 */}
-            <DataTableDailog
+            <DataTableDialog
               title={"刪除使用者"}
               maxWidth="xs"
               isOpen={deleteOpen}
@@ -590,7 +613,7 @@ function SampleDataTable() {
                 {"是否確定要刪除" + selectedData}
               </Box>
 
-            </DataTableDailog >
+            </DataTableDialog >
           </Grid >
         </Grid >
       </Container >
