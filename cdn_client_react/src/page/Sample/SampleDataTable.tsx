@@ -2,7 +2,7 @@ import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
-import { Box, Button, CircularProgress, Container, Grid, Switch, TextareaAutosize, Typography, useTheme } from '@mui/material';
+import { Box, Button, CircularProgress, Container, Grid, Switch, Typography, useTheme } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import TextField from '@mui/material/TextField';
 import MUIDataTable, { MUIDataTableColumn, MUIDataTableOptions, MUIDataTableState } from "mui-datatables";
@@ -18,23 +18,12 @@ import getDataTableState, { DataTableStatus, PageManagement, Search, setPageMana
 import DataTableThemeProvider from 'src/components/DataTable/DataTableThemeProvider';
 import getTextLabels from 'src/components/DataTable/TextLabels';
 import Footer from 'src/components/Footer';
+import TextArea from 'src/components/Input/TextArea';
 import Label from 'src/components/Label';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import PageHeader from '../PageBase/PageHeader';
-
-const TextareaStyle = {
-  width: '100%',
-  border: '1px solid rgba(0, 0, 0, 0.23)',
-  borderRadius: '10px',
-  margin: 0,
-  padding: '16px 14px',
-  fontSize: '14px',
-  fontFamily: '"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji"',
-  fontWeight: 400,
-  lineHeight: '1.4375em',
-}
 
 interface MapStyle {
   [key: number]: { label: string, color: "primary" | "secondary" | "error" | "black" | "warning" | "success" | "info" }
@@ -586,8 +575,7 @@ function SampleDataTable() {
                       <InputLabel sx={{ typography: "h4", mr: 1 }}>備註 :</InputLabel>
                     </Grid>
                     <Grid item xs={12}>
-                      <TextareaAutosize
-                        style={TextareaStyle}
+                      <TextArea
                         minRows={5}
                         maxRows={8}
                         id="remark"
