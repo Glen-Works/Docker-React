@@ -4,7 +4,6 @@ import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import KeyTwoToneIcon from '@mui/icons-material/KeyTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
 import { Box, Button, CircularProgress, Container, Grid, Switch, Typography, useTheme } from '@mui/material';
-import InputLabel from '@mui/material/InputLabel';
 import TextField from '@mui/material/TextField';
 import MUIDataTable, { MUIDataTableColumn, MUIDataTableOptions, MUIDataTableState } from "mui-datatables";
 import { useEffect, useState } from 'react';
@@ -17,6 +16,7 @@ import { CustomBodyTime } from 'src/components/DataTable/CustomerRender';
 import DataTableDialog from 'src/components/DataTable/DataTableDialog';
 import getDataTableState, { DataTableStatus, PageManagement, Search, setPageManagement } from 'src/components/DataTable/DataTableState';
 import DataTableThemeProvider from 'src/components/DataTable/DataTableThemeProvider';
+import DialogFormat from 'src/components/DataTable/DialogFormat';
 import getTextLabels from 'src/components/DataTable/TextLabels';
 import Footer from 'src/components/Footer';
 import TextArea from 'src/components/Input/TextArea';
@@ -493,143 +493,107 @@ function SampleDataTable() {
               submit={handleSubmitUser((addAndEditStatus == "add") ? checkAddUser : checkEditUser, onError)}
             >
               {/* onSubmit={handleSubmitUser(checkEditUser)} */}
-              <Box component="form" noValidate sx={{ width: 1, height: 1, mt: 1, justifyContent: 'center', display: 'flex' }} >
-                <Grid container rowSpacing={2} columnSpacing={{ xs: 1 }} sx={{ justifyContent: "center" }}>
-                  {(addAndEditStatus == "edit") &&
-                    <Grid item xs={12} alignItems="center" display="flex">
-                      <Grid>
-                        <InputLabel sx={{ typography: "h4", mr: 1 }}>ID :</InputLabel>
-                      </Grid>
-                      <Grid item xs={12}>
-                        <InputLabel sx={{ typography: "h4", mr: 1 }}>{selectedId}</InputLabel>
-                      </Grid>
-                    </Grid>
-                  }
-                  <Grid item xs={12} alignItems="center" display="flex">
-                    <Grid>
-                      <InputLabel sx={{ typography: "h4", mr: 1 }}>名稱 :</InputLabel>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        id="name"
-                        name="name"
-                        defaultValue={getUserValue("name")}
-                        {...registerUser("name", {
-                          required: "Required field"
-                        })}
-                        fullWidth={true}
-                        error={!!userErrors?.name}
-                        helperText={userErrors?.name ? userErrors.name.message : null}
-                      />
-                    </Grid>
-                  </Grid>
-                  <Grid item xs={12} alignItems="center" display="flex">
-                    <Grid>
-                      <InputLabel sx={{ typography: "h4", mr: 1 }}>信箱 :</InputLabel>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        id="email"
-                        //label="Email Address"
-                        name="email"
-                        defaultValue={getUserValue("status")}
-                        {...registerUser("email", {
-                          required: "Required field",
-                          minLength: { value: 5, message: "at least 5 letter" },
-                          maxLength: { value: 100, message: "need less 100 length" },
-                          pattern: {
-                            value: /^[A-Z0-9._%+-]+@[A-Z0-9._]+\.[A-Z]{2,}$/i,
-                            message: "Invalid email address",
-                          }
-                        })}
-                        fullWidth={true}
-                        error={!!userErrors?.email}
-                        helperText={userErrors?.email ? userErrors.email.message : null}
-                      />
-                    </Grid>
-                  </Grid>
-                  {(addAndEditStatus == "add") &&
-                    <Grid item xs={12} alignItems="center" display="flex">
-                      <Grid>
-                        <InputLabel sx={{ typography: "h4", mr: 1 }}>密碼 :</InputLabel>
-                      </Grid>
-                      <Grid item xs={12}>
-                        <TextField
-                          id="password"
-                          name="password"
-                          type="password"
-                          {...registerUser("password", {
-                            required: "Required field",
-                            minLength: { value: 5, message: "at least 5 letter" },
-                            maxLength: { value: 100, message: "need less 100 length" },
-                          })}
-                          fullWidth={true}
-                          error={!!userErrors?.password}
-                          helperText={userErrors?.password ? userErrors.password.message : null}
-                        />
-                      </Grid>
-                    </Grid>
-                  }
-                  <Grid item xs={12} alignItems="center" display="flex">
-                    <Grid>
-                      <InputLabel sx={{ typography: "h4", mr: 1 }}>狀態 :</InputLabel>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Switch
-                        id="status"
-                        name="status"
-                        checked={Boolean(Number(getUserValue("status")))}
-                        {...registerUser("status", {
-                        })}
-                      />
-                    </Grid>
-                  </Grid>
-                  <Grid item xs={12} alignItems="center" display="flex">
-                    <Grid>
-                      <InputLabel sx={{ typography: "h4", mr: 1 }}>管理者 :</InputLabel>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        id="userType"
-                        name="userType"
-                        select
-                        SelectProps={{
-                          native: true,
-                        }}
-                        defaultValue={getUserValue("userType")}
-                        {...registerUser("userType", {
-                          required: "Required field"
-                        })}
-                        fullWidth={true}
-                        error={!!userErrors?.userType}
-                        helperText={userErrors?.userType ? userErrors.userType.message : null}
-                      >
-                        {Object.keys(userTypeMap).map((value) => (
-                          <option key={value} value={value}>
-                            {userTypeMap[value].label}
-                          </option>
-                        ))
-                        }
-                      </TextField>
-                    </Grid>
-                  </Grid>
-                  <Grid item xs={12} alignItems="flex-start" display="flex">
-                    <Grid>
-                      <InputLabel sx={{ typography: "h4", mr: 1 }}>備註 :</InputLabel>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextArea
-                        minRows={5}
-                        maxRows={8}
-                        id="remark"
-                        name="remark"
-                        defaultValue={getUserValue("remark")}
-                        {...registerUser("remark", {})}
-                      />
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Box>
+              <Grid container justifyContent="center" alignItems="center" direction="column" >
+                {(addAndEditStatus == "edit") &&
+                  <DialogFormat title="ID :" >
+                    <Typography variant="h3" textAlign="left">{selectedId}</Typography>
+                  </DialogFormat>
+                }
+                <DialogFormat title="名稱 :" >
+                  <TextField
+                    id="name"
+                    name="name"
+                    defaultValue={getUserValue("name")}
+                    {...registerUser("name", {
+                      required: "Required field"
+                    })}
+                    fullWidth={true}
+                    error={!!userErrors?.name}
+                    helperText={userErrors?.name ? userErrors.name.message : null}
+                  />
+                </DialogFormat>
+
+                <DialogFormat title="信箱 :" >
+                  <TextField
+                    id="email"
+                    //label="Email Address"
+                    name="email"
+                    defaultValue={getUserValue("status")}
+                    {...registerUser("email", {
+                      required: "Required field",
+                      minLength: { value: 5, message: "at least 5 letter" },
+                      maxLength: { value: 100, message: "need less 100 length" },
+                      pattern: {
+                        value: /^[A-Z0-9._%+-]+@[A-Z0-9._]+\.[A-Z]{2,}$/i,
+                        message: "Invalid email address",
+                      }
+                    })}
+                    fullWidth={true}
+                    error={!!userErrors?.email}
+                    helperText={userErrors?.email ? userErrors.email.message : null}
+                  />
+                </DialogFormat>
+                {(addAndEditStatus == "add") &&
+                  <DialogFormat title="密碼 :" >
+                    <TextField
+                      id="password"
+                      name="password"
+                      type="password"
+                      {...registerUser("password", {
+                        required: "Required field",
+                        minLength: { value: 5, message: "at least 5 letter" },
+                        maxLength: { value: 100, message: "need less 100 length" },
+                      })}
+                      fullWidth={true}
+                      error={!!userErrors?.password}
+                      helperText={userErrors?.password ? userErrors.password.message : null}
+                    />
+                  </DialogFormat>
+                }
+                <DialogFormat title="狀態 :" >
+                  <Switch
+                    id="status"
+                    name="status"
+                    checked={Boolean(Number(getUserValue("status")))}
+                    {...registerUser("status", {
+                    })}
+                  />
+                </DialogFormat>
+                <DialogFormat title="身份 :" >
+                  <TextField
+                    id="userType"
+                    name="userType"
+                    select
+                    SelectProps={{
+                      native: true,
+                    }}
+                    defaultValue={getUserValue("userType")}
+                    {...registerUser("userType", {
+                      required: "Required field"
+                    })}
+                    fullWidth={true}
+                    error={!!userErrors?.userType}
+                    helperText={userErrors?.userType ? userErrors.userType.message : null}
+                  >
+                    {Object.keys(userTypeMap).map((value) => (
+                      <option key={value} value={value}>
+                        {userTypeMap[value].label}
+                      </option>
+                    ))
+                    }
+                  </TextField>
+                </DialogFormat>
+                <DialogFormat title="備註 :" >
+                  <TextArea
+                    minRows={5}
+                    maxRows={8}
+                    id="remark"
+                    name="remark"
+                    defaultValue={getUserValue("remark")}
+                    {...registerUser("remark", {})}
+                  />
+                </DialogFormat>
+              </Grid>
             </DataTableDialog>
 
             {/* 刪除 */}
