@@ -539,9 +539,8 @@ function SampleDataTable() {
                       <Switch
                         id="status"
                         name="status"
-                        //checked={Boolean(Number(getUserValue("status")))}
+                        checked={Boolean(Number(getUserValue("status")))}
                         {...registerUser("status", {
-                          required: "Required field"
                         })}
                       />
                     </Grid>
