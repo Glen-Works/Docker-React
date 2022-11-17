@@ -11,6 +11,14 @@ const TableTheme = (Theme) =>
             borderRadius: 25,
           },
         },
+      }, MUIDataTableHeadCell: {
+        styleOverrides: {
+          root: {
+            textTransform: 'none',
+            fontWeight: 'bold',
+            fontSize: '14px',
+          },
+        },
       }, MUIDataTableToolbar: {
         styleOverrides: {
           root: {
