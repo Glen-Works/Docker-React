@@ -40,6 +40,16 @@ const User = Loader(
   lazy(() => import('src/page/Management/User'))
 );
 
+// Menu page
+const Menu = Loader(
+  lazy(() => import('src/page/Management/Menu'))
+);
+
+// Role page
+const Role = Loader(
+  lazy(() => import('src/page/Management/Role'))
+);
+
 // SampleContent
 const SampleContent = Loader(
   lazy(() => import('src/page/Sample/SampleContent'))
@@ -86,6 +96,14 @@ const routes: RouteObject[] = [
               {
                 path: 'user',
                 element: <User />
+              },
+              {
+                path: 'menu',
+                element: <Menu />
+              },
+              {
+                path: 'role',
+                element: <Role />
               },
               {
                 path: 'samplecontent',

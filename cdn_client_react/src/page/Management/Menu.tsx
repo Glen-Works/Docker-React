@@ -57,7 +57,7 @@ interface UserPwd {
   checkPassword: string,
 }
 
-function SampleDataTable() {
+function Menu() {
 
   const theme = useTheme();
   const { state } = useAuthStateContext();
@@ -709,4 +709,4 @@ function SampleDataTable() {
   );
 }
 
-export default SampleDataTable;
+export default Menu;

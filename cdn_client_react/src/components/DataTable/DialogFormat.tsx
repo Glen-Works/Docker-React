@@ -24,7 +24,7 @@ const TitleTheme = (Theme) =>
 export default function DialogFormat(props: DialogFormatProp) {
   const { title, children } = props;
   return (
-    <Grid container direction="row" justifyContent="flex-start" alignItems="center">
+    <Grid container direction="row" justifyContent="flex-start" alignItems="center" m={0.5}>
       <Grid item xs={1.5} justifyContent="flex-end">
         <ThemeProvider theme={TitleTheme}>
           <Typography variant="h3" textAlign="right" mr={2}>{title}</Typography>
