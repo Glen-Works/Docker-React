@@ -35,6 +35,11 @@ const AuthLayout = Loader(
   lazy(() => import('src/layouts/AuthLayout'))
 );
 
+// User page
+const User = Loader(
+  lazy(() => import('src/page/Management/User'))
+);
+
 // SampleContent
 const SampleContent = Loader(
   lazy(() => import('src/page/Sample/SampleContent'))
@@ -78,6 +83,10 @@ const routes: RouteObject[] = [
             path: '',
             element: <SidebarLayout />,
             children: [
+              {
+                path: 'user',
+                element: <User />
+              },
               {
                 path: 'samplecontent',
                 element: <SampleContent />
