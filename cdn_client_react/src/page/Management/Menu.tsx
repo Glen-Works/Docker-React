@@ -1,7 +1,6 @@
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
-import KeyTwoToneIcon from '@mui/icons-material/KeyTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
 import { Box, Button, CircularProgress, Container, Grid, Switch, Typography, useTheme } from '@mui/material';
 import TextField from '@mui/material/TextField';
@@ -10,7 +9,7 @@ import { useEffect, useState } from 'react';
 import { unstable_batchedUpdates } from "react-dom";
 import { Helmet } from 'react-helmet-async';
 import { useForm } from "react-hook-form";
-import { userAddApi, userDeleteApi, userEditApi, userInfoApi, userListApi, userPwdEditApi } from 'src/api/Sample/sampleDataTableApi';
+import { menuAddApi, menuDeleteApi, menuEditApi, menuInfoApi, menuListApi } from 'src/api/Menu/menuApi';
 import { ColumnIconButton } from 'src/components/DataTable/CustomerIconRender';
 import { CustomBodyTime } from 'src/components/DataTable/CustomerRender';
 import DataTableDialog from 'src/components/DataTable/DataTableDialog';
@@ -30,7 +29,7 @@ interface MapStyle {
   [key: number]: { label: string, color: "primary" | "secondary" | "error" | "black" | "warning" | "success" | "info" }
 }
 
-const userTypeMap: MapStyle = {
+const menuTypeMap: MapStyle = {
   1: { label: '管理者', color: 'primary' },
   2: { label: '一般使用者', color: 'secondary' }
 }
@@ -44,17 +43,12 @@ interface UserData {
   name: string,
   email: string,
   status: boolean,
-  userType: number,
+  menuType: number,
   remark: string,
 }
 
 interface UserAdd extends UserData {
   password: string,
-}
-
-interface UserPwd {
-  newPassword: string,
-  checkPassword: string,
 }
 
 function Menu() {
@@ -66,7 +60,6 @@ function Menu() {
   const [selectedData, setSelectedData] = useState<string>("");
   const [addAndEditStatus, setAddAndEditStatus] = useState<"edit" | "add" | "">("");
   const [addAndEditOpen, setAddAndEditOpen] = useState<boolean>(false);
-  const [editPasswordOpen, setEditPwdOpen] = useState<boolean>(false);
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
   const onError = (errors, e) => console.log(errors, e);
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -81,14 +74,14 @@ function Menu() {
       });
 
   const { register: registerUser, handleSubmit: handleSubmitUser, setValue: setUserValue, getValues: getUserValue,
-    watch: watchUser, reset: resetUser, formState: { errors: userErrors } } = useForm(
+    watch: watchUser, reset: resetUser, formState: { errors: menuErrors } } = useForm(
       {
         defaultValues: {
           name: "",
           email: "",
           password: "",
           status: true,
-          userType: 2,
+          menuType: 2,
           remark: "",
         }
       });
@@ -101,9 +94,9 @@ function Menu() {
   useEffect(() => { }, [watchUser(), watchPwd()]);
 
   function getData(ds: PageManagement | null) {
-    userListApi(ds, state)
+    menuListApi(ds, state)
       .then(res => {
-        setTableState({ data: res.data.userList, pageManagement: res.data.pageManagement, isLoading: false });
+        setTableState({ data: res.data.menuList, pageManagement: res.data.pageManagement, isLoading: false });
       })
       .catch(error => {
         console.log("error:" + error.response?.data?.msg);
@@ -126,18 +119,6 @@ function Menu() {
     });
   };
 
-  const handlePwdClickOpen = (id: number) => {
-    unstable_batchedUpdates(() => {
-      setEditPwdOpen(true);
-      setSelectedId(id);
-    });
-  };
-
-  const handleEditPwdClose = () => {
-    setEditPwdOpen(false);
-    resetPwd();
-  };
-
   const handleAddAndEditClose = () => {
     unstable_batchedUpdates(() => {
       setAddAndEditOpen(false);
@@ -158,13 +139,13 @@ function Menu() {
   };
 
   async function getEditDataById(id: number) {
-    await userInfoApi(id, state)
+    await menuInfoApi(id, state)
       .then(res => {
         let data = res.data[0];
         setUserValue("name", data.name, { shouldValidate: true });
         setUserValue("email", data.email, { shouldValidate: true });
         setUserValue("status", data.status, { shouldValidate: true });
-        setUserValue("userType", data.userType, { shouldValidate: true });
+        setUserValue("menuType", data.menuType, { shouldValidate: true });
         setUserValue("remark", data.remark, { shouldValidate: true });
       })
       .catch(error => {
@@ -173,46 +154,36 @@ function Menu() {
   }
 
   function getDialogUserData(): UserData {
-    var userData: UserData = {
+    var menuData: UserData = {
       name: getUserValue("name"),
       email: getUserValue("email"),
       status: Boolean(Number(getUserValue("status"))),
-      userType: Number(getUserValue("userType")),
+      menuType: Number(getUserValue("menuType")),
       remark: getUserValue("remark"),
     }
-    return userData;
+    return menuData;
   }
-
-  const submitEditPwd = (formObj, event) => {
-    var userPwd: UserPwd = {
-      newPassword: getPwdValue("password"),
-      checkPassword: getPwdValue("password"),
-    }
-
-    console.log(userPwd);
-    editUserPwd(userPwd);
-  };
 
   const submitAddUser = (formObj, event) => {
 
-    let userData = getDialogUserData();
-    var userAddData: UserAdd = {
-      ...userData,
+    let menuData = getDialogUserData();
+    var menuAddData: UserAdd = {
+      ...menuData,
       password: getUserValue("password"),
     }
-    console.log(userAddData);
-    addUser(userAddData);
+    console.log(menuAddData);
+    addUser(menuAddData);
   };
 
   const submitEditUser = (formObj, event) => {
-    let userData = getDialogUserData();
-    console.log(userData);
-    editUser(userData);
+    let menuData = getDialogUserData();
+    console.log(menuData);
+    editUser(menuData);
   };
 
   function addUser(data: any) {
     // console.log(data);
-    userAddApi(data, state)
+    menuAddApi(data, state)
       .then(res => {
         handleAddAndEditClose();
         getData({ ...tableState.pageManagement });
@@ -224,7 +195,7 @@ function Menu() {
 
   function editUser(data: any) {
     // console.log(data);
-    userEditApi(selectedId, data, state)
+    menuEditApi(selectedId, data, state)
       .then(res => {
         handleAddAndEditClose();
         getData({ ...tableState.pageManagement });
@@ -234,20 +205,9 @@ function Menu() {
       });
   }
 
-  function editUserPwd(data: any) {
-    // console.log(data);
-    userPwdEditApi(selectedId, data, state)
-      .then(res => {
-        handleEditPwdClose();
-      })
-      .catch(error => {
-        console.log("error:" + error.response?.data?.msg);
-      });
-  }
-
   function deleteUser() {
     // console.log(selectedIndex);
-    userDeleteApi(selectedId, state)
+    menuDeleteApi(selectedId, state)
       .then(res => {
         handleDeleteClose();
         getData({ ...tableState.pageManagement });
@@ -312,14 +272,14 @@ function Menu() {
       }
     },
     {
-      name: "userType",
-      label: "userType",
+      name: "menuType",
+      label: "menuType",
       options: {
         sort: true,
         customBodyRender: (value, tableMeta, updateValue) => (
           <>
-            {(userTypeMap[value] != undefined) &&
-              < Label color={userTypeMap[value].color}>{userTypeMap[value].label}</Label>
+            {(menuTypeMap[value] != undefined) &&
+              < Label color={menuTypeMap[value].color}>{menuTypeMap[value].label}</Label>
             }
           </>
         )
@@ -391,14 +351,6 @@ function Menu() {
               >
                 <DeleteTwoToneIcon fontSize="small" />
               </ColumnIconButton>
-              <ColumnIconButton
-                title="修改密碼"
-                handleClickOpen={() => { handlePwdClickOpen(id) }}
-                color={theme.palette.info.main}
-                background={theme.colors.error.lighter}
-              >
-                <KeyTwoToneIcon fontSize="small" />
-              </ColumnIconButton>
             </Box>
           );
         }
@@ -439,7 +391,7 @@ function Menu() {
     <>
       <SuspenseLoader isOpen={tableState.isLoading} />
       <Helmet>
-        <title>Transactions - Applications</title>
+        <title>Menu</title>
       </Helmet>
       <PageTitleWrapper>
         <PageHeader />
@@ -515,7 +467,7 @@ function Menu() {
               <MUIDataTable
                 title={
                   <Typography variant="h4">
-                    Sample List
+                    Menu List
                     {tableState.isLoading && <CircularProgress size={24} style={{ marginLeft: 15, position: 'relative', top: 4 }} />}
                   </Typography>
                 }
@@ -548,8 +500,8 @@ function Menu() {
                       required: "Required field"
                     })}
                     fullWidth={true}
-                    error={!!userErrors?.name}
-                    helperText={userErrors?.name ? userErrors.name.message : null}
+                    error={!!menuErrors?.name}
+                    helperText={menuErrors?.name ? menuErrors.name.message : null}
                   />
                 </DialogFormat>
 
@@ -569,8 +521,8 @@ function Menu() {
                       }
                     })}
                     fullWidth={true}
-                    error={!!userErrors?.email}
-                    helperText={userErrors?.email ? userErrors.email.message : null}
+                    error={!!menuErrors?.email}
+                    helperText={menuErrors?.email ? menuErrors.email.message : null}
                   />
                 </DialogFormat>
                 {(addAndEditStatus == "add") &&
@@ -585,8 +537,8 @@ function Menu() {
                         maxLength: { value: 100, message: "need less 100 length" },
                       })}
                       fullWidth={true}
-                      error={!!userErrors?.password}
-                      helperText={userErrors?.password ? userErrors.password.message : null}
+                      error={!!menuErrors?.password}
+                      helperText={menuErrors?.password ? menuErrors.password.message : null}
                     />
                   </DialogFormat>
                 }
@@ -601,23 +553,23 @@ function Menu() {
                 </DialogFormat>
                 <DialogFormat title="身份 :" >
                   <TextField
-                    id="userType"
-                    name="userType"
+                    id="menuType"
+                    name="menuType"
                     select
                     SelectProps={{
                       native: true,
                     }}
-                    defaultValue={getUserValue("userType")}
-                    {...registerUser("userType", {
+                    defaultValue={getUserValue("menuType")}
+                    {...registerUser("menuType", {
                       required: "Required field"
                     })}
                     fullWidth={true}
-                    error={!!userErrors?.userType}
-                    helperText={userErrors?.userType ? userErrors.userType.message : null}
+                    error={!!menuErrors?.menuType}
+                    helperText={menuErrors?.menuType ? menuErrors.menuType.message : null}
                   >
-                    {Object.keys(userTypeMap).map((value) => (
+                    {Object.keys(menuTypeMap).map((value) => (
                       <option key={value} value={value}>
-                        {userTypeMap[value].label}
+                        {menuTypeMap[value].label}
                       </option>
                     ))
                     }
@@ -635,58 +587,6 @@ function Menu() {
                 </DialogFormat>
               </Grid>
             </DataTableDialog>
-
-
-            {/* 修改 */}
-            <DataTableDialog
-              title={"修改使用者密碼"}
-              maxWidth="md"
-              isOpen={editPasswordOpen}
-              handleClose={handleEditPwdClose}
-              submit={handleSubmitPwd(submitEditPwd, onError)}
-            >
-              <Grid container justifyContent="center" alignItems="center" direction="column" >
-                {(addAndEditStatus == "edit") &&
-                  <DialogFormat title="ID :" >
-                    <Typography variant="h3" textAlign="left">{selectedId}</Typography>
-                  </DialogFormat>
-                }
-                <DialogFormat title="密碼 :" >
-                  <TextField
-                    id="password"
-                    name="password"
-                    type="password"
-                    {...registerPwd("password", {
-                      required: "Required field",
-                      minLength: { value: 5, message: "at least 5 letter" },
-                      maxLength: { value: 100, message: "need less 100 length" },
-                    })}
-                    fullWidth={true}
-                    error={!!pwdErrors?.password}
-                    helperText={pwdErrors?.password ? pwdErrors.password.message : null}
-                  />
-                </DialogFormat>
-                <DialogFormat title="密碼確認 :" >
-                  <TextField
-                    id="passwordCheck"
-                    name="passwordCheck"
-                    type="password"
-                    {...registerPwd("passwordCheck", {
-                      required: "Required field",
-                      validate: (val: string) => {
-                        if (watchPwd('password') != val) {
-                          return "Your passwords do no match";
-                        }
-                      }
-                    })}
-                    fullWidth={true}
-                    error={!!pwdErrors?.passwordCheck}
-                    helperText={pwdErrors?.passwordCheck ? pwdErrors.passwordCheck.message : null}
-                  />
-                </DialogFormat>
-              </Grid>
-            </DataTableDialog>
-
 
             {/* 刪除 */}
             <DataTableDialog

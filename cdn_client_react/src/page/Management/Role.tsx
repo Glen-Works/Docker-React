@@ -1,7 +1,6 @@
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
-import KeyTwoToneIcon from '@mui/icons-material/KeyTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
 import { Box, Button, CircularProgress, Container, Grid, Switch, Typography, useTheme } from '@mui/material';
 import TextField from '@mui/material/TextField';
@@ -10,7 +9,7 @@ import { useEffect, useState } from 'react';
 import { unstable_batchedUpdates } from "react-dom";
 import { Helmet } from 'react-helmet-async';
 import { useForm } from "react-hook-form";
-import { userAddApi, userDeleteApi, userEditApi, userInfoApi, userListApi, userPwdEditApi } from 'src/api/Sample/sampleDataTableApi';
+import { roleAddApi, roleDeleteApi, roleEditApi, roleInfoApi, roleListApi } from 'src/api/Role/roleApi';
 import { ColumnIconButton } from 'src/components/DataTable/CustomerIconRender';
 import { CustomBodyTime } from 'src/components/DataTable/CustomerRender';
 import DataTableDialog from 'src/components/DataTable/DataTableDialog';
@@ -30,31 +29,17 @@ interface MapStyle {
   [key: number]: { label: string, color: "primary" | "secondary" | "error" | "black" | "warning" | "success" | "info" }
 }
 
-const userTypeMap: MapStyle = {
-  1: { label: '管理者', color: 'primary' },
-  2: { label: '一般使用者', color: 'secondary' }
-}
-
 const statusMap: MapStyle = {
   0: { label: '停用', color: 'error' },
   1: { label: '啟用', color: 'primary' }
 }
 
-interface UserData {
+interface RoleData {
   name: string,
-  email: string,
+  key: string,
   status: boolean,
-  userType: number,
+  weight: number,
   remark: string,
-}
-
-interface UserAdd extends UserData {
-  password: string,
-}
-
-interface UserPwd {
-  newPassword: string,
-  checkPassword: string,
 }
 
 function Role() {
@@ -66,7 +51,6 @@ function Role() {
   const [selectedData, setSelectedData] = useState<string>("");
   const [addAndEditStatus, setAddAndEditStatus] = useState<"edit" | "add" | "">("");
   const [addAndEditOpen, setAddAndEditOpen] = useState<boolean>(false);
-  const [editPasswordOpen, setEditPwdOpen] = useState<boolean>(false);
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
   const onError = (errors, e) => console.log(errors, e);
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -80,15 +64,14 @@ function Role() {
         }
       });
 
-  const { register: registerUser, handleSubmit: handleSubmitUser, setValue: setUserValue, getValues: getUserValue,
-    watch: watchUser, reset: resetUser, formState: { errors: userErrors } } = useForm(
+  const { register: registerRole, handleSubmit: handleSubmitRole, setValue: setRoleValue, getValues: getRoleValue,
+    watch: watchRole, reset: resetRole, formState: { errors: roleErrors } } = useForm(
       {
         defaultValues: {
           name: "",
-          email: "",
-          password: "",
+          key: "",
           status: true,
-          userType: 2,
+          weight: 0,
           remark: "",
         }
       });
@@ -98,12 +81,12 @@ function Role() {
     getData(null);
   }, []);
 
-  useEffect(() => { }, [watchUser(), watchPwd()]);
+  useEffect(() => { }, [watchRole(), watchPwd()]);
 
   function getData(ds: PageManagement | null) {
-    userListApi(ds, state)
+    roleListApi(ds, state)
       .then(res => {
-        setTableState({ data: res.data.userList, pageManagement: res.data.pageManagement, isLoading: false });
+        setTableState({ data: res.data.roleList, pageManagement: res.data.pageManagement, isLoading: false });
       })
       .catch(error => {
         console.log("error:" + error.response?.data?.msg);
@@ -114,7 +97,7 @@ function Role() {
     unstable_batchedUpdates(() => {
       setAddAndEditStatus("add");
       setAddAndEditOpen(true);
-      resetUser();
+      resetRole();
     });
   };
 
@@ -126,22 +109,10 @@ function Role() {
     });
   };
 
-  const handlePwdClickOpen = (id: number) => {
-    unstable_batchedUpdates(() => {
-      setEditPwdOpen(true);
-      setSelectedId(id);
-    });
-  };
-
-  const handleEditPwdClose = () => {
-    setEditPwdOpen(false);
-    resetPwd();
-  };
-
   const handleAddAndEditClose = () => {
     unstable_batchedUpdates(() => {
       setAddAndEditOpen(false);
-      resetUser();
+      resetRole();
     });
   };
 
@@ -158,61 +129,47 @@ function Role() {
   };
 
   async function getEditDataById(id: number) {
-    await userInfoApi(id, state)
+    await roleInfoApi(id, state)
       .then(res => {
         let data = res.data[0];
-        setUserValue("name", data.name, { shouldValidate: true });
-        setUserValue("email", data.email, { shouldValidate: true });
-        setUserValue("status", data.status, { shouldValidate: true });
-        setUserValue("userType", data.userType, { shouldValidate: true });
-        setUserValue("remark", data.remark, { shouldValidate: true });
+        setRoleValue("name", data.name, { shouldValidate: true });
+        setRoleValue("key", data.key, { shouldValidate: true });
+        setRoleValue("status", data.status, { shouldValidate: true });
+        setRoleValue("weight", data.roleType, { shouldValidate: true });
+        setRoleValue("remark", data.remark, { shouldValidate: true });
       })
       .catch(error => {
         console.log("error:" + error.response?.data?.msg);
       });
   }
 
-  function getDialogUserData(): UserData {
-    var userData: UserData = {
-      name: getUserValue("name"),
-      email: getUserValue("email"),
-      status: Boolean(Number(getUserValue("status"))),
-      userType: Number(getUserValue("userType")),
-      remark: getUserValue("remark"),
+  function getDialogRoleData(): RoleData {
+    var roleData: RoleData = {
+      name: getRoleValue("name"),
+      key: getRoleValue("key"),
+      status: Boolean(Number(getRoleValue("status"))),
+      weight: Number(getRoleValue("weight")),
+      remark: getRoleValue("remark"),
     }
-    return userData;
+    return roleData;
   }
 
-  const submitEditPwd = (formObj, event) => {
-    var userPwd: UserPwd = {
-      newPassword: getPwdValue("password"),
-      checkPassword: getPwdValue("password"),
-    }
+  const submitAddRole = (formObj, event) => {
 
-    console.log(userPwd);
-    editUserPwd(userPwd);
+    let roleData = getDialogRoleData();
+    console.log(roleData);
+    addRole(roleData);
   };
 
-  const submitAddUser = (formObj, event) => {
-
-    let userData = getDialogUserData();
-    var userAddData: UserAdd = {
-      ...userData,
-      password: getUserValue("password"),
-    }
-    console.log(userAddData);
-    addUser(userAddData);
+  const submitEditRole = (formObj, event) => {
+    let roleData = getDialogRoleData();
+    console.log(roleData);
+    editRole(roleData);
   };
 
-  const submitEditUser = (formObj, event) => {
-    let userData = getDialogUserData();
-    console.log(userData);
-    editUser(userData);
-  };
-
-  function addUser(data: any) {
+  function addRole(data: any) {
     // console.log(data);
-    userAddApi(data, state)
+    roleAddApi(data, state)
       .then(res => {
         handleAddAndEditClose();
         getData({ ...tableState.pageManagement });
@@ -222,9 +179,9 @@ function Role() {
       });
   }
 
-  function editUser(data: any) {
+  function editRole(data: any) {
     // console.log(data);
-    userEditApi(selectedId, data, state)
+    roleEditApi(selectedId, data, state)
       .then(res => {
         handleAddAndEditClose();
         getData({ ...tableState.pageManagement });
@@ -234,20 +191,9 @@ function Role() {
       });
   }
 
-  function editUserPwd(data: any) {
-    // console.log(data);
-    userPwdEditApi(selectedId, data, state)
-      .then(res => {
-        handleEditPwdClose();
-      })
-      .catch(error => {
-        console.log("error:" + error.response?.data?.msg);
-      });
-  }
-
-  function deleteUser() {
+  function deleteRole() {
     // console.log(selectedIndex);
-    userDeleteApi(selectedId, state)
+    roleDeleteApi(selectedId, state)
       .then(res => {
         handleDeleteClose();
         getData({ ...tableState.pageManagement });
@@ -268,7 +214,7 @@ function Role() {
 
     var searchData: Search = {
       name: data.get("name").toString(),
-      email: data.get("email").toString(),
+      key: data.get("key").toString(),
     }
 
     var pageManagement: PageManagement = { ...tableState.pageManagement, search: searchData };
@@ -291,8 +237,8 @@ function Role() {
       }
     },
     {
-      name: "email",
-      label: "email",
+      name: "key",
+      label: "key",
       options: {
         sort: true,
       }
@@ -312,34 +258,10 @@ function Role() {
       }
     },
     {
-      name: "userType",
-      label: "userType",
+      name: "weight",
+      label: "weight",
       options: {
         sort: true,
-        customBodyRender: (value, tableMeta, updateValue) => (
-          <>
-            {(userTypeMap[value] != undefined) &&
-              < Label color={userTypeMap[value].color}>{userTypeMap[value].label}</Label>
-            }
-          </>
-        )
-      }
-    },
-    {
-      name: "loginIp",
-      label: "loginIp",
-      options: {
-        sort: true,
-        display: false,
-      }
-    },
-    {
-      name: "loginTime",
-      label: "loginTime",
-      options: {
-        sort: true,
-        display: false,
-        customBodyRender: CustomBodyTime
       }
     },
     {
@@ -372,7 +294,7 @@ function Role() {
           // console.log(dataIndex, rowIndex);
           let rowData = tableState.data[dataIndex];
           let id = rowData.id;
-          let data = `id:${rowData.id},email:${rowData.email}`;
+          let data = `id:${rowData.id},key:${rowData.key}`;
           return (
             <Box sx={{ display: 'inline-flex' }}>
               <ColumnIconButton
@@ -390,14 +312,6 @@ function Role() {
                 background={theme.colors.error.lighter}
               >
                 <DeleteTwoToneIcon fontSize="small" />
-              </ColumnIconButton>
-              <ColumnIconButton
-                title="修改密碼"
-                handleClickOpen={() => { handlePwdClickOpen(id) }}
-                color={theme.palette.info.main}
-                background={theme.colors.error.lighter}
-              >
-                <KeyTwoToneIcon fontSize="small" />
               </ColumnIconButton>
             </Box>
           );
@@ -439,7 +353,7 @@ function Role() {
     <>
       <SuspenseLoader isOpen={tableState.isLoading} />
       <Helmet>
-        <title>Transactions - Applications</title>
+        <title>Role</title>
       </Helmet>
       <PageTitleWrapper>
         <PageHeader />
@@ -480,13 +394,13 @@ function Role() {
               </Grid>
               <Grid item >
                 <TextField
-                  id="email"
+                  id="key"
                   label="Email Address"
-                  name="email"
-                  autoComplete="email"
+                  name="key"
+                  autoComplete="key"
                   size="small"
                   type="search"
-                  {...register("email", {})}
+                  {...register("key", {})}
                 />
               </Grid>
               <Grid item  >
@@ -515,7 +429,7 @@ function Role() {
               <MUIDataTable
                 title={
                   <Typography variant="h4">
-                    Sample List
+                    Role List
                     {tableState.isLoading && <CircularProgress size={24} style={{ marginLeft: 15, position: 'relative', top: 4 }} />}
                   </Typography>
                 }
@@ -527,11 +441,11 @@ function Role() {
 
             {/* 修改 */}
             <DataTableDialog
-              title={(addAndEditStatus == "add") ? "新增使用者" : "修改使用者"}
+              title={(addAndEditStatus == "add") ? "新增角色" : "修改角色"}
               maxWidth="md"
               isOpen={addAndEditOpen}
               handleClose={handleAddAndEditClose}
-              submit={handleSubmitUser((addAndEditStatus == "add") ? submitAddUser : submitEditUser, onError)}
+              submit={handleSubmitRole((addAndEditStatus == "add") ? submitAddRole : submitEditRole, onError)}
             >
               <Grid container justifyContent="center" alignItems="center" direction="column" >
                 {(addAndEditStatus == "edit") &&
@@ -543,85 +457,53 @@ function Role() {
                   <TextField
                     id="name"
                     name="name"
-                    defaultValue={getUserValue("name")}
-                    {...registerUser("name", {
+                    defaultValue={getRoleValue("name")}
+                    {...registerRole("name", {
                       required: "Required field"
                     })}
                     fullWidth={true}
-                    error={!!userErrors?.name}
-                    helperText={userErrors?.name ? userErrors.name.message : null}
+                    error={!!roleErrors?.name}
+                    helperText={roleErrors?.name ? roleErrors.name.message : null}
                   />
                 </DialogFormat>
 
-                <DialogFormat title="信箱 :" >
+                <DialogFormat title="key :" >
                   <TextField
-                    id="email"
+                    id="key"
                     //label="Email Address"
-                    name="email"
-                    defaultValue={getUserValue("status")}
-                    {...registerUser("email", {
+                    name="key"
+                    defaultValue={getRoleValue("status")}
+                    {...registerRole("key", {
                       required: "Required field",
-                      minLength: { value: 5, message: "at least 5 letter" },
-                      maxLength: { value: 100, message: "need less 100 length" },
-                      pattern: {
-                        value: /^[A-Z0-9._%+-]+@[A-Z0-9._]+\.[A-Z]{2,}$/i,
-                        message: "Invalid email address",
-                      }
                     })}
                     fullWidth={true}
-                    error={!!userErrors?.email}
-                    helperText={userErrors?.email ? userErrors.email.message : null}
+                    error={!!roleErrors?.key}
+                    helperText={roleErrors?.key ? roleErrors.key.message : null}
                   />
                 </DialogFormat>
-                {(addAndEditStatus == "add") &&
-                  <DialogFormat title="密碼 :" >
-                    <TextField
-                      id="password"
-                      name="password"
-                      type="password"
-                      {...registerUser("password", {
-                        required: "Required field",
-                        minLength: { value: 5, message: "at least 5 letter" },
-                        maxLength: { value: 100, message: "need less 100 length" },
-                      })}
-                      fullWidth={true}
-                      error={!!userErrors?.password}
-                      helperText={userErrors?.password ? userErrors.password.message : null}
-                    />
-                  </DialogFormat>
-                }
                 <DialogFormat title="狀態 :" >
                   <Switch
                     id="status"
                     name="status"
-                    checked={Boolean(Number(getUserValue("status")))}
-                    {...registerUser("status", {
+                    checked={Boolean(Number(getRoleValue("status")))}
+                    {...registerRole("status", {
                     })}
                   />
                 </DialogFormat>
-                <DialogFormat title="身份 :" >
+                <DialogFormat title="權重 :" >
                   <TextField
-                    id="userType"
-                    name="userType"
-                    select
-                    SelectProps={{
-                      native: true,
-                    }}
-                    defaultValue={getUserValue("userType")}
-                    {...registerUser("userType", {
-                      required: "Required field"
+                    id="weight"
+                    name="weight"
+                    type="number"
+                    defaultValue={getRoleValue("weight")}
+                    {...registerRole("weight", {
+                      min: { value: 0, message: "Required field" },
+                      max: { value: 32766, message: "Required field" },
                     })}
                     fullWidth={true}
-                    error={!!userErrors?.userType}
-                    helperText={userErrors?.userType ? userErrors.userType.message : null}
-                  >
-                    {Object.keys(userTypeMap).map((value) => (
-                      <option key={value} value={value}>
-                        {userTypeMap[value].label}
-                      </option>
-                    ))
-                    }
-                  </TextField>
+                    error={!!roleErrors?.weight}
+                    helperText={roleErrors?.weight ? roleErrors.weight.message : null}
+                  />
                 </DialogFormat>
                 <DialogFormat title="備註 :" >
                   <TextArea
@@ -629,72 +511,20 @@ function Role() {
                     maxRows={8}
                     id="remark"
                     name="remark"
-                    defaultValue={getUserValue("remark")}
-                    {...registerUser("remark", {})}
+                    defaultValue={getRoleValue("remark")}
+                    {...registerRole("remark", {})}
                   />
                 </DialogFormat>
               </Grid>
             </DataTableDialog>
-
-
-            {/* 修改 */}
-            <DataTableDialog
-              title={"修改使用者密碼"}
-              maxWidth="md"
-              isOpen={editPasswordOpen}
-              handleClose={handleEditPwdClose}
-              submit={handleSubmitPwd(submitEditPwd, onError)}
-            >
-              <Grid container justifyContent="center" alignItems="center" direction="column" >
-                {(addAndEditStatus == "edit") &&
-                  <DialogFormat title="ID :" >
-                    <Typography variant="h3" textAlign="left">{selectedId}</Typography>
-                  </DialogFormat>
-                }
-                <DialogFormat title="密碼 :" >
-                  <TextField
-                    id="password"
-                    name="password"
-                    type="password"
-                    {...registerPwd("password", {
-                      required: "Required field",
-                      minLength: { value: 5, message: "at least 5 letter" },
-                      maxLength: { value: 100, message: "need less 100 length" },
-                    })}
-                    fullWidth={true}
-                    error={!!pwdErrors?.password}
-                    helperText={pwdErrors?.password ? pwdErrors.password.message : null}
-                  />
-                </DialogFormat>
-                <DialogFormat title="密碼確認 :" >
-                  <TextField
-                    id="passwordCheck"
-                    name="passwordCheck"
-                    type="password"
-                    {...registerPwd("passwordCheck", {
-                      required: "Required field",
-                      validate: (val: string) => {
-                        if (watchPwd('password') != val) {
-                          return "Your passwords do no match";
-                        }
-                      }
-                    })}
-                    fullWidth={true}
-                    error={!!pwdErrors?.passwordCheck}
-                    helperText={pwdErrors?.passwordCheck ? pwdErrors.passwordCheck.message : null}
-                  />
-                </DialogFormat>
-              </Grid>
-            </DataTableDialog>
-
 
             {/* 刪除 */}
             <DataTableDialog
-              title={"刪除使用者"}
+              title={"刪除角色"}
               maxWidth="xs"
               isOpen={deleteOpen}
               handleClose={handleDeleteClose}
-              submit={deleteUser}
+              submit={deleteRole}
             >
               <Box component="span" sx={{ typography: "h4" }}>
                 {"是否確定要刪除" + selectedData}
