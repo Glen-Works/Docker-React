@@ -26,12 +26,7 @@ import { useAuthStateContext } from 'src/contexts/AuthContext';
 import PageHeader from '../PageBase/PageHeader';
 
 interface MapStyle {
-  [key: number]: { label: string, color: "primary" | "secondary" | "error" | "black" | "warning" | "success" | "info" }
-}
-
-const menuTypeMap: MapStyle = {
-  1: { label: '管理者', color: 'primary' },
-  2: { label: '一般使用者', color: 'secondary' }
+  [key: number | string]: { label: string, color: "primary" | "secondary" | "error" | "black" | "warning" | "success" | "info" }
 }
 
 const statusMap: MapStyle = {
@@ -39,16 +34,21 @@ const statusMap: MapStyle = {
   1: { label: '啟用', color: 'primary' }
 }
 
-interface UserData {
-  name: string,
-  email: string,
-  status: boolean,
-  menuType: number,
-  remark: string,
+const featureMap: MapStyle = {
+  'T': { label: '標題', color: 'black' },
+  'P': { label: '頁面', color: 'primary' },
+  'F': { label: '按鍵功能', color: 'secondary' }
 }
 
-interface UserAdd extends UserData {
-  password: string,
+interface MenuData {
+  name: string,
+  key: string,
+  url: string,
+  feature: string,
+  status: boolean,
+  parent: number,
+  weight: number,
+  remark: string,
 }
 
 function Menu() {
@@ -64,24 +64,17 @@ function Menu() {
   const onError = (errors, e) => console.log(errors, e);
   const { register, handleSubmit, formState: { errors } } = useForm();
 
-  const { register: registerPwd, handleSubmit: handleSubmitPwd, getValues: getPwdValue,
-    watch: watchPwd, reset: resetPwd, formState: { errors: pwdErrors } } = useForm(
-      {
-        defaultValues: {
-          password: "",
-          passwordCheck: "",
-        }
-      });
-
-  const { register: registerUser, handleSubmit: handleSubmitUser, setValue: setUserValue, getValues: getUserValue,
-    watch: watchUser, reset: resetUser, formState: { errors: menuErrors } } = useForm(
+  const { register: registerMenu, handleSubmit: handleSubmitMenu, setValue: setMenuValue, getValues: getMenuValue,
+    watch: watchMenu, reset: resetMenu, formState: { errors: menuErrors } } = useForm(
       {
         defaultValues: {
           name: "",
-          email: "",
-          password: "",
+          key: "",
+          url: "",
+          feature: "",
           status: true,
-          menuType: 2,
+          parent: 0,
+          weight: 0,
           remark: "",
         }
       });
@@ -90,8 +83,6 @@ function Menu() {
   useEffect(() => {
     getData(null);
   }, []);
-
-  useEffect(() => { }, [watchUser(), watchPwd()]);
 
   function getData(ds: PageManagement | null) {
     menuListApi(ds, state)
@@ -107,7 +98,7 @@ function Menu() {
     unstable_batchedUpdates(() => {
       setAddAndEditStatus("add");
       setAddAndEditOpen(true);
-      resetUser();
+      resetMenu();
     });
   };
 
@@ -122,7 +113,7 @@ function Menu() {
   const handleAddAndEditClose = () => {
     unstable_batchedUpdates(() => {
       setAddAndEditOpen(false);
-      resetUser();
+      resetMenu();
     });
   };
 
@@ -142,46 +133,48 @@ function Menu() {
     await menuInfoApi(id, state)
       .then(res => {
         let data = res.data[0];
-        setUserValue("name", data.name, { shouldValidate: true });
-        setUserValue("email", data.email, { shouldValidate: true });
-        setUserValue("status", data.status, { shouldValidate: true });
-        setUserValue("menuType", data.menuType, { shouldValidate: true });
-        setUserValue("remark", data.remark, { shouldValidate: true });
+        setMenuValue("name", data.name, { shouldValidate: true });
+        setMenuValue("key", data.key, { shouldValidate: true });
+        setMenuValue("url", data.url, { shouldValidate: true });
+        setMenuValue("feature", data.feature, { shouldValidate: true });
+        setMenuValue("status", data.status, { shouldValidate: true });
+        setMenuValue("parent", data.parent, { shouldValidate: true });
+        setMenuValue("weight", data.menuType, { shouldValidate: true });
+        setMenuValue("remark", data.remark, { shouldValidate: true });
       })
       .catch(error => {
         console.log("error:" + error.response?.data?.msg);
       });
   }
 
-  function getDialogUserData(): UserData {
-    var menuData: UserData = {
-      name: getUserValue("name"),
-      email: getUserValue("email"),
-      status: Boolean(Number(getUserValue("status"))),
-      menuType: Number(getUserValue("menuType")),
-      remark: getUserValue("remark"),
+  function getDialogMenuData(): MenuData {
+    var menuData: MenuData = {
+      name: getMenuValue("name"),
+      key: getMenuValue("key"),
+      url: getMenuValue("url"),
+      feature: getMenuValue("feature"),
+      status: Boolean(Number(getMenuValue("status"))),
+      parent: Number(getMenuValue("parent")),
+      weight: Number(getMenuValue("weight")),
+      remark: getMenuValue("remark"),
     }
     return menuData;
   }
 
-  const submitAddUser = (formObj, event) => {
+  const submitAddMenu = (formObj, event) => {
 
-    let menuData = getDialogUserData();
-    var menuAddData: UserAdd = {
-      ...menuData,
-      password: getUserValue("password"),
-    }
-    console.log(menuAddData);
-    addUser(menuAddData);
-  };
-
-  const submitEditUser = (formObj, event) => {
-    let menuData = getDialogUserData();
+    let menuData = getDialogMenuData();
     console.log(menuData);
-    editUser(menuData);
+    addMenu(menuData);
   };
 
-  function addUser(data: any) {
+  const submitEditMenu = (formObj, event) => {
+    let menuData = getDialogMenuData();
+    console.log(menuData);
+    editMenu(menuData);
+  };
+
+  function addMenu(data: any) {
     // console.log(data);
     menuAddApi(data, state)
       .then(res => {
@@ -193,7 +186,7 @@ function Menu() {
       });
   }
 
-  function editUser(data: any) {
+  function editMenu(data: any) {
     // console.log(data);
     menuEditApi(selectedId, data, state)
       .then(res => {
@@ -205,7 +198,7 @@ function Menu() {
       });
   }
 
-  function deleteUser() {
+  function deleteMenu() {
     // console.log(selectedIndex);
     menuDeleteApi(selectedId, state)
       .then(res => {
@@ -228,7 +221,7 @@ function Menu() {
 
     var searchData: Search = {
       name: data.get("name").toString(),
-      email: data.get("email").toString(),
+      key: data.get("key").toString(),
     }
 
     var pageManagement: PageManagement = { ...tableState.pageManagement, search: searchData };
@@ -251,10 +244,31 @@ function Menu() {
       }
     },
     {
-      name: "email",
-      label: "email",
+      name: "key",
+      label: "key",
       options: {
         sort: true,
+      }
+    },
+    {
+      name: "url",
+      label: "url",
+      options: {
+        sort: true,
+      }
+    },
+    {
+      name: "feature",
+      label: "feature",
+      options: {
+        sort: true,
+        customBodyRender: (value, tableMeta, updateValue) => (
+          <>
+            {(featureMap[value]) &&
+              < Label color={featureMap[value].color}>{featureMap[value].label}</Label>
+            }
+          </>
+        )
       }
     },
     {
@@ -272,34 +286,17 @@ function Menu() {
       }
     },
     {
-      name: "menuType",
-      label: "menuType",
+      name: "parent",
+      label: "parent",
       options: {
         sort: true,
-        customBodyRender: (value, tableMeta, updateValue) => (
-          <>
-            {(menuTypeMap[value] != undefined) &&
-              < Label color={menuTypeMap[value].color}>{menuTypeMap[value].label}</Label>
-            }
-          </>
-        )
       }
     },
     {
-      name: "loginIp",
-      label: "loginIp",
+      name: "weight",
+      label: "weight",
       options: {
         sort: true,
-        display: false,
-      }
-    },
-    {
-      name: "loginTime",
-      label: "loginTime",
-      options: {
-        sort: true,
-        display: false,
-        customBodyRender: CustomBodyTime
       }
     },
     {
@@ -332,7 +329,7 @@ function Menu() {
           // console.log(dataIndex, rowIndex);
           let rowData = tableState.data[dataIndex];
           let id = rowData.id;
-          let data = `id:${rowData.id},email:${rowData.email}`;
+          let data = `id:${rowData.id},key:${rowData.key}`;
           return (
             <Box sx={{ display: 'inline-flex' }}>
               <ColumnIconButton
@@ -432,13 +429,13 @@ function Menu() {
               </Grid>
               <Grid item >
                 <TextField
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
+                  id="url"
+                  label="Url"
+                  name="url"
+                  autoComplete="url"
                   size="small"
                   type="search"
-                  {...register("email", {})}
+                  {...register("url", {})}
                 />
               </Grid>
               <Grid item  >
@@ -479,11 +476,11 @@ function Menu() {
 
             {/* 修改 */}
             <DataTableDialog
-              title={(addAndEditStatus == "add") ? "新增使用者" : "修改使用者"}
+              title={(addAndEditStatus == "add") ? "新增菜單" : "修改菜單"}
               maxWidth="md"
               isOpen={addAndEditOpen}
               handleClose={handleAddAndEditClose}
-              submit={handleSubmitUser((addAndEditStatus == "add") ? submitAddUser : submitEditUser, onError)}
+              submit={handleSubmitMenu((addAndEditStatus == "add") ? submitAddMenu : submitEditMenu, onError)}
             >
               <Grid container justifyContent="center" alignItems="center" direction="column" >
                 {(addAndEditStatus == "edit") &&
@@ -495,8 +492,8 @@ function Menu() {
                   <TextField
                     id="name"
                     name="name"
-                    defaultValue={getUserValue("name")}
-                    {...registerUser("name", {
+                    defaultValue={getMenuValue("name")}
+                    {...registerMenu("name", {
                       required: "Required field"
                     })}
                     fullWidth={true}
@@ -504,76 +501,92 @@ function Menu() {
                     helperText={menuErrors?.name ? menuErrors.name.message : null}
                   />
                 </DialogFormat>
-
-                <DialogFormat title="信箱 :" >
+                <DialogFormat title="key :" >
                   <TextField
-                    id="email"
-                    //label="Email Address"
-                    name="email"
-                    defaultValue={getUserValue("status")}
-                    {...registerUser("email", {
+                    id="key"
+                    name="key"
+                    defaultValue={getMenuValue("status")}
+                    {...registerMenu("key", {
                       required: "Required field",
-                      minLength: { value: 5, message: "at least 5 letter" },
-                      maxLength: { value: 100, message: "need less 100 length" },
-                      pattern: {
-                        value: /^[A-Z0-9._%+-]+@[A-Z0-9._]+\.[A-Z]{2,}$/i,
-                        message: "Invalid email address",
-                      }
                     })}
                     fullWidth={true}
-                    error={!!menuErrors?.email}
-                    helperText={menuErrors?.email ? menuErrors.email.message : null}
+                    error={!!menuErrors?.key}
+                    helperText={menuErrors?.key ? menuErrors.key.message : null}
                   />
                 </DialogFormat>
-                {(addAndEditStatus == "add") &&
-                  <DialogFormat title="密碼 :" >
-                    <TextField
-                      id="password"
-                      name="password"
-                      type="password"
-                      {...registerUser("password", {
-                        required: "Required field",
-                        minLength: { value: 5, message: "at least 5 letter" },
-                        maxLength: { value: 100, message: "need less 100 length" },
-                      })}
-                      fullWidth={true}
-                      error={!!menuErrors?.password}
-                      helperText={menuErrors?.password ? menuErrors.password.message : null}
-                    />
-                  </DialogFormat>
-                }
-                <DialogFormat title="狀態 :" >
-                  <Switch
-                    id="status"
-                    name="status"
-                    checked={Boolean(Number(getUserValue("status")))}
-                    {...registerUser("status", {
-                    })}
-                  />
-                </DialogFormat>
-                <DialogFormat title="身份 :" >
+                <DialogFormat title="url :" >
                   <TextField
-                    id="menuType"
-                    name="menuType"
+                    id="url"
+                    name="url"
+                    defaultValue={getMenuValue("url")}
+                    {...registerMenu("url", {
+                      required: "Required field",
+                    })}
+                    fullWidth={true}
+                    error={!!menuErrors?.url}
+                    helperText={menuErrors?.url ? menuErrors.url.message : null}
+                  />
+                </DialogFormat>
+                <DialogFormat title="功能 :" >
+                  <TextField
+                    id="feature"
+                    name="feature"
                     select
                     SelectProps={{
                       native: true,
                     }}
-                    defaultValue={getUserValue("menuType")}
-                    {...registerUser("menuType", {
+                    defaultValue={getMenuValue("feature")}
+                    {...registerMenu("feature", {
                       required: "Required field"
                     })}
                     fullWidth={true}
-                    error={!!menuErrors?.menuType}
-                    helperText={menuErrors?.menuType ? menuErrors.menuType.message : null}
+                    error={!!menuErrors?.feature}
+                    helperText={menuErrors?.feature ? menuErrors.feature.message : null}
                   >
-                    {Object.keys(menuTypeMap).map((value) => (
+                    {Object.keys(featureMap).map((value) => (
                       <option key={value} value={value}>
-                        {menuTypeMap[value].label}
+                        {featureMap[value].label}
                       </option>
                     ))
                     }
                   </TextField>
+                </DialogFormat>
+                <DialogFormat title="狀態 :" >
+                  <Switch
+                    id="status"
+                    name="status"
+                    checked={Boolean(Number(getMenuValue("status")))}
+                    {...registerMenu("status", {
+                    })}
+                  />
+                </DialogFormat>
+                <DialogFormat title="parent :" >
+                  <TextField
+                    id="parent"
+                    name="parent"
+                    defaultValue={getMenuValue("parent")}
+                    {...registerMenu("parent", {
+                      required: "Required field",
+                    })}
+                    fullWidth={true}
+                    error={!!menuErrors?.parent}
+                    helperText={menuErrors?.parent ? menuErrors.parent.message : null}
+                  />
+                </DialogFormat>
+                <DialogFormat title="權重 :" >
+                  <TextField
+                    id="weight"
+                    name="weight"
+                    type="number"
+                    defaultValue={getMenuValue("weight")}
+                    {...registerMenu("weight", {
+                      min: { value: 0, message: "Required field" },
+                      max: { value: 32766, message: "Required field" },
+                    })}
+                    fullWidth={true}
+                    error={!!menuErrors?.weight}
+                    helperText={menuErrors?.weight ? menuErrors.weight.message : null}
+                  />
                 </DialogFormat>
                 <DialogFormat title="備註 :" >
                   <TextArea
@@ -581,8 +594,8 @@ function Menu() {
                     maxRows={8}
                     id="remark"
                     name="remark"
-                    defaultValue={getUserValue("remark")}
-                    {...registerUser("remark", {})}
+                    defaultValue={getMenuValue("remark")}
+                    {...registerMenu("remark", {})}
                   />
                 </DialogFormat>
               </Grid>
@@ -590,11 +603,11 @@ function Menu() {
 
             {/* 刪除 */}
             <DataTableDialog
-              title={"刪除使用者"}
+              title={"刪除菜單"}
               maxWidth="xs"
               isOpen={deleteOpen}
               handleClose={handleDeleteClose}
-              submit={deleteUser}
+              submit={deleteMenu}
             >
               <Box component="span" sx={{ typography: "h4" }}>
                 {"是否確定要刪除" + selectedData}

@@ -515,7 +515,7 @@ function User() {
               <MUIDataTable
                 title={
                   <Typography variant="h4">
-                    Sample List
+                    User List
                     {tableState.isLoading && <CircularProgress size={24} style={{ marginLeft: 15, position: 'relative', top: 4 }} />}
                   </Typography>
                 }

@@ -55,15 +55,6 @@ function Role() {
   const onError = (errors, e) => console.log(errors, e);
   const { register, handleSubmit, formState: { errors } } = useForm();
 
-  const { register: registerPwd, handleSubmit: handleSubmitPwd, getValues: getPwdValue,
-    watch: watchPwd, reset: resetPwd, formState: { errors: pwdErrors } } = useForm(
-      {
-        defaultValues: {
-          password: "",
-          passwordCheck: "",
-        }
-      });
-
   const { register: registerRole, handleSubmit: handleSubmitRole, setValue: setRoleValue, getValues: getRoleValue,
     watch: watchRole, reset: resetRole, formState: { errors: roleErrors } } = useForm(
       {
@@ -80,8 +71,6 @@ function Role() {
   useEffect(() => {
     getData(null);
   }, []);
-
-  useEffect(() => { }, [watchRole(), watchPwd()]);
 
   function getData(ds: PageManagement | null) {
     roleListApi(ds, state)
@@ -394,13 +383,13 @@ function Role() {
               </Grid>
               <Grid item >
                 <TextField
-                  id="key"
-                  label="Email Address"
-                  name="key"
-                  autoComplete="key"
+                  id="url"
+                  label="Url"
+                  name="url"
+                  autoComplete="url"
                   size="small"
                   type="search"
-                  {...register("key", {})}
+                  {...register("url", {})}
                 />
               </Grid>
               <Grid item  >
@@ -466,11 +455,9 @@ function Role() {
                     helperText={roleErrors?.name ? roleErrors.name.message : null}
                   />
                 </DialogFormat>
-
                 <DialogFormat title="key :" >
                   <TextField
                     id="key"
-                    //label="Email Address"
                     name="key"
                     defaultValue={getRoleValue("status")}
                     {...registerRole("key", {
