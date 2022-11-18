@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import { unstable_batchedUpdates } from "react-dom";
 import { Helmet } from 'react-helmet-async';
 import { useForm } from "react-hook-form";
-import { userAddApi, userDeleteApi, userEditApi, userInfoApi, userListApi } from 'src/api/Sample/sampleDataTableApi';
+import { userAddApi, userDeleteApi, userEditApi, userInfoApi, userListApi, userPwdEditApi } from 'src/api/Sample/sampleDataTableApi';
 import { ColumnIconButton } from 'src/components/DataTable/CustomerIconRender';
 import { CustomBodyTime } from 'src/components/DataTable/CustomerRender';
 import DataTableDialog from 'src/components/DataTable/DataTableDialog';
@@ -53,8 +53,8 @@ interface UserAdd extends UserData {
 }
 
 interface UserPwd {
-  password: string,
-  passwordCheck: string,
+  newPassword: string,
+  checkPassword: string,
 }
 
 function User() {
@@ -66,12 +66,12 @@ function User() {
   const [selectedData, setSelectedData] = useState<string>("");
   const [addAndEditStatus, setAddAndEditStatus] = useState<"edit" | "add" | "">("");
   const [addAndEditOpen, setAddAndEditOpen] = useState<boolean>(false);
-  const [editPasswordOpen, setEditPasswordOpen] = useState<boolean>(false);
+  const [editPasswordOpen, setEditPwdOpen] = useState<boolean>(false);
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
   const onError = (errors, e) => console.log(errors, e);
   const { register, handleSubmit, formState: { errors } } = useForm();
 
-  const { register: registerPwd, handleSubmit: handleSubmitPwd, setValue: setPwdValue, getValues: getPwdValue,
+  const { register: registerPwd, handleSubmit: handleSubmitPwd, getValues: getPwdValue,
     watch: watchPwd, reset: resetPwd, formState: { errors: pwdErrors } } = useForm(
       {
         defaultValues: {
@@ -126,15 +126,15 @@ function User() {
     });
   };
 
-  const handlePasswordClickOpen = (id: number) => {
+  const handlePwdClickOpen = (id: number) => {
     unstable_batchedUpdates(() => {
-      setEditPasswordOpen(true);
+      setEditPwdOpen(true);
       setSelectedId(id);
     });
   };
 
-  const handleEditPasswordClose = () => {
-    setEditPasswordOpen(false);
+  const handleEditPwdClose = () => {
+    setEditPwdOpen(false);
     resetPwd();
   };
 
@@ -183,7 +183,17 @@ function User() {
     return userData;
   }
 
-  const checkAddUser = (formObj, event) => {
+  const submitEditPwd = (formObj, event) => {
+    var userPwd: UserPwd = {
+      newPassword: getPwdValue("password"),
+      checkPassword: getPwdValue("password"),
+    }
+
+    console.log(userPwd);
+    editUserPwd(userPwd);
+  };
+
+  const submitAddUser = (formObj, event) => {
 
     let userData = getDialogUserData();
     var userAddData: UserAdd = {
@@ -194,8 +204,7 @@ function User() {
     addUser(userAddData);
   };
 
-  const checkEditUser = (formObj, event) => {
-
+  const submitEditUser = (formObj, event) => {
     let userData = getDialogUserData();
     console.log(userData);
     editUser(userData);
@@ -219,6 +228,17 @@ function User() {
       .then(res => {
         handleAddAndEditClose();
         getData({ ...tableState.pageManagement });
+      })
+      .catch(error => {
+        console.log("error:" + error.response?.data?.msg);
+      });
+  }
+
+  function editUserPwd(data: any) {
+    // console.log(data);
+    userPwdEditApi(selectedId, data, state)
+      .then(res => {
+        handleEditPwdClose();
       })
       .catch(error => {
         console.log("error:" + error.response?.data?.msg);
@@ -373,7 +393,7 @@ function User() {
               </ColumnIconButton>
               <ColumnIconButton
                 title="修改密碼"
-                handleClickOpen={() => { handlePasswordClickOpen(id) }}
+                handleClickOpen={() => { handlePwdClickOpen(id) }}
                 color={theme.palette.info.main}
                 background={theme.colors.error.lighter}
               >
@@ -511,7 +531,7 @@ function User() {
               maxWidth="md"
               isOpen={addAndEditOpen}
               handleClose={handleAddAndEditClose}
-              submit={handleSubmitUser((addAndEditStatus == "add") ? checkAddUser : checkEditUser, onError)}
+              submit={handleSubmitUser((addAndEditStatus == "add") ? submitAddUser : submitEditUser, onError)}
             >
               <Grid container justifyContent="center" alignItems="center" direction="column" >
                 {(addAndEditStatus == "edit") &&
@@ -622,8 +642,8 @@ function User() {
               title={"修改使用者密碼"}
               maxWidth="md"
               isOpen={editPasswordOpen}
-              handleClose={handleEditPasswordClose}
-              submit={handleSubmitPwd(checkEditUser, onError)}
+              handleClose={handleEditPwdClose}
+              submit={handleSubmitPwd(submitEditPwd, onError)}
             >
               <Grid container justifyContent="center" alignItems="center" direction="column" >
                 {(addAndEditStatus == "edit") &&
@@ -635,8 +655,11 @@ function User() {
                   <TextField
                     id="password"
                     name="password"
+                    type="password"
                     {...registerPwd("password", {
-                      required: "Required field"
+                      required: "Required field",
+                      minLength: { value: 5, message: "at least 5 letter" },
+                      maxLength: { value: 100, message: "need less 100 length" },
                     })}
                     fullWidth={true}
                     error={!!pwdErrors?.password}
@@ -647,8 +670,14 @@ function User() {
                   <TextField
                     id="passwordCheck"
                     name="passwordCheck"
+                    type="password"
                     {...registerPwd("passwordCheck", {
-                      required: "Required field"
+                      required: "Required field",
+                      validate: (val: string) => {
+                        if (watchPwd('password') != val) {
+                          return "Your passwords do no match";
+                        }
+                      }
                     })}
                     fullWidth={true}
                     error={!!pwdErrors?.passwordCheck}

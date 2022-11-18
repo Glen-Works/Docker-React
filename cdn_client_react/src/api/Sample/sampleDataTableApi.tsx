@@ -13,6 +13,9 @@ export const userAddApi = (data: null | any, auth: Auth) => {
 export const userEditApi = (id: number, data: null | any, auth: Auth) => {
     return api("put", "/api/v1/user/" + id, { headers: { ...setAuthHeader(auth).headers, } }, data);
 }
+export const userPwdEditApi = (id: number, data: null | any, auth: Auth) => {
+    return api("patch", "/api/v1/user/password/" + id, { headers: { ...setAuthHeader(auth).headers, } }, data);
+}
 export const userDeleteApi = (id: number, auth: Auth) => {
     return api("delete", "/api/v1/user/" + id, { headers: { ...setAuthHeader(auth).headers, } }, null);
 }
