@@ -84,6 +84,8 @@ function Menu() {
     getData(null);
   }, []);
 
+  useEffect(() => { }, [watchMenu()]);
+
   function getData(ds: PageManagement | null) {
     menuListApi(ds, state)
       .then(res => {
@@ -139,7 +141,7 @@ function Menu() {
         setMenuValue("feature", data.feature, { shouldValidate: true });
         setMenuValue("status", data.status, { shouldValidate: true });
         setMenuValue("parent", data.parent, { shouldValidate: true });
-        setMenuValue("weight", data.menuType, { shouldValidate: true });
+        setMenuValue("weight", data.weight, { shouldValidate: true });
         setMenuValue("remark", data.remark, { shouldValidate: true });
       })
       .catch(error => {
@@ -222,6 +224,7 @@ function Menu() {
     var searchData: Search = {
       name: data.get("name").toString(),
       key: data.get("key").toString(),
+      url: data.get("url").toString(),
     }
 
     var pageManagement: PageManagement = { ...tableState.pageManagement, search: searchData };
@@ -290,6 +293,7 @@ function Menu() {
       label: "parent",
       options: {
         sort: true,
+        display: false,
       }
     },
     {
@@ -425,6 +429,17 @@ function Menu() {
                   size="small"
                   type="search"
                   {...register("name", {})}
+                />
+              </Grid>
+              <Grid item >
+                <TextField
+                  id="key"
+                  label="Key"
+                  name="key"
+                  autoComplete="key"
+                  size="small"
+                  type="search"
+                  {...register("key", {})}
                 />
               </Grid>
               <Grid item >
@@ -577,11 +592,14 @@ function Menu() {
                   <TextField
                     id="weight"
                     name="weight"
-                    type="number"
-                    defaultValue={getMenuValue("weight")}
+                    defaultValue={Number(getMenuValue("weight"))}
                     {...registerMenu("weight", {
-                      min: { value: 0, message: "Required field" },
-                      max: { value: 32766, message: "Required field" },
+                      min: { value: 0, message: "Minimum value is 0" },
+                      max: { value: 32766, message: "Maximum value is 32766" },
+                      pattern: {
+                        value: /^[0-9]+$/,
+                        message: "Invalid value,value must be a number",
+                      }
                     })}
                     fullWidth={true}
                     error={!!menuErrors?.weight}

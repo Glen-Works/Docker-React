@@ -72,6 +72,8 @@ function Role() {
     getData(null);
   }, []);
 
+  useEffect(() => { }, [watchRole()]);
+
   function getData(ds: PageManagement | null) {
     roleListApi(ds, state)
       .then(res => {
@@ -124,7 +126,7 @@ function Role() {
         setRoleValue("name", data.name, { shouldValidate: true });
         setRoleValue("key", data.key, { shouldValidate: true });
         setRoleValue("status", data.status, { shouldValidate: true });
-        setRoleValue("weight", data.roleType, { shouldValidate: true });
+        setRoleValue("weight", data.weight, { shouldValidate: true });
         setRoleValue("remark", data.remark, { shouldValidate: true });
       })
       .catch(error => {
@@ -383,13 +385,13 @@ function Role() {
               </Grid>
               <Grid item >
                 <TextField
-                  id="url"
-                  label="Url"
-                  name="url"
-                  autoComplete="url"
+                  id="key"
+                  label="Key"
+                  name="key"
+                  autoComplete="key"
                   size="small"
                   type="search"
-                  {...register("url", {})}
+                  {...register("key", {})}
                 />
               </Grid>
               <Grid item  >
@@ -481,11 +483,14 @@ function Role() {
                   <TextField
                     id="weight"
                     name="weight"
-                    type="number"
-                    defaultValue={getRoleValue("weight")}
+                    defaultValue={Number(getRoleValue("weight"))}
                     {...registerRole("weight", {
-                      min: { value: 0, message: "Required field" },
-                      max: { value: 32766, message: "Required field" },
+                      min: { value: 0, message: "Minimum value is 0" },
+                      max: { value: 32766, message: "Maximum value is 32766" },
+                      pattern: {
+                        value: /^[0-9]+$/,
+                        message: "Invalid value,value must be a number",
+                      }
                     })}
                     fullWidth={true}
                     error={!!roleErrors?.weight}
