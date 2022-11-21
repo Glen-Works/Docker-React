@@ -30,9 +30,19 @@ const SignInSide = Loader(
   lazy(() => import('src/page/Login'))
 );
 
+//login
+const Dashboard = Loader(
+  lazy(() => import('src/page/Dashboard'))
+);
+
 //AuthLayout
 const AuthLayout = Loader(
   lazy(() => import('src/layouts/AuthLayout'))
+);
+
+//AuthMenuLayout
+const AuthMenuLayout = Loader(
+  lazy(() => import('src/layouts/AuthMenuLayout'))
 );
 
 // User page
@@ -87,12 +97,16 @@ const routes: RouteObject[] = [
     children: [
       {
         path: '',
-        element: <AuthLayout />, // jwt權限 判斷
+        element: <AuthLayout><AuthMenuLayout /></AuthLayout>,  // jwt權限 與 menu 判斷
         children: [
           {
             path: '',
             element: <SidebarLayout />,
             children: [
+              {
+                path: 'dashboard',
+                element: <Dashboard />
+              },
               {
                 path: 'user',
                 element: <User />
