@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { loginApi } from 'src/api/loginApi';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import { jwtValidate } from 'src/middleware/jwtAuthMiddleware';
-import SetUserInfo from 'src/stores/action/actions';
+import setUserInfo from 'src/stores/action/authActions';
 
 interface Login {
   account: string,
@@ -71,7 +71,7 @@ export default function SignInSide() {
     }
 
     loginApi(loginData)?.then(res => {
-      SetUserInfo(dispatch, res.data);
+      setUserInfo(dispatch, res.data);
       return navigate("/SampleDataTable");
     }).catch(error => {
       console.log("error:" + error.response?.data?.msg);

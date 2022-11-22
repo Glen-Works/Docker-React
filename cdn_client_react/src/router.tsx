@@ -97,43 +97,49 @@ const routes: RouteObject[] = [
     children: [
       {
         path: '',
-        element: <AuthLayout><AuthMenuLayout /></AuthLayout>,  // jwt權限 與 menu 判斷
+        element: <AuthLayout />,  // jwt權限 與 menu 判斷
         children: [
           {
             path: '',
-            element: <SidebarLayout />,
+            element: <AuthMenuLayout />,  // jwt權限 與 menu 判斷
             children: [
               {
-                path: 'dashboard',
-                element: <Dashboard />
-              },
-              {
-                path: 'user',
-                element: <User />
-              },
-              {
-                path: 'menu',
-                element: <Menu />
-              },
-              {
-                path: 'role',
-                element: <Role />
-              },
-              {
-                path: 'samplecontent',
-                element: <SampleContent />
-              },
-              {
-                path: 'sampledatatable',
-                element: <SampleDataTable />
-              },
-              {
-                path: '500',
-                element: <Status500 />
-              },
-              {
-                path: '*',
-                element: <Status404 />
+                path: '',
+                element: <SidebarLayout />,
+                children: [
+                  {
+                    path: 'dashboard',
+                    element: <Dashboard />
+                  },
+                  {
+                    path: 'user',
+                    element: <User />
+                  },
+                  {
+                    path: 'menu',
+                    element: <Menu />
+                  },
+                  {
+                    path: 'role',
+                    element: <Role />
+                  },
+                  {
+                    path: 'samplecontent',
+                    element: <SampleContent />
+                  },
+                  {
+                    path: 'sampledatatable',
+                    element: <SampleDataTable />
+                  },
+                  {
+                    path: '500',
+                    element: <Status500 />
+                  },
+                  {
+                    path: '*',
+                    element: <Status404 />
+                  }
+                ]
               }
             ]
           }

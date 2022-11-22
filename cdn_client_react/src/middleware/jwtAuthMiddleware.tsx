@@ -1,6 +1,6 @@
 
 import api, { AxiosResponse, setAuthHeader } from "src/api/baseApi";
-import SetUserInfo from "src/stores/action/actions";
+import setUserInfo from "src/stores/action/authActions";
 import { Auth } from "src/stores/reducer/authReducer";
 
 // 身份驗證
@@ -41,7 +41,7 @@ export async function jwtRefesh(dispatch, auth: Auth): Promise<boolean> {
     var returnBool = false
     try {
         return await apiData?.then(res => {
-            SetUserInfo(dispatch, res.data);
+            setUserInfo(dispatch, res.data);
             console.log("更新 jwt成功");
             return Promise.resolve(true);
         }).catch(error => {

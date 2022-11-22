@@ -1,7 +1,7 @@
 import { Auth, initialState, removeCookieUserInfo, setCookieUserInfo } from "src/stores/reducer/authReducer";
 
 
-export default function SetUserInfo(dispatch: any, data: Auth) {
+export default function setUserInfo(dispatch: any, data: Auth) {
     try {
         dispatch({ type: 'REQUEST_LOGIN' });
         if (data.userInfo != null && data.authorisation != null) {
