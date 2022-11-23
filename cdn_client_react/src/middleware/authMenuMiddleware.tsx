@@ -53,6 +53,9 @@ export interface Menu {
     weight: number,
 }
 
+export interface MenuTree extends Menu {
+    child?: Menu[]
+}
 
 // 頁面權限驗證
 export const authMenuMiddleware = (menuList: Menu[], uri: string): boolean => {
@@ -103,3 +106,20 @@ export const getAuthMenu = async (auth: Auth): Promise<Menu[]> => {
 }
 
 
+export function makeMenuTree(menuList: MenuTree[], parent: number = 0): MenuTree[] {
+
+    let menuTree: MenuTree[] = [];
+    menuList.forEach(value => {
+        if (value.feature == "T" && value.parent == parent) {
+            value.child = makeMenuTree(menuList, value.id);
+            menuTree.push(value);
+        }
+
+        if (value.feature == "P" && value.parent == parent) {
+            value.child = [];
+            menuTree.push(value);
+        }
+        return value;
+    });
+    return menuTree;
+}
