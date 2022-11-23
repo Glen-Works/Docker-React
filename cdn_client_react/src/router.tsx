@@ -1,13 +1,13 @@
 import { lazy, Suspense } from 'react';
 import { RouteObject } from 'react-router';
 import { Navigate } from 'react-router-dom';
-import SuspenseLoader from 'src/components/SuspenseLoader';
 import BaseLayout from 'src/layouts/BaseLayout';
+import SuspenseLoaderRouter from './components/SuspenseLoaderRouter';
 import SidebarLayout from './layouts/SidebarLayout';
 
 const Loader = (Component) => (props) =>
 (
-  <Suspense fallback={<SuspenseLoader isOpen={true} />}>
+  <Suspense fallback={<SuspenseLoaderRouter />}>
     <Component {...props} />
   </Suspense>
 );

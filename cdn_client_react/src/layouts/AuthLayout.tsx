@@ -34,7 +34,6 @@ const AuthLayout: FC<JwtAuthBaseChild> = ({ children }) => {
         <Box>
             {children || <Outlet />}
         </Box>
-        // <main>{children}</main>
     )
 }
 export default AuthLayout;
