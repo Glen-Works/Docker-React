@@ -97,11 +97,11 @@ const routes: RouteObject[] = [
     children: [
       {
         path: '',
-        element: <AuthLayout />,  // jwt權限 與 menu 判斷
+        element: <AuthLayout />,  // jwt權限 判斷
         children: [
           {
             path: '',
-            element: <AuthMenuLayout />,  // jwt權限 與 menu 判斷
+            element: <AuthMenuLayout />,  // menu權限 判斷
             children: [
               {
                 path: '',
