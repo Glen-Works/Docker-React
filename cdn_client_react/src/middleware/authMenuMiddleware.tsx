@@ -54,7 +54,7 @@ export interface Menu {
 }
 
 export interface MenuTree extends Menu {
-    child?: Menu[]
+    children?: Menu[]
 }
 
 // 頁面權限驗證
@@ -111,12 +111,12 @@ export function makeMenuTree(menuList: MenuTree[], parent: number = 0): MenuTree
     let menuTree: MenuTree[] = [];
     menuList.forEach(value => {
         if (value.feature == "T" && value.parent == parent) {
-            value.child = makeMenuTree(menuList, value.id);
+            value.children = makeMenuTree(menuList, value.id);
             menuTree.push(value);
         }
 
         if (value.feature == "P" && value.parent == parent) {
-            value.child = [];
+            value.children = [];
             menuTree.push(value);
         }
         return value;
