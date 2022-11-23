@@ -24,6 +24,8 @@ import Label from 'src/components/Label';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
+import { useAuthMenuContext } from 'src/contexts/AuthMenuContext';
+import { validAuthMenuFeature } from 'src/middleware/authMenuMiddleware';
 import PageHeader from '../PageBase/PageHeader';
 
 interface MapStyle {
@@ -68,6 +70,14 @@ function User() {
   const [addAndEditOpen, setAddAndEditOpen] = useState<boolean>(false);
   const [editPasswordOpen, setEditPwdOpen] = useState<boolean>(false);
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
+  const AuthMenu = useAuthMenuContext();
+
+  const [checkFeatureList, setCheckFeatureList] = useState<boolean>(false);
+  const [checkFeatureCreate, setCheckFeatureCreate] = useState<boolean>(false);
+  const [checkFeatureUpdate, setCheckFeatureUpdate] = useState<boolean>(false);
+  const [checkFeatureDelete, setCheckFeatureDelete] = useState<boolean>(false);
+  const [checkFeaturePassword, setCheckFeaturePassword] = useState<boolean>(false);
+
   const onError = (errors, e) => console.log(errors, e);
   const { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -96,6 +106,15 @@ function User() {
 
   useEffect(() => {
     getData(null);
+
+    unstable_batchedUpdates(() => {
+      setCheckFeatureList(validAuthMenuFeature(AuthMenu.state, "user_list"));   //權限 列表
+      setCheckFeatureCreate(validAuthMenuFeature(AuthMenu.state, "user_create")); //權限 新增
+      setCheckFeatureUpdate(validAuthMenuFeature(AuthMenu.state, "user_update")); //權限 修改
+      setCheckFeatureDelete(validAuthMenuFeature(AuthMenu.state, "user_delete")); //權限 刪除
+      setCheckFeaturePassword(validAuthMenuFeature(AuthMenu.state, "user_password_update")); //權限 密碼修改
+    });
+
   }, []);
 
   useEffect(() => { }, [watchUser(), watchPwd()]);
@@ -375,30 +394,39 @@ function User() {
           let data = `id:${rowData.id},email:${rowData.email}`;
           return (
             <Box sx={{ display: 'inline-flex' }}>
-              <ColumnIconButton
-                title="修改"
-                handleClickOpen={() => { handleEditClickOpen(id) }}
-                color={theme.palette.primary.main}
-                background={theme.colors.primary.lighter}
-              >
-                <EditTwoToneIcon fontSize="small" />
-              </ColumnIconButton>
-              <ColumnIconButton
-                title="刪除"
-                handleClickOpen={() => handleDeleteClickOpen(id, data)}
-                color={theme.palette.error.main}
-                background={theme.colors.error.lighter}
-              >
-                <DeleteTwoToneIcon fontSize="small" />
-              </ColumnIconButton>
-              <ColumnIconButton
-                title="修改密碼"
-                handleClickOpen={() => { handlePwdClickOpen(id) }}
-                color={theme.palette.info.main}
-                background={theme.colors.error.lighter}
-              >
-                <KeyTwoToneIcon fontSize="small" />
-              </ColumnIconButton>
+              {
+                (checkFeatureUpdate) &&
+                <ColumnIconButton
+                  title="修改"
+                  handleClickOpen={() => { handleEditClickOpen(id) }}
+                  color={theme.palette.primary.main}
+                  background={theme.colors.primary.lighter}
+                >
+                  <EditTwoToneIcon fontSize="small" />
+                </ColumnIconButton>
+              }
+              {
+                (checkFeatureDelete) &&
+                <ColumnIconButton
+                  title="刪除"
+                  handleClickOpen={() => handleDeleteClickOpen(id, data)}
+                  color={theme.palette.error.main}
+                  background={theme.colors.error.lighter}
+                >
+                  <DeleteTwoToneIcon fontSize="small" />
+                </ColumnIconButton>
+              }
+              {
+                (checkFeaturePassword) &&
+                <ColumnIconButton
+                  title="修改密碼"
+                  handleClickOpen={() => { handlePwdClickOpen(id) }}
+                  color={theme.palette.info.main}
+                  background={theme.colors.error.lighter}
+                >
+                  <KeyTwoToneIcon fontSize="small" />
+                </ColumnIconButton>
+              }
             </Box>
           );
         }
@@ -498,31 +526,38 @@ function User() {
                 >
                   Search</Button>
               </Grid>
-              <Grid item >
-                <Button
-                  variant="contained"
-                  color='warning'
-                  startIcon={<AddTwoToneIcon fontSize="small" />}
-                  onClick={handleAddClickOpen}
-                >
-                  Create
-                </Button>
-              </Grid>
+
+              {
+                (checkFeatureCreate) &&
+                <Grid item >
+                  <Button
+                    variant="contained"
+                    color='warning'
+                    startIcon={<AddTwoToneIcon fontSize="small" />}
+                    onClick={handleAddClickOpen}
+                  >
+                    Create
+                  </Button>
+                </Grid>
+              }
             </Grid>
           </Box>
           <Grid item xs={12}>
             <DataTableThemeProvider>
-              <MUIDataTable
-                title={
-                  <Typography variant="h4">
-                    User List
-                    {tableState.isLoading && <CircularProgress size={24} style={{ marginLeft: 15, position: 'relative', top: 4 }} />}
-                  </Typography>
-                }
-                data={tableState.data}
-                columns={columns}
-                options={options}
-              />
+              {
+                (checkFeatureList) &&
+                <MUIDataTable
+                  title={
+                    <Typography variant="h4">
+                      User List
+                      {tableState.isLoading && <CircularProgress size={24} style={{ marginLeft: 15, position: 'relative', top: 4 }} />}
+                    </Typography>
+                  }
+                  data={tableState.data}
+                  columns={columns}
+                  options={options}
+                />
+              }
             </DataTableThemeProvider>
 
             {/* 修改 */}

@@ -1,13 +1,13 @@
 import { lazy, Suspense } from 'react';
 import { RouteObject } from 'react-router';
 import { Navigate } from 'react-router-dom';
-import SuspenseLoader from 'src/components/SuspenseLoader';
 import BaseLayout from 'src/layouts/BaseLayout';
+import SuspenseLoaderRouter from './components/SuspenseLoaderRouter';
 import SidebarLayout from './layouts/SidebarLayout';
 
 const Loader = (Component) => (props) =>
 (
-  <Suspense fallback={<SuspenseLoader isOpen={true} />}>
+  <Suspense fallback={<SuspenseLoaderRouter />}>
     <Component {...props} />
   </Suspense>
 );
@@ -30,9 +30,19 @@ const SignInSide = Loader(
   lazy(() => import('src/page/Login'))
 );
 
+//login
+const Dashboard = Loader(
+  lazy(() => import('src/page/Dashboard'))
+);
+
 //AuthLayout
 const AuthLayout = Loader(
   lazy(() => import('src/layouts/AuthLayout'))
+);
+
+//AuthMenuLayout
+const AuthMenuLayout = Loader(
+  lazy(() => import('src/layouts/AuthMenuLayout'))
 );
 
 // User page
@@ -87,39 +97,49 @@ const routes: RouteObject[] = [
     children: [
       {
         path: '',
-        element: <AuthLayout />, // jwt權限 判斷
+        element: <AuthLayout />,  // jwt權限 判斷
         children: [
           {
             path: '',
-            element: <SidebarLayout />,
+            element: <AuthMenuLayout />,  // menu權限 判斷
             children: [
               {
-                path: 'user',
-                element: <User />
-              },
-              {
-                path: 'menu',
-                element: <Menu />
-              },
-              {
-                path: 'role',
-                element: <Role />
-              },
-              {
-                path: 'samplecontent',
-                element: <SampleContent />
-              },
-              {
-                path: 'sampledatatable',
-                element: <SampleDataTable />
-              },
-              {
-                path: '500',
-                element: <Status500 />
-              },
-              {
-                path: '*',
-                element: <Status404 />
+                path: '',
+                element: <SidebarLayout />,
+                children: [
+                  {
+                    path: 'dashboard',
+                    element: <Dashboard />
+                  },
+                  {
+                    path: 'user',
+                    element: <User />
+                  },
+                  {
+                    path: 'menu',
+                    element: <Menu />
+                  },
+                  {
+                    path: 'role',
+                    element: <Role />
+                  },
+                  {
+                    path: 'samplecontent',
+                    element: <SampleContent />
+                  },
+                  {
+                    path: 'sampledatatable',
+                    element: <SampleDataTable />
+                  },
+                  {
+                    path: '500',
+                    element: <Status500 />
+                  },
+                  {
+                    path: '*',
+                    element: <Status404 />
+                  }
+                ]
               }
             ]
           }

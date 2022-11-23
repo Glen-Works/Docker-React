@@ -6,6 +6,7 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
 import { CssBaseline } from '@mui/material';
 import UseAuthState from 'src/contexts/AuthContext';
+import UseAuthMenuState from './contexts/AuthMenuContext';
 import ThemeProvider from './theme/ThemeProvider';
 
 function App() {
@@ -17,7 +18,9 @@ function App() {
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <CssBaseline />
         <UseAuthState>
-          {content}
+          <UseAuthMenuState>
+            {content}
+          </UseAuthMenuState>
         </UseAuthState>
       </LocalizationProvider>
     </ThemeProvider>
