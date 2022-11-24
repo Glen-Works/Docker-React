@@ -1,10 +1,23 @@
 
+import BrightnessLowTwoToneIcon from '@mui/icons-material/BrightnessLowTwoTone';
+import { ReactNode } from 'react';
 import api, { setAuthHeader } from "src/api/baseApi";
 import { Auth } from "src/stores/reducer/authReducer";
 import { getKeyByValue } from "src/utils/baseFunction";
 
 interface RouterList {
     [key: string]: string
+}
+
+interface RouterIcon {
+    [key: string]: ReactNode
+}
+
+// icon頁面
+export const routerIcon: RouterIcon = {
+    "user_page": <BrightnessLowTwoToneIcon />,
+    "role_page": <BrightnessLowTwoToneIcon />,
+    "menu_page": <BrightnessLowTwoToneIcon />,
 }
 
 // 權限頁面
@@ -17,7 +30,8 @@ export const routerList: RouterList = {
 // 預設頁面 (不需權限)
 export const exceptUriList = [
     "/dashboard",
-    "/SampleDataTable",
+    "/samplecontent",
+    "/sampledatatable",
     "/500",
     "/404",
 ]

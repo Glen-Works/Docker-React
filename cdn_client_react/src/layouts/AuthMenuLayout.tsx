@@ -27,14 +27,15 @@ const AuthMenuLayout: FC<AuthMenuBaseChild> = ({ children }) => {
             // STEP 2：使用 Promise.all 搭配 await 等待兩個 API 都取得回應後才繼續
             let menuList = await getAuthMenu(state);
             let check = authMenuMiddleware(menuList, location.pathname);
+            AuthMenu.dispatch(menuList);
+
             if (check) {
-                unstable_batchedUpdates(() => {
-                    AuthMenu.dispatch(menuList);
-                    setAuthCheck(true)
-                });
-            } else {
                 setAuthCheck(true)
-                return navigate("/dashboard");
+            } else {
+                unstable_batchedUpdates(() => {
+                    navigate("/dashboard");
+                    setAuthCheck(true);
+                });
             }
 
         };
@@ -43,7 +44,6 @@ const AuthMenuLayout: FC<AuthMenuBaseChild> = ({ children }) => {
 
     return (
         <Box>
-            {/* {console.log("authCheck:", authCheck)} */}
             {(authCheck == false) && <SuspenseLoaderRouter />}
             {authCheck && (children || <Outlet />)}
         </Box>
