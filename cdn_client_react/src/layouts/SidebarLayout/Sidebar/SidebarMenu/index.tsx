@@ -157,6 +157,7 @@ function SidebarMenu() {
   const { closeSidebar } = useContext(SidebarContext);
   const AuthMenu = useAuthMenuContext();
   const [menuList, setMenuList] = useState(null);
+  const [selected, setSelected] = useState<string[]>([""]);
 
   useEffect(() => {
     let authMenu = AuthMenu.state;
@@ -164,6 +165,10 @@ function SidebarMenu() {
       setMenuList(makeMenuTree(AuthMenu.state));
     }
   }, []);
+
+  function setSelectMenu(data: string[]) {
+    setSelected(data);
+  }
 
   // console.log(AuthMenu.state);
   // console.log(menuList);
@@ -218,6 +223,8 @@ function SidebarMenu() {
           <MenuTreeView
             key={menu.id}
             data={menu}
+            selected={selected}
+            setSelectMenu={setSelectMenu}
           />
         ))
       }

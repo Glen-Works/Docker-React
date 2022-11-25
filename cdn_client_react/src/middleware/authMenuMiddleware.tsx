@@ -3,28 +3,19 @@ import BrightnessLowTwoToneIcon from '@mui/icons-material/BrightnessLowTwoTone';
 import { ReactNode } from 'react';
 import api, { setAuthHeader } from "src/api/baseApi";
 import { Auth } from "src/stores/reducer/authReducer";
-import { getKeyByValue } from "src/utils/baseFunction";
 
 interface RouterList {
-    [key: string]: string
+    [key: string]: { uri: string, icon: ReactNode }
 }
 
-interface RouterIcon {
-    [key: string]: ReactNode
-}
-
-// icon頁面
-export const routerIcon: RouterIcon = {
-    "user_page": <BrightnessLowTwoToneIcon />,
-    "role_page": <BrightnessLowTwoToneIcon />,
-    "menu_page": <BrightnessLowTwoToneIcon />,
-}
-
-// 權限頁面
+// 權限頁面 與 Icon
 export const routerList: RouterList = {
-    "user_page": '/user',
-    "role_page": '/menu',
-    "menu_page": '/role',
+    "user_page": { uri: '/user', icon: <BrightnessLowTwoToneIcon /> },
+    "role_page": { uri: '/role', icon: <BrightnessLowTwoToneIcon /> },
+    "menu_page": { uri: '/menu', icon: <BrightnessLowTwoToneIcon /> },
+    "management6": { uri: '/dashboard', icon: <BrightnessLowTwoToneIcon /> },
+    "management3": { uri: '/samplecontent', icon: <BrightnessLowTwoToneIcon /> },
+    "manageamentp0": { uri: '/sampledatatable', icon: <BrightnessLowTwoToneIcon /> },
 }
 
 // 預設頁面 (不需權限)
@@ -37,7 +28,7 @@ export const exceptUriList = [
 ]
 
 // 功能對照表 
-export const featureList = [
+const featureList = [
     "user_list",                //使用者清單
     "user_info",                //使用者資訊
     "user_create",              //使用者新增
@@ -75,7 +66,6 @@ export interface MenuTree extends Menu {
 export const authMenuMiddleware = (menuList: Menu[], uri: string): boolean => {
     // 預設頁面 (不需權限)
     for (let index = 0; index < exceptUriList.length; index++) {
-        // console.log("exceptUri", exceptUriList[index]);
         const exceptUri = exceptUriList[index];
         if (exceptUri == uri) {
             return true;
@@ -85,11 +75,16 @@ export const authMenuMiddleware = (menuList: Menu[], uri: string): boolean => {
     // 權限頁面
     for (let index = 0; index < menuList.length; index++) {
         const item = menuList[index];
-        if (item.feature == "P" && item.key == getKeyByValue(routerList, uri)) {
+        if (item.feature == "P" && item.key == getMenuKeyByValue(routerList, uri)) {
             return true;
         }
     }
     return false;
+}
+
+// 權限 find key by uri
+export function getMenuKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key].uri === value) ?? "";
 }
 
 // 功能權限驗證

@@ -1,27 +1,36 @@
 import { FormControlLabel } from "@material-ui/core";
 import { TreeItem, TreeView } from "@mui/lab";
 import { Avatar, Link } from "@mui/material";
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { unstable_batchedUpdates } from "react-dom";
 import { NavLink as RouterLink, useLocation, useNavigate } from "react-router-dom";
-import { MenuTree, routerList } from "src/middleware/authMenuMiddleware";
+import { getMenuKeyByValue, MenuTree, routerList } from "src/middleware/authMenuMiddleware";
+
+type setMenu = (data: string[]) => void;
 
 interface MenuTreeViewProp {
-  data: MenuTree
+  data: MenuTree,
+  selected: string[],
+  setSelectMenu: setMenu,
 }
 
 export default function MenuTreeView(prop: MenuTreeViewProp) {
-  const { data } = prop;
+  const { data, selected, setSelectMenu } = prop;
   let location = useLocation();
   let navigate = useNavigate();
 
-  const [selected, setSelected] = React.useState<number[]>([]);
+  const [expend, setExpend] = useState<string[]>([]);
 
   useEffect(() => {
-    setSelected(getChildById(data, location.pathname));
-  }, [selected]);
+    setDefaultExpanded(data);
+  }, []);
 
-  const getChildById = (nodes: MenuTree, key: string) => {
-    let path: number[] = []; //取的到節點的路徑
+  const handleToggle = (event: React.SyntheticEvent, nodeIds: string[]) => {
+    setExpend(nodeIds);
+  };
+
+  const getChildById = (nodes: MenuTree, key: string, path: number[]) => {
+    // let path: number[] = []; //取的到節點的路徑
 
     // recursive DFS
     function getNodeById(node: MenuTree, key: string, parentsPath: number[]) {
@@ -46,15 +55,21 @@ export default function MenuTreeView(prop: MenuTreeViewProp) {
     }
 
     const nodeToToggle = getNodeById(nodes, key, path);
-    // console.log(path);
 
-    return path;
+    if (nodeToToggle != undefined) path.push(nodeToToggle.id);
+
+    return nodeToToggle;
   };
 
-  function getOnChange(nodes: MenuTree) {
-    const parentList = getChildById(data, nodes.key);
-    console.log("path", [nodes.id, ...parentList]);
-    setSelected([nodes.id, ...parentList]);
+  function setDefaultExpanded(nodes: MenuTree) {
+    let parentList: number[] = [];
+    const node = getChildById(data, getMenuKeyByValue(routerList, location.pathname), parentList);
+    if (parentList?.length > 0) {
+      unstable_batchedUpdates(() => {
+        setExpend(parentList.map(String));
+        setSelectMenu([node.id.toString()]);
+      });
+    }
   }
 
   const renderTree = (nodes: MenuTree) => {
@@ -70,7 +85,7 @@ export default function MenuTreeView(prop: MenuTreeViewProp) {
                 {(nodes.feature == "P") && <>
                   <Avatar variant={"rounded"}
                     alt=""
-                    src={RouterLink[nodes.key] ?? null}
+                    src={RouterLink[nodes.key]?.icon ?? null}
                     style={{
                       width: 10,
                       height: 10,
@@ -80,7 +95,8 @@ export default function MenuTreeView(prop: MenuTreeViewProp) {
                     variant="body2"
                     onClick={() => {
                       // getOnChange(nodes);
-                      navigate(routerList[nodes.key] ?? "/dashboard");
+                      setSelectMenu([nodes.id.toString()]);
+                      navigate(routerList[nodes.key]?.uri ?? "/dashboard");
                     }}
                   >
                   </Link>
@@ -103,12 +119,14 @@ export default function MenuTreeView(prop: MenuTreeViewProp) {
   };
 
   return (
-    <TreeView
-      // defaultCollapseIcon={<ExpandMoreIcon />}
-      defaultExpanded={selected?.map(String) ?? null}
-    // defaultExpandIcon={<ChevronRightIcon />}
-    >
-      {renderTree(data)}
-    </TreeView>
+    <>
+      <TreeView
+        expanded={expend}
+        selected={selected}
+        onNodeToggle={handleToggle}
+      >
+        {renderTree(data)}
+      </TreeView>
+    </>
   );
 }
