@@ -83,13 +83,6 @@ export default function MenuTreeView(prop: MenuTreeViewProp) {
             control={
               <>
                 {(nodes.feature == "P") && <>
-                  <Avatar variant={"rounded"}
-                    alt=""
-                    src={RouterLink[nodes.key]?.icon ?? null}
-                    style={{
-                      width: 10,
-                      height: 10,
-                    }} />
                   <Link
                     component="button"
                     variant="body2"
@@ -99,6 +92,13 @@ export default function MenuTreeView(prop: MenuTreeViewProp) {
                       navigate(routerList[nodes.key]?.uri ?? "/dashboard");
                     }}
                   >
+                    <Avatar variant={"rounded"}
+                      alt=""
+                      src={RouterLink[nodes.key]?.icon ?? null}
+                      style={{
+                        width: 10,
+                        height: 10,
+                      }} />
                   </Link>
                 </>
                 }
