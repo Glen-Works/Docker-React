@@ -2,14 +2,10 @@ import { useContext, useEffect, useState } from 'react';
 
 import {
   alpha,
-  Box, Button, List, ListItem, styled
+  Box, styled
 } from '@mui/material';
-import { NavLink as RouterLink } from 'react-router-dom';
 import { SidebarContext } from 'src/contexts/SidebarContext';
 
-import BrightnessLowTwoToneIcon from '@mui/icons-material/BrightnessLowTwoTone';
-import DesignServicesTwoToneIcon from '@mui/icons-material/DesignServicesTwoTone';
-import MmsTwoToneIcon from '@mui/icons-material/MmsTwoTone';
 import { useAuthMenuContext } from 'src/contexts/AuthMenuContext';
 import { makeMenuTree } from 'src/middleware/authMenuMiddleware';
 import MenuTreeView from './MenuTreeView';
@@ -153,6 +149,53 @@ const SubMenuWrapper = styled(Box)(
 `
 );
 
+const MenuTreeWrapper = styled(Box)(
+  ({ theme }) => `
+  .MuiTreeView-root {
+    padding: ${theme.spacing(0.5)};
+  }
+`
+);
+
+const MenuTreeItemWrapper = styled(Box)(
+  ({ theme }) => `
+  .MuiTreeItem-root{
+    text-transform: uppercase;
+    padding: ${theme.spacing(0.5, 0.2)};
+    color: ${theme.colors.alpha.trueWhite[70]};
+    background-color: transparent;
+    width: 100%;
+
+    .MuiTreeItem-label{
+      font-weight: bold;
+      font-size: ${theme.typography.pxToRem(12)};
+      line-height: 1.5;
+
+      &:hover {
+        background-color: ${alpha(theme.colors.alpha.trueWhite[100], 0.06)};
+        color: ${theme.colors.alpha.trueWhite[100]};
+  
+        .MuiTreeItem-iconContainer {
+          color: ${theme.colors.alpha.trueWhite[100]};
+        }
+    }
+    
+    
+
+    .MuiTreeItem-iconContainer {
+      transition: ${theme.transitions.create(['color'])};
+      font-size: inherit;
+      transition: none;
+      color: ${theme.colors.alpha.trueWhite[30]};
+      font-size: ${theme.typography.pxToRem(20)};
+      
+    }
+  }
+  
+  `
+);
+
+
 function SidebarMenu() {
   const { closeSidebar } = useContext(SidebarContext);
   const AuthMenu = useAuthMenuContext();
@@ -175,7 +218,7 @@ function SidebarMenu() {
 
   return (
     <>
-      <MenuWrapper>
+      {/* <MenuWrapper>
         <List component="div">
           <SubMenuWrapper>
             <List component="div">
@@ -216,18 +259,22 @@ function SidebarMenu() {
           </SubMenuWrapper>
         </List>
 
-      </MenuWrapper>
-      {
-        menuList?.map((menu) => (
-          // <h1 key={menu.id}>{menu.id}</h1>
-          <MenuTreeView
-            key={menu.id}
-            data={menu}
-            selected={selected}
-            setSelectMenu={setSelectMenu}
-          />
-        ))
-      }
+      </MenuWrapper> */}
+      <MenuTreeWrapper>
+        <MenuTreeItemWrapper>
+          {
+            menuList?.map((menu) => (
+              // <h1 key={menu.id}>{menu.id}</h1>
+              <MenuTreeView
+                key={menu.id}
+                data={menu}
+                selected={selected}
+                setSelectMenu={setSelectMenu}
+              />
+            ))
+          }
+        </MenuTreeItemWrapper>
+      </MenuTreeWrapper>
     </>
   );
 }
