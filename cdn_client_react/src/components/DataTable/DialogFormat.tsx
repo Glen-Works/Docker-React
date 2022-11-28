@@ -1,4 +1,4 @@
-import { createTheme, Grid, ThemeProvider, Typography } from "@mui/material";
+import { Box, Grid, styled, Typography } from "@mui/material";
 import { ReactNode } from "react";
 
 interface DialogFormatProp {
@@ -6,29 +6,21 @@ interface DialogFormatProp {
   children?: ReactNode
 }
 
-const TitleTheme = (Theme) =>
-  createTheme({
-    ...Theme,
-    // typography: {
-    //   ...Theme.typography,
-    //   h3: {
-    //     fontWeight: 500,
-    //     fontSize: 20,
-    //     lineHeight: 1.6,
-    //     color: Theme.colors.alpha.black[100]
-    //   },
-    // }
-  });
-
+const TypographyWrapper = styled(Box)(
+  ({ theme }) => `
+  .MuiTypography-root {
+    margin-right: ${theme.spacing(2)};
+  }
+  `);
 
 export default function DialogFormat(props: DialogFormatProp) {
   const { title, children } = props;
   return (
     <Grid container direction="row" justifyContent="flex-start" alignItems="center" m={0.5}>
       <Grid item xs={1.5} justifyContent="flex-end">
-        <ThemeProvider theme={TitleTheme}>
-          <Typography variant="h3" textAlign="right" mr={2}>{title}</Typography>
-        </ThemeProvider>
+        <TypographyWrapper>
+          <Typography variant="h5" textAlign="right">{title}</Typography>
+        </TypographyWrapper>
       </Grid>
       <Grid item xs={10} >
         {/* <ThemeProvider theme={theme}> */}
