@@ -1,10 +1,7 @@
-import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import KeyTwoToneIcon from '@mui/icons-material/KeyTwoTone';
-import SearchIcon from '@mui/icons-material/Search';
-import { Box, Button, CircularProgress, Container, Grid, Typography, useTheme } from '@mui/material';
-import TextField from '@mui/material/TextField';
+import { Box, CircularProgress, Container, Grid, Typography, useTheme } from '@mui/material';
 import MUIDataTable, { MUIDataTableColumn, MUIDataTableOptions, MUIDataTableState } from "mui-datatables";
 import { useEffect, useState } from 'react';
 import { unstable_batchedUpdates } from "react-dom";
@@ -27,6 +24,7 @@ import { validAuthMenuFeature } from 'src/middleware/authMenuMiddleware';
 import PageHeader from 'src/page/PageBase/PageHeader';
 import UserAddAndEditDialog from './UserAddAndEditDialog';
 import UserAddAbdEditDialog from './UserEditPasswordDialog';
+import UserSearch from './UserSearch';
 
 
 export interface MapStyle {
@@ -488,61 +486,14 @@ function User() {
           alignItems="stretch"
           spacing={1}
         >
-          <Box component="form" noValidate onSubmit={handleSubmit(onFormSubmit)} sx={{ width: 1, mt: 1 }} >
-            <Grid
-              container
-              spacing={1}
-              direction="row"
-              justifyContent="flex-end"
-              alignItems="stretch"
-            >
-              <Grid item >
-                <TextField
-                  id="name"
-                  label="name"
-                  name="name"
-                  autoComplete="name"
-                  size="small"
-                  type="search"
-                  {...register("name", {})}
-                />
-              </Grid>
-              <Grid item >
-                <TextField
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  size="small"
-                  type="search"
-                  {...register("email", {})}
-                />
-              </Grid>
-              <Grid item  >
-                <Button
-                  type="submit"
-                  color='success'
-                  variant="contained"
-                  startIcon={<SearchIcon fontSize="small" />}
-                >
-                  Search</Button>
-              </Grid>
+          <UserSearch
+            checkFeatureCreate={checkFeatureCreate}
+            register={register}
+            handleSubmit={handleSubmit}
+            onFormSubmit={onFormSubmit}
+            handleAddClickOpen={handleAddClickOpen}
+          />
 
-              {
-                (checkFeatureCreate) &&
-                <Grid item >
-                  <Button
-                    variant="contained"
-                    color='warning'
-                    startIcon={<AddTwoToneIcon fontSize="small" />}
-                    onClick={handleAddClickOpen}
-                  >
-                    Create
-                  </Button>
-                </Grid>
-              }
-            </Grid>
-          </Box>
           <Grid item xs={12}>
             <DataTableThemeProvider>
               {

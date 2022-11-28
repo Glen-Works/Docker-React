@@ -27,10 +27,8 @@ export default function UserAddAbdEditDialog(props: UserAddAbdEditDialogProp) {
     onError
   } = props;
 
-  {/* 刪除 */ }
   return (
     <>
-      {/* 修改 */}
       <DataTableDialog
         title={"修改使用者密碼"}
         maxWidth="md"

@@ -35,10 +35,8 @@ export default function UserAddAndEditDialog(props: UserAddAndEditDialogProp) {
     userErrors,
   } = props;
 
-  {/* 刪除 */ }
   return (
     <>
-      {/* 修改 */}
       <DataTableDialog
         title={(addAndEditStatus == "add") ? "新增使用者" : "修改使用者"}
         maxWidth="md"
