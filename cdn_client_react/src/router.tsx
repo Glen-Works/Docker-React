@@ -47,7 +47,7 @@ const AuthMenuLayout = Loader(
 
 // User page
 const User = Loader(
-  lazy(() => import('src/page/Management/User'))
+  lazy(() => import('src/page/Management/User/index'))
 );
 
 // Menu page

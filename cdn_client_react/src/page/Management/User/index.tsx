@@ -3,7 +3,7 @@ import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import KeyTwoToneIcon from '@mui/icons-material/KeyTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
-import { Box, Button, CircularProgress, Container, Grid, Switch, Typography, useTheme } from '@mui/material';
+import { Box, Button, CircularProgress, Container, Grid, Typography, useTheme } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import MUIDataTable, { MUIDataTableColumn, MUIDataTableOptions, MUIDataTableState } from "mui-datatables";
 import { useEffect, useState } from 'react';
@@ -16,19 +16,20 @@ import { CustomBodyTime } from 'src/components/DataTable/CustomerRender';
 import DataTableDialog from 'src/components/DataTable/DataTableDialog';
 import getDataTableState, { DataTableStatus, PageManagement, Search, setPageManagement } from 'src/components/DataTable/DataTableState';
 import DataTableThemeProvider from 'src/components/DataTable/DataTableThemeProvider';
-import DialogFormat from 'src/components/DataTable/DialogFormat';
 import getTextLabels from 'src/components/DataTable/TextLabels';
 import Footer from 'src/components/Footer';
-import TextArea from 'src/components/Input/TextArea';
 import Label from 'src/components/Label';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import { useAuthMenuContext } from 'src/contexts/AuthMenuContext';
 import { validAuthMenuFeature } from 'src/middleware/authMenuMiddleware';
-import PageHeader from '../PageBase/PageHeader';
+import PageHeader from 'src/page/PageBase/PageHeader';
+import UserAddAndEditDialog from './UserAddAndEditDialog';
+import UserAddAbdEditDialog from './UserEditPasswordDialog';
 
-interface MapStyle {
+
+export interface MapStyle {
   [key: number]: { label: string, color: "primary" | "secondary" | "error" | "black" | "warning" | "success" | "info" }
 }
 
@@ -560,168 +561,32 @@ function User() {
               }
             </DataTableThemeProvider>
 
-            {/* 修改 */}
-            <DataTableDialog
-              title={(addAndEditStatus == "add") ? "新增使用者" : "修改使用者"}
-              maxWidth="md"
-              isOpen={addAndEditOpen}
-              handleClose={handleAddAndEditClose}
-              submit={handleSubmitUser((addAndEditStatus == "add") ? submitAddUser : submitEditUser, onError)}
-            >
-              <Grid container justifyContent="center" alignItems="center" direction="column" >
-                {(addAndEditStatus == "edit") &&
-                  <DialogFormat title="ID :" >
-                    <Typography variant="h3" textAlign="left">{selectedId}</Typography>
-                  </DialogFormat>
-                }
-                <DialogFormat title="名稱 :" >
-                  <TextField
-                    id="name"
-                    name="name"
-                    defaultValue={getUserValue("name")}
-                    {...registerUser("name", {
-                      required: "Required field"
-                    })}
-                    fullWidth={true}
-                    error={!!userErrors?.name}
-                    helperText={userErrors?.name ? userErrors.name.message : null}
-                  />
-                </DialogFormat>
+            <UserAddAndEditDialog
+              selectedId={selectedId}
+              addAndEditStatus={addAndEditStatus}
+              addAndEditOpen={addAndEditOpen}
+              userTypeMap={userTypeMap}
+              handleAddAndEditClose={handleAddAndEditClose}
+              submitAddUser={submitAddUser}
+              submitEditUser={submitEditUser}
+              onError={onError}
+              registerUser={registerUser}
+              handleSubmitUser={handleSubmitUser}
+              getUserValue={getUserValue}
+              userErrors={userErrors}
+            />
 
-                <DialogFormat title="信箱 :" >
-                  <TextField
-                    id="email"
-                    //label="Email Address"
-                    name="email"
-                    defaultValue={getUserValue("status")}
-                    {...registerUser("email", {
-                      required: "Required field",
-                      minLength: { value: 5, message: "at least 5 letter" },
-                      maxLength: { value: 100, message: "need less 100 length" },
-                      pattern: {
-                        value: /^[A-Z0-9._%+-]+@[A-Z0-9._]+\.[A-Z]{2,}$/i,
-                        message: "Invalid email address",
-                      }
-                    })}
-                    fullWidth={true}
-                    error={!!userErrors?.email}
-                    helperText={userErrors?.email ? userErrors.email.message : null}
-                  />
-                </DialogFormat>
-                {(addAndEditStatus == "add") &&
-                  <DialogFormat title="密碼 :" >
-                    <TextField
-                      id="password"
-                      name="password"
-                      type="password"
-                      {...registerUser("password", {
-                        required: "Required field",
-                        minLength: { value: 5, message: "at least 5 letter" },
-                        maxLength: { value: 100, message: "need less 100 length" },
-                      })}
-                      fullWidth={true}
-                      error={!!userErrors?.password}
-                      helperText={userErrors?.password ? userErrors.password.message : null}
-                    />
-                  </DialogFormat>
-                }
-                <DialogFormat title="狀態 :" >
-                  <Switch
-                    id="status"
-                    name="status"
-                    checked={Boolean(Number(getUserValue("status")))}
-                    {...registerUser("status", {
-                    })}
-                  />
-                </DialogFormat>
-                <DialogFormat title="身份 :" >
-                  <TextField
-                    id="userType"
-                    name="userType"
-                    select
-                    SelectProps={{
-                      native: true,
-                    }}
-                    defaultValue={getUserValue("userType")}
-                    {...registerUser("userType", {
-                      required: "Required field"
-                    })}
-                    fullWidth={true}
-                    error={!!userErrors?.userType}
-                    helperText={userErrors?.userType ? userErrors.userType.message : null}
-                  >
-                    {Object.keys(userTypeMap).map((value) => (
-                      <option key={value} value={value}>
-                        {userTypeMap[value].label}
-                      </option>
-                    ))
-                    }
-                  </TextField>
-                </DialogFormat>
-                <DialogFormat title="備註 :" >
-                  <TextArea
-                    minRows={5}
-                    maxRows={8}
-                    id="remark"
-                    name="remark"
-                    defaultValue={getUserValue("remark")}
-                    {...registerUser("remark", {})}
-                  />
-                </DialogFormat>
-              </Grid>
-            </DataTableDialog>
-
-
-            {/* 修改 */}
-            <DataTableDialog
-              title={"修改使用者密碼"}
-              maxWidth="md"
-              isOpen={editPasswordOpen}
-              handleClose={handleEditPwdClose}
-              submit={handleSubmitPwd(submitEditPwd, onError)}
-            >
-              <Grid container justifyContent="center" alignItems="center" direction="column" >
-                {(addAndEditStatus == "edit") &&
-                  <DialogFormat title="ID :" >
-                    <Typography variant="h3" textAlign="left">{selectedId}</Typography>
-                  </DialogFormat>
-                }
-                <DialogFormat title="密碼 :" >
-                  <TextField
-                    id="password"
-                    name="password"
-                    type="password"
-                    {...registerPwd("password", {
-                      required: "Required field",
-                      minLength: { value: 5, message: "at least 5 letter" },
-                      maxLength: { value: 100, message: "need less 100 length" },
-                    })}
-                    fullWidth={true}
-                    error={!!pwdErrors?.password}
-                    helperText={pwdErrors?.password ? pwdErrors.password.message : null}
-                  />
-                </DialogFormat>
-                <DialogFormat title="密碼確認 :" >
-                  <TextField
-                    id="passwordCheck"
-                    name="passwordCheck"
-                    type="password"
-                    {...registerPwd("passwordCheck", {
-                      required: "Required field",
-                      validate: (val: string) => {
-                        if (watchPwd('password') != val) {
-                          return "Your passwords do no match";
-                        }
-                      }
-                    })}
-                    fullWidth={true}
-                    error={!!pwdErrors?.passwordCheck}
-                    helperText={pwdErrors?.passwordCheck ? pwdErrors.passwordCheck.message : null}
-                  />
-                </DialogFormat>
-              </Grid>
-            </DataTableDialog>
-
+            <UserAddAbdEditDialog
+              selectedId={selectedId}
+              editPasswordOpen={editPasswordOpen}
+              handleEditPwdClose={handleEditPwdClose}
+              submitEditPwd={submitEditPwd}
+              onError={onError}
+              registerPwd={registerPwd}
+              handleSubmitPwd={handleSubmitPwd}
+              watchPwd={watchPwd}
+              pwdErrors={pwdErrors}
+            />
 
             {/* 刪除 */}
             <DataTableDialog
