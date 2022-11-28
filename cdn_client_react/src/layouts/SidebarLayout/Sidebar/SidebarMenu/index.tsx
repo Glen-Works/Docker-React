@@ -2,14 +2,10 @@ import { useContext, useEffect, useState } from 'react';
 
 import {
   alpha,
-  Box, Button, List, ListItem, styled
+  Box, styled
 } from '@mui/material';
-import { NavLink as RouterLink } from 'react-router-dom';
 import { SidebarContext } from 'src/contexts/SidebarContext';
 
-import BrightnessLowTwoToneIcon from '@mui/icons-material/BrightnessLowTwoTone';
-import DesignServicesTwoToneIcon from '@mui/icons-material/DesignServicesTwoTone';
-import MmsTwoToneIcon from '@mui/icons-material/MmsTwoTone';
 import { useAuthMenuContext } from 'src/contexts/AuthMenuContext';
 import { makeMenuTree } from 'src/middleware/authMenuMiddleware';
 import MenuTreeView from './MenuTreeView';
@@ -222,7 +218,7 @@ function SidebarMenu() {
 
   return (
     <>
-      <MenuWrapper>
+      {/* <MenuWrapper>
         <List component="div">
           <SubMenuWrapper>
             <List component="div">
@@ -263,7 +259,7 @@ function SidebarMenu() {
           </SubMenuWrapper>
         </List>
 
-      </MenuWrapper>
+      </MenuWrapper> */}
       <MenuTreeWrapper>
         <MenuTreeItemWrapper>
           {
