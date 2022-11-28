@@ -1,9 +1,6 @@
-import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
-import SearchIcon from '@mui/icons-material/Search';
-import { Box, Button, CircularProgress, Container, Grid, Switch, Typography, useTheme } from '@mui/material';
-import TextField from '@mui/material/TextField';
+import { Box, CircularProgress, Container, Grid, Typography, useTheme } from '@mui/material';
 import MUIDataTable, { MUIDataTableColumn, MUIDataTableOptions, MUIDataTableState } from "mui-datatables";
 import { useEffect, useState } from 'react';
 import { unstable_batchedUpdates } from "react-dom";
@@ -15,15 +12,15 @@ import { CustomBodyTime } from 'src/components/DataTable/CustomerRender';
 import DataTableDialog from 'src/components/DataTable/DataTableDialog';
 import getDataTableState, { DataTableStatus, PageManagement, Search, setPageManagement } from 'src/components/DataTable/DataTableState';
 import DataTableThemeProvider from 'src/components/DataTable/DataTableThemeProvider';
-import DialogFormat from 'src/components/DataTable/DialogFormat';
 import getTextLabels from 'src/components/DataTable/TextLabels';
 import Footer from 'src/components/Footer';
-import TextArea from 'src/components/Input/TextArea';
 import Label from 'src/components/Label';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
-import PageHeader from '../PageBase/PageHeader';
+import PageHeader from '../../PageBase/PageHeader';
+import RoleAddAndEditDialog from './RoleAddAndEditDialog';
+import RoleSearch from './RoleSearch';
 
 interface MapStyle {
   [key: number]: { label: string, color: "primary" | "secondary" | "error" | "black" | "warning" | "success" | "info" }
@@ -364,57 +361,13 @@ function Role() {
           alignItems="stretch"
           spacing={1}
         >
-          <Box component="form" noValidate onSubmit={handleSubmit(onFormSubmit)} sx={{ width: 1, mt: 1 }} >
-            <Grid
-              container
-              spacing={1}
-              direction="row"
-              justifyContent="flex-end"
-              alignItems="stretch"
-            >
-              <Grid item >
-                <TextField
-                  id="name"
-                  label="name"
-                  name="name"
-                  autoComplete="name"
-                  size="small"
-                  type="search"
-                  {...register("name", {})}
-                />
-              </Grid>
-              <Grid item >
-                <TextField
-                  id="key"
-                  label="Key"
-                  name="key"
-                  autoComplete="key"
-                  size="small"
-                  type="search"
-                  {...register("key", {})}
-                />
-              </Grid>
-              <Grid item  >
-                <Button
-                  type="submit"
-                  color='success'
-                  variant="contained"
-                  startIcon={<SearchIcon fontSize="small" />}
-                >
-                  Search</Button>
-              </Grid>
-              <Grid item >
-                <Button
-                  variant="contained"
-                  color='warning'
-                  startIcon={<AddTwoToneIcon fontSize="small" />}
-                  onClick={handleAddClickOpen}
-                >
-                  Create
-                </Button>
-              </Grid>
-            </Grid>
-          </Box>
+          <RoleSearch
+            register={register}
+            handleSubmit={handleSubmit}
+            onFormSubmit={onFormSubmit}
+            handleAddClickOpen={handleAddClickOpen}
+          />
+
           <Grid item xs={12}>
             <DataTableThemeProvider>
               <MUIDataTable
@@ -430,85 +383,19 @@ function Role() {
               />
             </DataTableThemeProvider>
 
-            {/* 修改 */}
-            <DataTableDialog
-              title={(addAndEditStatus == "add") ? "新增角色" : "修改角色"}
-              maxWidth="md"
-              isOpen={addAndEditOpen}
-              handleClose={handleAddAndEditClose}
-              submit={handleSubmitRole((addAndEditStatus == "add") ? submitAddRole : submitEditRole, onError)}
-            >
-              <Grid container justifyContent="center" alignItems="center" direction="column" >
-                {(addAndEditStatus == "edit") &&
-                  <DialogFormat title="ID :" >
-                    <Typography variant="h3" textAlign="left">{selectedId}</Typography>
-                  </DialogFormat>
-                }
-                <DialogFormat title="名稱 :" >
-                  <TextField
-                    id="name"
-                    name="name"
-                    defaultValue={getRoleValue("name")}
-                    {...registerRole("name", {
-                      required: "Required field"
-                    })}
-                    fullWidth={true}
-                    error={!!roleErrors?.name}
-                    helperText={roleErrors?.name ? roleErrors.name.message : null}
-                  />
-                </DialogFormat>
-                <DialogFormat title="key :" >
-                  <TextField
-                    id="key"
-                    name="key"
-                    defaultValue={getRoleValue("status")}
-                    {...registerRole("key", {
-                      required: "Required field",
-                    })}
-                    fullWidth={true}
-                    error={!!roleErrors?.key}
-                    helperText={roleErrors?.key ? roleErrors.key.message : null}
-                  />
-                </DialogFormat>
-                <DialogFormat title="狀態 :" >
-                  <Switch
-                    id="status"
-                    name="status"
-                    checked={Boolean(Number(getRoleValue("status")))}
-                    {...registerRole("status", {
-                    })}
-                  />
-                </DialogFormat>
-                <DialogFormat title="權重 :" >
-                  <TextField
-                    id="weight"
-                    name="weight"
-                    defaultValue={Number(getRoleValue("weight"))}
-                    {...registerRole("weight", {
-                      min: { value: 0, message: "Minimum value is 0" },
-                      max: { value: 32766, message: "Maximum value is 32766" },
-                      pattern: {
-                        value: /^[0-9]+$/,
-                        message: "Invalid value,value must be a number",
-                      }
-                    })}
-                    fullWidth={true}
-                    error={!!roleErrors?.weight}
-                    helperText={roleErrors?.weight ? roleErrors.weight.message : null}
-                  />
-                </DialogFormat>
-                <DialogFormat title="備註 :" >
-                  <TextArea
-                    minRows={5}
-                    maxRows={8}
-                    id="remark"
-                    name="remark"
-                    defaultValue={getRoleValue("remark")}
-                    {...registerRole("remark", {})}
-                  />
-                </DialogFormat>
-              </Grid>
-            </DataTableDialog>
+            <RoleAddAndEditDialog
+              selectedId={selectedId}
+              addAndEditStatus={addAndEditStatus}
+              addAndEditOpen={addAndEditOpen}
+              handleAddAndEditClose={handleAddAndEditClose}
+              submitAddRole={submitAddRole}
+              submitEditRole={submitEditRole}
+              onError={onError}
+              registerRole={registerRole}
+              handleSubmitRole={handleSubmitRole}
+              getRoleValue={getRoleValue}
+              roleErrors={roleErrors}
+            />
 
             {/* 刪除 */}
             <DataTableDialog

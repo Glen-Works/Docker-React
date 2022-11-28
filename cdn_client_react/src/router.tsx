@@ -57,7 +57,7 @@ const Menu = Loader(
 
 // Role page
 const Role = Loader(
-  lazy(() => import('src/page/Management/Role'))
+  lazy(() => import('src/page/Management/Role/index'))
 );
 
 // SampleContent
