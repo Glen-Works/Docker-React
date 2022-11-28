@@ -1,9 +1,6 @@
-import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
-import SearchIcon from '@mui/icons-material/Search';
-import { Box, Button, CircularProgress, Container, Grid, Switch, Typography, useTheme } from '@mui/material';
-import TextField from '@mui/material/TextField';
+import { Box, CircularProgress, Container, Grid, Typography, useTheme } from '@mui/material';
 import MUIDataTable, { MUIDataTableColumn, MUIDataTableOptions, MUIDataTableState } from "mui-datatables";
 import { useEffect, useState } from 'react';
 import { unstable_batchedUpdates } from "react-dom";
@@ -15,17 +12,17 @@ import { CustomBodyTime } from 'src/components/DataTable/CustomerRender';
 import DataTableDialog from 'src/components/DataTable/DataTableDialog';
 import getDataTableState, { DataTableStatus, PageManagement, Search, setPageManagement } from 'src/components/DataTable/DataTableState';
 import DataTableThemeProvider from 'src/components/DataTable/DataTableThemeProvider';
-import DialogFormat from 'src/components/DataTable/DialogFormat';
 import getTextLabels from 'src/components/DataTable/TextLabels';
 import Footer from 'src/components/Footer';
-import TextArea from 'src/components/Input/TextArea';
 import Label from 'src/components/Label';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
-import PageHeader from '../PageBase/PageHeader';
+import PageHeader from '../../PageBase/PageHeader';
+import MenuAddAndEditDialog from './MenuAddAndEditDialog';
+import MenuSearch from './MenuSearch';
 
-interface MapStyle {
+export interface MapStyle {
   [key: number | string]: { label: string, color: "primary" | "secondary" | "error" | "black" | "warning" | "success" | "info" }
 }
 
@@ -241,7 +238,7 @@ function Menu() {
     },
     {
       name: "name",
-      label: "name",
+      label: "名稱",
       options: {
         sort: true,
       }
@@ -262,7 +259,7 @@ function Menu() {
     },
     {
       name: "feature",
-      label: "feature",
+      label: "功能",
       options: {
         sort: true,
         customBodyRender: (value, tableMeta, updateValue) => (
@@ -276,7 +273,7 @@ function Menu() {
     },
     {
       name: "status",
-      label: "status",
+      label: "狀態",
       options: {
         sort: true,
         customBodyRender: (value, tableMeta, updateValue) => (
@@ -290,7 +287,7 @@ function Menu() {
     },
     {
       name: "parent",
-      label: "parent",
+      label: "選單(父類別)",
       options: {
         sort: true,
         display: false,
@@ -298,14 +295,14 @@ function Menu() {
     },
     {
       name: "weight",
-      label: "weight",
+      label: "權重",
       options: {
         sort: true,
       }
     },
     {
       name: "createdAt",
-      label: "createdAt",
+      label: "創建日期",
       options: {
         sort: true,
         display: false,
@@ -314,7 +311,7 @@ function Menu() {
     },
     {
       name: "updatedAt",
-      label: "updatedAt",
+      label: "修改日期",
       options: {
         sort: true,
         display: false,
@@ -323,7 +320,7 @@ function Menu() {
     },
     {
       name: "option",
-      label: "option",
+      label: "選項",
       options: {
         download: false,
         viewColumns: false,
@@ -412,68 +409,12 @@ function Menu() {
           alignItems="stretch"
           spacing={1}
         >
-          <Box component="form" noValidate onSubmit={handleSubmit(onFormSubmit)} sx={{ width: 1, mt: 1 }} >
-            <Grid
-              container
-              spacing={1}
-              direction="row"
-              justifyContent="flex-end"
-              alignItems="stretch"
-            >
-              <Grid item >
-                <TextField
-                  id="name"
-                  label="name"
-                  name="name"
-                  autoComplete="name"
-                  size="small"
-                  type="search"
-                  {...register("name", {})}
-                />
-              </Grid>
-              <Grid item >
-                <TextField
-                  id="key"
-                  label="Key"
-                  name="key"
-                  autoComplete="key"
-                  size="small"
-                  type="search"
-                  {...register("key", {})}
-                />
-              </Grid>
-              <Grid item >
-                <TextField
-                  id="url"
-                  label="Url"
-                  name="url"
-                  autoComplete="url"
-                  size="small"
-                  type="search"
-                  {...register("url", {})}
-                />
-              </Grid>
-              <Grid item  >
-                <Button
-                  type="submit"
-                  color='success'
-                  variant="contained"
-                  startIcon={<SearchIcon fontSize="small" />}
-                >
-                  Search</Button>
-              </Grid>
-              <Grid item >
-                <Button
-                  variant="contained"
-                  color='warning'
-                  startIcon={<AddTwoToneIcon fontSize="small" />}
-                  onClick={handleAddClickOpen}
-                >
-                  Create
-                </Button>
-              </Grid>
-            </Grid>
-          </Box>
+          <MenuSearch
+            register={register}
+            handleSubmit={handleSubmit}
+            onFormSubmit={onFormSubmit}
+            handleAddClickOpen={handleAddClickOpen}
+          />
           <Grid item xs={12}>
             <DataTableThemeProvider>
               <MUIDataTable
@@ -489,135 +430,20 @@ function Menu() {
               />
             </DataTableThemeProvider>
 
-            {/* 修改 */}
-            <DataTableDialog
-              title={(addAndEditStatus == "add") ? "新增菜單" : "修改菜單"}
-              maxWidth="md"
-              isOpen={addAndEditOpen}
-              handleClose={handleAddAndEditClose}
-              submit={handleSubmitMenu((addAndEditStatus == "add") ? submitAddMenu : submitEditMenu, onError)}
-            >
-              <Grid container justifyContent="center" alignItems="center" direction="column" >
-                {(addAndEditStatus == "edit") &&
-                  <DialogFormat title="ID :" >
-                    <Typography variant="h3" textAlign="left">{selectedId}</Typography>
-                  </DialogFormat>
-                }
-                <DialogFormat title="名稱 :" >
-                  <TextField
-                    id="name"
-                    name="name"
-                    defaultValue={getMenuValue("name")}
-                    {...registerMenu("name", {
-                      required: "Required field"
-                    })}
-                    fullWidth={true}
-                    error={!!menuErrors?.name}
-                    helperText={menuErrors?.name ? menuErrors.name.message : null}
-                  />
-                </DialogFormat>
-                <DialogFormat title="key :" >
-                  <TextField
-                    id="key"
-                    name="key"
-                    defaultValue={getMenuValue("status")}
-                    {...registerMenu("key", {
-                      required: "Required field",
-                    })}
-                    fullWidth={true}
-                    error={!!menuErrors?.key}
-                    helperText={menuErrors?.key ? menuErrors.key.message : null}
-                  />
-                </DialogFormat>
-                <DialogFormat title="url :" >
-                  <TextField
-                    id="url"
-                    name="url"
-                    defaultValue={getMenuValue("url")}
-                    {...registerMenu("url", {
-                      required: "Required field",
-                    })}
-                    fullWidth={true}
-                    error={!!menuErrors?.url}
-                    helperText={menuErrors?.url ? menuErrors.url.message : null}
-                  />
-                </DialogFormat>
-                <DialogFormat title="功能 :" >
-                  <TextField
-                    id="feature"
-                    name="feature"
-                    select
-                    SelectProps={{
-                      native: true,
-                    }}
-                    defaultValue={getMenuValue("feature")}
-                    {...registerMenu("feature", {
-                      required: "Required field"
-                    })}
-                    fullWidth={true}
-                    error={!!menuErrors?.feature}
-                    helperText={menuErrors?.feature ? menuErrors.feature.message : null}
-                  >
-                    {Object.keys(featureMap).map((value) => (
-                      <option key={value} value={value}>
-                        {featureMap[value].label}
-                      </option>
-                    ))
-                    }
-                  </TextField>
-                </DialogFormat>
-                <DialogFormat title="狀態 :" >
-                  <Switch
-                    id="status"
-                    name="status"
-                    checked={Boolean(Number(getMenuValue("status")))}
-                    {...registerMenu("status", {
-                    })}
-                  />
-                </DialogFormat>
-                <DialogFormat title="parent :" >
-                  <TextField
-                    id="parent"
-                    name="parent"
-                    defaultValue={getMenuValue("parent")}
-                    {...registerMenu("parent", {
-                      required: "Required field",
-                    })}
-                    fullWidth={true}
-                    error={!!menuErrors?.parent}
-                    helperText={menuErrors?.parent ? menuErrors.parent.message : null}
-                  />
-                </DialogFormat>
-                <DialogFormat title="權重 :" >
-                  <TextField
-                    id="weight"
-                    name="weight"
-                    defaultValue={Number(getMenuValue("weight"))}
-                    {...registerMenu("weight", {
-                      min: { value: 0, message: "Minimum value is 0" },
-                      max: { value: 32766, message: "Maximum value is 32766" },
-                      pattern: {
-                        value: /^[0-9]+$/,
-                        message: "Invalid value,value must be a number",
-                      }
-                    })}
-                    fullWidth={true}
-                    error={!!menuErrors?.weight}
-                    helperText={menuErrors?.weight ? menuErrors.weight.message : null}
-                  />
-                </DialogFormat>
-                <DialogFormat title="備註 :" >
-                  <TextArea
-                    minRows={5}
-                    maxRows={8}
-                    id="remark"
-                    name="remark"
-                    defaultValue={getMenuValue("remark")}
-                    {...registerMenu("remark", {})}
-                  />
-                </DialogFormat>
-              </Grid>
-            </DataTableDialog>
+            <MenuAddAndEditDialog
+              featureMap={featureMap}
+              selectedId={selectedId}
+              addAndEditStatus={addAndEditStatus}
+              addAndEditOpen={addAndEditOpen}
+              handleAddAndEditClose={handleAddAndEditClose}
+              submitAddMenu={submitAddMenu}
+              submitEditMenu={submitEditMenu}
+              onError={onError}
+              registerMenu={registerMenu}
+              handleSubmitMenu={handleSubmitMenu}
+              getMenuValue={getMenuValue}
+              menuErrors={menuErrors}
+            />
 
             {/* 刪除 */}
             <DataTableDialog

@@ -52,7 +52,7 @@ const User = Loader(
 
 // Menu page
 const Menu = Loader(
-  lazy(() => import('src/page/Management/Menu'))
+  lazy(() => import('src/page/Management/Menu/index'))
 );
 
 // Role page
