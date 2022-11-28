@@ -153,6 +153,53 @@ const SubMenuWrapper = styled(Box)(
 `
 );
 
+const MenuTreeWrapper = styled(Box)(
+  ({ theme }) => `
+  .MuiTreeView-root {
+    padding: ${theme.spacing(0.5)};
+  }
+`
+);
+
+const MenuTreeItemWrapper = styled(Box)(
+  ({ theme }) => `
+  .MuiTreeItem-root{
+    text-transform: uppercase;
+    padding: ${theme.spacing(0.5, 0.2)};
+    color: ${theme.colors.alpha.trueWhite[70]};
+    background-color: transparent;
+    width: 100%;
+
+    .MuiTreeItem-label{
+      font-weight: bold;
+      font-size: ${theme.typography.pxToRem(12)};
+      line-height: 1.5;
+
+      &:hover {
+        background-color: ${alpha(theme.colors.alpha.trueWhite[100], 0.06)};
+        color: ${theme.colors.alpha.trueWhite[100]};
+  
+        .MuiTreeItem-iconContainer {
+          color: ${theme.colors.alpha.trueWhite[100]};
+        }
+    }
+    
+    
+
+    .MuiTreeItem-iconContainer {
+      transition: ${theme.transitions.create(['color'])};
+      font-size: inherit;
+      transition: none;
+      color: ${theme.colors.alpha.trueWhite[30]};
+      font-size: ${theme.typography.pxToRem(20)};
+      
+    }
+  }
+  
+  `
+);
+
+
 function SidebarMenu() {
   const { closeSidebar } = useContext(SidebarContext);
   const AuthMenu = useAuthMenuContext();
@@ -217,17 +264,21 @@ function SidebarMenu() {
         </List>
 
       </MenuWrapper>
-      {
-        menuList?.map((menu) => (
-          // <h1 key={menu.id}>{menu.id}</h1>
-          <MenuTreeView
-            key={menu.id}
-            data={menu}
-            selected={selected}
-            setSelectMenu={setSelectMenu}
-          />
-        ))
-      }
+      <MenuTreeWrapper>
+        <MenuTreeItemWrapper>
+          {
+            menuList?.map((menu) => (
+              // <h1 key={menu.id}>{menu.id}</h1>
+              <MenuTreeView
+                key={menu.id}
+                data={menu}
+                selected={selected}
+                setSelectMenu={setSelectMenu}
+              />
+            ))
+          }
+        </MenuTreeItemWrapper>
+      </MenuTreeWrapper>
     </>
   );
 }
