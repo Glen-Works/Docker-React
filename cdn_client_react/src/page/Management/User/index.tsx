@@ -303,21 +303,21 @@ function User() {
     },
     {
       name: "name",
-      label: "name",
+      label: "名稱",
       options: {
         sort: true,
       }
     },
     {
       name: "email",
-      label: "email",
+      label: "信箱",
       options: {
         sort: true,
       }
     },
     {
       name: "status",
-      label: "status",
+      label: "狀態",
       options: {
         sort: true,
         customBodyRender: (value, tableMeta, updateValue) => (
@@ -331,7 +331,7 @@ function User() {
     },
     {
       name: "userType",
-      label: "userType",
+      label: "角色",
       options: {
         sort: true,
         customBodyRender: (value, tableMeta, updateValue) => (
@@ -345,7 +345,7 @@ function User() {
     },
     {
       name: "loginIp",
-      label: "loginIp",
+      label: "登入IP",
       options: {
         sort: true,
         display: false,
@@ -353,7 +353,7 @@ function User() {
     },
     {
       name: "loginTime",
-      label: "loginTime",
+      label: "登入時間",
       options: {
         sort: true,
         display: false,
@@ -362,7 +362,7 @@ function User() {
     },
     {
       name: "createdAt",
-      label: "createdAt",
+      label: "創建日期",
       options: {
         sort: true,
         display: false,
@@ -371,7 +371,7 @@ function User() {
     },
     {
       name: "updatedAt",
-      label: "updatedAt",
+      label: "修改日期",
       options: {
         sort: true,
         display: false,
@@ -380,7 +380,7 @@ function User() {
     },
     {
       name: "option",
-      label: "option",
+      label: "",
       options: {
         download: false,
         viewColumns: false,

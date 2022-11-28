@@ -320,7 +320,7 @@ function Menu() {
     },
     {
       name: "option",
-      label: "選項",
+      label: "",
       options: {
         download: false,
         viewColumns: false,

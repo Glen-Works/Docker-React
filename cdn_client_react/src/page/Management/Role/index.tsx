@@ -219,7 +219,7 @@ function Role() {
     },
     {
       name: "name",
-      label: "name",
+      label: "名稱",
       options: {
         sort: true,
       }
@@ -233,7 +233,7 @@ function Role() {
     },
     {
       name: "status",
-      label: "status",
+      label: "狀態",
       options: {
         sort: true,
         customBodyRender: (value, tableMeta, updateValue) => (
@@ -247,14 +247,14 @@ function Role() {
     },
     {
       name: "weight",
-      label: "weight",
+      label: "權重",
       options: {
         sort: true,
       }
     },
     {
       name: "createdAt",
-      label: "createdAt",
+      label: "創建日期",
       options: {
         sort: true,
         display: false,
@@ -263,7 +263,7 @@ function Role() {
     },
     {
       name: "updatedAt",
-      label: "updatedAt",
+      label: "修改日期",
       options: {
         sort: true,
         display: false,
@@ -272,7 +272,7 @@ function Role() {
     },
     {
       name: "option",
-      label: "option",
+      label: "",
       options: {
         download: false,
         viewColumns: false,
