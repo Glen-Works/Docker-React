@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { unstable_batchedUpdates } from "react-dom";
 import { Helmet } from 'react-helmet-async';
 import { useForm } from "react-hook-form";
-import { menuAddApi, menuDeleteApi, menuEditApi, menuInfoApi, menuListApi } from 'src/api/Menu/menuApi';
+import { menuAddApi, menuAllListApi, menuDeleteApi, menuEditApi, menuInfoApi, menuListApi } from 'src/api/Menu/menuApi';
 import { ColumnIconButton } from 'src/components/DataTable/CustomerIconRender';
 import { CustomBodyTime } from 'src/components/DataTable/CustomerRender';
 import DataTableDialog from 'src/components/DataTable/DataTableDialog';
@@ -37,6 +37,13 @@ const featureMap: MapStyle = {
   'F': { label: '按鍵功能', color: 'secondary' }
 }
 
+export interface MenuListSelect {
+  id: number,
+  name: string,
+  key: string,
+  feature: string,
+}
+
 interface MenuData {
   name: string,
   key: string,
@@ -49,10 +56,10 @@ interface MenuData {
 }
 
 function Menu() {
-
   const theme = useTheme();
   const { state } = useAuthStateContext();
   const [tableState, setTableState] = useState<DataTableStatus>(getDataTableState());
+  const [menuListSelect, setMenuListSelect] = useState<MenuListSelect[]>([]);
   const [selectedId, setSelectedId] = useState<number>(0);
   const [selectedData, setSelectedData] = useState<string>("");
   const [addAndEditStatus, setAddAndEditStatus] = useState<"edit" | "add" | "">("");
@@ -95,6 +102,7 @@ function Menu() {
 
   const handleAddClickOpen = () => {
     unstable_batchedUpdates(() => {
+      getMenuAllList();
       setAddAndEditStatus("add");
       setAddAndEditOpen(true);
       resetMenu();
@@ -104,6 +112,7 @@ function Menu() {
   const handleEditClickOpen = (id: number) => {
     unstable_batchedUpdates(() => {
       setAddAndEditStatus("edit");
+      getMenuAllList();
       getEditDataById(id).then(() => { setAddAndEditOpen(true) });
       setSelectedId(id);
     });
@@ -127,6 +136,24 @@ function Menu() {
   const handleDeleteClose = () => {
     setDeleteOpen(false);
   };
+
+  async function getMenuAllList() {
+    await menuAllListApi(null, state)
+      .then(res => {
+        let defaultMenuList: MenuListSelect = {
+          id: 0,
+          name: "無",
+          key: "",
+          feature: "T",
+        }
+        setMenuListSelect([
+          defaultMenuList,
+          ...res.data
+        ]);
+      }).catch(error => {
+        console.log("error:" + error.response?.data?.msg);
+      });
+  }
 
   async function getEditDataById(id: number) {
     await menuInfoApi(id, state)
@@ -161,7 +188,6 @@ function Menu() {
   }
 
   const submitAddMenu = (formObj, event) => {
-
     let menuData = getDialogMenuData();
     console.log(menuData);
     addMenu(menuData);
@@ -217,7 +243,6 @@ function Menu() {
   //search submit 
   const onFormSubmit = (formObj, event) => {
     const data = new FormData(event.target);
-
     var searchData: Search = {
       name: data.get("name").toString(),
       key: data.get("key").toString(),
@@ -431,6 +456,7 @@ function Menu() {
             </DataTableThemeProvider>
 
             <MenuAddAndEditDialog
+              menuListMap={menuListSelect}
               featureMap={featureMap}
               selectedId={selectedId}
               addAndEditStatus={addAndEditStatus}

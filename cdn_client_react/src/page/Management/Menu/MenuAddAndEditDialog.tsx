@@ -2,11 +2,12 @@ import { Grid, MenuItem, Switch, TextField, Typography } from "@mui/material";
 import DataTableDialog from "src/components/DataTable/DataTableDialog";
 import DialogFormat from "src/components/Dialog/DialogFormat";
 import TextArea from "src/components/Input/TextArea";
-import { MapStyle } from ".";
+import { MapStyle, MenuListSelect } from ".";
 
 
 interface MenuAddAndEditDialogProp {
-  featureMap: MapStyle
+  menuListMap: MenuListSelect[],
+  featureMap: MapStyle,
   selectedId: number,
   addAndEditStatus: string,
   addAndEditOpen: boolean,
@@ -22,6 +23,7 @@ interface MenuAddAndEditDialogProp {
 
 export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
   const {
+    menuListMap,
     featureMap,
     selectedId,
     addAndEditStatus,
@@ -47,14 +49,14 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
       <Grid container justifyContent="center" alignItems="center" direction="column" >
         {(addAndEditStatus == "edit") &&
           <DialogFormat title="ID :" >
-            <Typography variant="h3" textAlign="left">{selectedId}</Typography>
+            <Typography variant="h5" textAlign="left">{selectedId}</Typography>
           </DialogFormat>
         }
         <DialogFormat title="名稱 :" >
           <TextField
             id="name"
             name="name"
-            defaultValue={getMenuValue("name")}
+            value={getMenuValue("name")}
             {...registerMenu("name", {
               required: "Required field"
             })}
@@ -67,7 +69,7 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
           <TextField
             id="key"
             name="key"
-            defaultValue={getMenuValue("status")}
+            value={getMenuValue("key")}
             {...registerMenu("key", {
               required: "Required field",
             })}
@@ -80,7 +82,7 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
           <TextField
             id="url"
             name="url"
-            defaultValue={getMenuValue("url")}
+            value={getMenuValue("url")}
             {...registerMenu("url", {
             })}
             fullWidth={true}
@@ -93,7 +95,7 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
             id="feature"
             name="feature"
             select
-            defaultValue={getMenuValue("feature")}
+            value={getMenuValue("feature")}
             {...registerMenu("feature", {
               required: "Required field"
             })}
@@ -122,21 +124,31 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
           <TextField
             id="parent"
             name="parent"
-            defaultValue={getMenuValue("parent")}
+            select
+            value={getMenuValue("parent")}
             {...registerMenu("parent", {
               required: "Required field",
             })}
             fullWidth={true}
             error={!!menuErrors?.parent}
             helperText={menuErrors?.parent ? menuErrors.parent.message : null}
-          />
+          >
+            {(menuListMap.length > 0) &&
+              menuListMap.map((value) => (
+                (value.feature == "T") &&
+                <MenuItem key={value.key} value={value.id}>
+                  {value.name}
+                </MenuItem>
+              ))
+            }
+          </TextField>
         </DialogFormat>
         <DialogFormat title="權重 :" >
           <TextField
             id="weight"
             name="weight"
             type="number"
-            defaultValue={Number(getMenuValue("weight"))}
+            value={Number(getMenuValue("weight"))}
             {...registerMenu("weight", {
               min: { value: 0, message: "Minimum value is 0" },
               max: { value: 32766, message: "Maximum value is 32766" },
@@ -156,7 +168,7 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
             maxRows={8}
             id="remark"
             name="remark"
-            defaultValue={getMenuValue("remark")}
+            value={getMenuValue("remark") ?? ""}
             {...registerMenu("remark", {})}
           />
         </DialogFormat>
