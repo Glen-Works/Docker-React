@@ -54,7 +54,7 @@ export default function UserAddAndEditDialog(props: UserAddAndEditDialogProp) {
             <TextField
               id="name"
               name="name"
-              defaultValue={getUserValue("name")}
+              value={getUserValue("name")}
               {...registerUser("name", {
                 required: "Required field"
               })}
@@ -69,7 +69,7 @@ export default function UserAddAndEditDialog(props: UserAddAndEditDialogProp) {
               id="email"
               //label="Email Address"
               name="email"
-              defaultValue={getUserValue("status")}
+              value={getUserValue("status")}
               {...registerUser("email", {
                 required: "Required field",
                 minLength: { value: 5, message: "at least 5 letter" },
@@ -115,7 +115,7 @@ export default function UserAddAndEditDialog(props: UserAddAndEditDialogProp) {
               id="userType"
               name="userType"
               select
-              defaultValue={getUserValue("userType")}
+              value={getUserValue("userType")}
               {...registerUser("userType", {
                 required: "Required field"
               })}
@@ -137,7 +137,7 @@ export default function UserAddAndEditDialog(props: UserAddAndEditDialogProp) {
               maxRows={8}
               id="remark"
               name="remark"
-              defaultValue={getUserValue("remark")}
+              value={getUserValue("remark")}
               {...registerUser("remark", {})}
             />
           </DialogFormat>

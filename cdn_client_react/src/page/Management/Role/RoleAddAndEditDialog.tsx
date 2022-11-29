@@ -51,7 +51,7 @@ export default function RoleAddAndEditDialog(props: RoleAddAndEditDialogProp) {
           <TextField
             id="name"
             name="name"
-            defaultValue={getRoleValue("name")}
+            value={getRoleValue("name")}
             {...registerRole("name", {
               required: "Required field"
             })}
@@ -64,7 +64,7 @@ export default function RoleAddAndEditDialog(props: RoleAddAndEditDialogProp) {
           <TextField
             id="key"
             name="key"
-            defaultValue={getRoleValue("status")}
+            value={getRoleValue("status")}
             {...registerRole("key", {
               required: "Required field",
             })}
@@ -87,7 +87,7 @@ export default function RoleAddAndEditDialog(props: RoleAddAndEditDialogProp) {
             id="weight"
             name="weight"
             type="number"
-            defaultValue={Number(getRoleValue("weight"))}
+            value={Number(getRoleValue("weight"))}
             {...registerRole("weight", {
               min: { value: 0, message: "Minimum value is 0" },
               max: { value: 32766, message: "Maximum value is 32766" },
@@ -107,7 +107,7 @@ export default function RoleAddAndEditDialog(props: RoleAddAndEditDialogProp) {
             maxRows={8}
             id="remark"
             name="remark"
-            defaultValue={getRoleValue("remark")}
+            value={getRoleValue("remark")}
             {...registerRole("remark", {})}
           />
         </DialogFormat>
