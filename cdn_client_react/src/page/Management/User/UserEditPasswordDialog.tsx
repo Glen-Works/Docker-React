@@ -1,6 +1,6 @@
 import { Grid, TextField, Typography } from "@mui/material";
 import DataTableDialog from "src/components/DataTable/DataTableDialog";
-import DialogFormat from "src/components/DataTable/DialogFormat";
+import DialogFormat from "src/components/Dialog/DialogFormat";
 
 interface UserAddAbdEditDialogProp {
   selectedId: number,
@@ -38,7 +38,7 @@ export default function UserAddAbdEditDialog(props: UserAddAbdEditDialogProp) {
       >
         <Grid container justifyContent="center" alignItems="center" direction="column" >
           <DialogFormat title="ID :" >
-            <Typography variant="h3" textAlign="left">{selectedId}</Typography>
+            <Typography variant="h5" textAlign="left">{selectedId}</Typography>
           </DialogFormat>
           <DialogFormat title="密碼 :" >
             <TextField

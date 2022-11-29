@@ -1,6 +1,6 @@
-import { Grid, Switch, TextField, Typography } from "@mui/material";
+import { Grid, MenuItem, Switch, TextField, Typography } from "@mui/material";
 import DataTableDialog from "src/components/DataTable/DataTableDialog";
-import DialogFormat from "src/components/DataTable/DialogFormat";
+import DialogFormat from "src/components/Dialog/DialogFormat";
 import TextArea from "src/components/Input/TextArea";
 import { MapStyle } from ".";
 
@@ -115,9 +115,6 @@ export default function UserAddAndEditDialog(props: UserAddAndEditDialogProp) {
               id="userType"
               name="userType"
               select
-              SelectProps={{
-                native: true,
-              }}
               defaultValue={getUserValue("userType")}
               {...registerUser("userType", {
                 required: "Required field"
@@ -127,9 +124,9 @@ export default function UserAddAndEditDialog(props: UserAddAndEditDialogProp) {
               helperText={userErrors?.userType ? userErrors.userType.message : null}
             >
               {Object.keys(userTypeMap).map((value) => (
-                <option key={value} value={value}>
+                <MenuItem key={value} value={value}>
                   {userTypeMap[value].label}
-                </option>
+                </MenuItem>
               ))
               }
             </TextField>

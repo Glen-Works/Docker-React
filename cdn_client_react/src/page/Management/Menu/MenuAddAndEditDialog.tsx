@@ -1,6 +1,6 @@
-import { Grid, Switch, TextField, Typography } from "@mui/material";
+import { Grid, MenuItem, Switch, TextField, Typography } from "@mui/material";
 import DataTableDialog from "src/components/DataTable/DataTableDialog";
-import DialogFormat from "src/components/DataTable/DialogFormat";
+import DialogFormat from "src/components/Dialog/DialogFormat";
 import TextArea from "src/components/Input/TextArea";
 import { MapStyle } from ".";
 
@@ -82,7 +82,6 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
             name="url"
             defaultValue={getMenuValue("url")}
             {...registerMenu("url", {
-              required: "Required field",
             })}
             fullWidth={true}
             error={!!menuErrors?.url}
@@ -94,9 +93,6 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
             id="feature"
             name="feature"
             select
-            SelectProps={{
-              native: true,
-            }}
             defaultValue={getMenuValue("feature")}
             {...registerMenu("feature", {
               required: "Required field"
@@ -106,9 +102,9 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
             helperText={menuErrors?.feature ? menuErrors.feature.message : null}
           >
             {Object.keys(featureMap).map((value) => (
-              <option key={value} value={value}>
+              <MenuItem key={value} value={value}>
                 {featureMap[value].label}
-              </option>
+              </MenuItem>
             ))
             }
           </TextField>
@@ -139,6 +135,7 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
           <TextField
             id="weight"
             name="weight"
+            type="number"
             defaultValue={Number(getMenuValue("weight"))}
             {...registerMenu("weight", {
               min: { value: 0, message: "Minimum value is 0" },

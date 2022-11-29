@@ -1,6 +1,6 @@
 import { Grid, Switch, TextField, Typography } from "@mui/material";
 import DataTableDialog from "src/components/DataTable/DataTableDialog";
-import DialogFormat from "src/components/DataTable/DialogFormat";
+import DialogFormat from "src/components/Dialog/DialogFormat";
 import TextArea from "src/components/Input/TextArea";
 
 
@@ -86,6 +86,7 @@ export default function RoleAddAndEditDialog(props: RoleAddAndEditDialogProp) {
           <TextField
             id="weight"
             name="weight"
+            type="number"
             defaultValue={Number(getRoleValue("weight"))}
             {...registerRole("weight", {
               min: { value: 0, message: "Minimum value is 0" },
