@@ -137,7 +137,7 @@ export default function UserAddAndEditDialog(props: UserAddAndEditDialogProp) {
               maxRows={8}
               id="remark"
               name="remark"
-              value={getUserValue("remark")}
+              value={getUserValue("remark") ?? ""}
               {...registerUser("remark", {})}
             />
           </DialogFormat>
