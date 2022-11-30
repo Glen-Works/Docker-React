@@ -54,7 +54,6 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
         }
         <DialogFormat title="名稱 :" >
           <TextField
-            id="name"
             name="name"
             value={getMenuValue("name")}
             {...registerMenu("name", {
@@ -67,7 +66,6 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
         </DialogFormat>
         <DialogFormat title="key :" >
           <TextField
-            id="key"
             name="key"
             value={getMenuValue("key")}
             {...registerMenu("key", {
@@ -80,7 +78,6 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
         </DialogFormat>
         <DialogFormat title="url :" >
           <TextField
-            id="url"
             name="url"
             value={getMenuValue("url")}
             {...registerMenu("url", {
@@ -92,10 +89,10 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
         </DialogFormat>
         <DialogFormat title="功能 :" >
           <TextField
-            id="feature"
             name="feature"
             select
-            value={getMenuValue("feature")}
+            defaultValue={"T"}
+            value={getMenuValue("feature") ?? "T"}
             {...registerMenu("feature", {
               required: "Required field"
             })}
@@ -113,7 +110,6 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
         </DialogFormat>
         <DialogFormat title="狀態 :" >
           <Switch
-            id="status"
             name="status"
             checked={Boolean(Number(getMenuValue("status")))}
             {...registerMenu("status", {
@@ -122,10 +118,9 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
         </DialogFormat>
         <DialogFormat title="選單(父類別) :" >
           <TextField
-            id="parent"
             name="parent"
             select
-            value={getMenuValue("parent")}
+            value={getMenuValue("parent") ?? 0}
             {...registerMenu("parent", {
               required: "Required field",
             })}
@@ -145,7 +140,6 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
         </DialogFormat>
         <DialogFormat title="權重 :" >
           <TextField
-            id="weight"
             name="weight"
             type="number"
             value={Number(getMenuValue("weight"))}
@@ -166,7 +160,6 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
           <TextArea
             minRows={5}
             maxRows={8}
-            id="remark"
             name="remark"
             value={getMenuValue("remark") ?? ""}
             {...registerMenu("remark", {})}

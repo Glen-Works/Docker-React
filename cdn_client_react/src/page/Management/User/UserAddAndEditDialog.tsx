@@ -52,7 +52,6 @@ export default function UserAddAndEditDialog(props: UserAddAndEditDialogProp) {
           }
           <DialogFormat title="名稱 :" >
             <TextField
-              id="name"
               name="name"
               value={getUserValue("name")}
               {...registerUser("name", {
@@ -66,8 +65,6 @@ export default function UserAddAndEditDialog(props: UserAddAndEditDialogProp) {
 
           <DialogFormat title="信箱 :" >
             <TextField
-              id="email"
-              //label="Email Address"
               name="email"
               value={getUserValue("email")}
               {...registerUser("email", {

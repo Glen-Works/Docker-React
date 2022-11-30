@@ -264,7 +264,6 @@ function SidebarMenu() {
         <MenuTreeItemWrapper>
           {
             menuList?.map((menu) => (
-              // <h1 key={menu.id}>{menu.id}</h1>
               <TreeMenuView
                 key={menu.id}
                 data={menu}
