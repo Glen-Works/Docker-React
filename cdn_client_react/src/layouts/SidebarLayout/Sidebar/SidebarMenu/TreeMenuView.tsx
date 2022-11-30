@@ -8,13 +8,13 @@ import { getMenuKeyByValue, MenuTree, routerList } from "src/middleware/authMenu
 
 type setMenu = (data: string[]) => void;
 
-interface MenuTreeViewProp {
+interface TreeMenuViewProp {
   data: MenuTree,
   selected: string[],
   setSelectMenu: setMenu,
 }
 
-export default function MenuTreeView(prop: MenuTreeViewProp) {
+export default function TreeMenuView(prop: TreeMenuViewProp) {
   const { data, selected, setSelectMenu } = prop;
   let location = useLocation();
   let navigate = useNavigate();

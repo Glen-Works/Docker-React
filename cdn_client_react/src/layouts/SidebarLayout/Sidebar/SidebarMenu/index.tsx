@@ -7,8 +7,8 @@ import {
 import { SidebarContext } from 'src/contexts/SidebarContext';
 
 import { useAuthMenuContext } from 'src/contexts/AuthMenuContext';
-import { makeMenuTree } from 'src/middleware/authMenuMiddleware';
-import MenuTreeView from './MenuTreeView';
+import { makeMenuTree, menuFeatureType } from 'src/middleware/authMenuMiddleware';
+import TreeMenuView from './TreeMenuView';
 
 const MenuWrapper = styled(Box)(
   ({ theme }) => `
@@ -205,7 +205,7 @@ function SidebarMenu() {
   useEffect(() => {
     let authMenu = AuthMenu.state;
     if (authMenu != null) {
-      setMenuList(makeMenuTree(AuthMenu.state));
+      setMenuList(makeMenuTree(AuthMenu.state, 0, menuFeatureType));
     }
   }, []);
 
@@ -265,7 +265,7 @@ function SidebarMenu() {
           {
             menuList?.map((menu) => (
               // <h1 key={menu.id}>{menu.id}</h1>
-              <MenuTreeView
+              <TreeMenuView
                 key={menu.id}
                 data={menu}
                 selected={selected}
