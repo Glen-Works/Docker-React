@@ -277,7 +277,7 @@ function Menu() {
     },
     {
       name: "url",
-      label: "url",
+      label: "網址",
       options: {
         sort: true,
       }
@@ -345,7 +345,7 @@ function Menu() {
     },
     {
       name: "option",
-      label: "",
+      label: " ",
       options: {
         download: false,
         viewColumns: false,

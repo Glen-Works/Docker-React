@@ -64,7 +64,7 @@ export default function RoleAddAndEditDialog(props: RoleAddAndEditDialogProp) {
           <TextField
             id="key"
             name="key"
-            value={getRoleValue("status")}
+            value={getRoleValue("key")}
             {...registerRole("key", {
               required: "Required field",
             })}

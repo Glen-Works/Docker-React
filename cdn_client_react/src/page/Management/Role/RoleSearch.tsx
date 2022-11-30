@@ -29,7 +29,7 @@ export default function RoleSearch(props: RoleSearchProp) {
         <Grid item >
           <TextField
             id="name"
-            label="name"
+            label="名稱"
             name="name"
             autoComplete="name"
             size="small"

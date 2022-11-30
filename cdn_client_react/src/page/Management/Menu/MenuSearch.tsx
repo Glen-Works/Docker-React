@@ -29,7 +29,7 @@ export default function MenuSearch(props: MenuSearchProp) {
         <Grid item >
           <TextField
             id="name"
-            label="name"
+            label="名稱"
             name="name"
             autoComplete="name"
             size="small"
@@ -51,7 +51,7 @@ export default function MenuSearch(props: MenuSearchProp) {
         <Grid item >
           <TextField
             id="url"
-            label="Url"
+            label="網址"
             name="url"
             autoComplete="url"
             size="small"

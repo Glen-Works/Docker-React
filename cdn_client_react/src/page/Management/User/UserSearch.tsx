@@ -31,7 +31,7 @@ export default function UserSearch(props: UserSearchProp) {
         <Grid item >
           <TextField
             id="name"
-            label="name"
+            label="名稱"
             name="name"
             autoComplete="name"
             size="small"
@@ -42,7 +42,7 @@ export default function UserSearch(props: UserSearchProp) {
         <Grid item >
           <TextField
             id="email"
-            label="Email Address"
+            label="信箱"
             name="email"
             autoComplete="email"
             size="small"

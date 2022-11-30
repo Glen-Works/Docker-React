@@ -69,7 +69,7 @@ export default function UserAddAndEditDialog(props: UserAddAndEditDialogProp) {
               id="email"
               //label="Email Address"
               name="email"
-              value={getUserValue("status")}
+              value={getUserValue("email")}
               {...registerUser("email", {
                 required: "Required field",
                 minLength: { value: 5, message: "at least 5 letter" },

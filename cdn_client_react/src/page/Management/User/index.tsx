@@ -380,7 +380,7 @@ function User() {
     },
     {
       name: "option",
-      label: "",
+      label: " ",
       options: {
         download: false,
         viewColumns: false,
