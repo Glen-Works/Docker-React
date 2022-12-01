@@ -119,7 +119,7 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
           <TextField
             name="parent"
             select
-            value={getMenuValue("parent") ?? 0}
+            value={getMenuValue("parent")}
             {...registerMenu("parent", {
               required: "Required field",
             })}
@@ -129,8 +129,8 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
           >
             {(menuListMap.length > 0) &&
               menuListMap.map((value) => (
-                (value.feature == "T") &&
-                <MenuItem key={value.key} value={value.id}>
+                (value.feature == "T" || value.feature == "P") &&
+                <MenuItem key={value.id} value={value.id}>
                   {value.name}
                 </MenuItem>
               ))
