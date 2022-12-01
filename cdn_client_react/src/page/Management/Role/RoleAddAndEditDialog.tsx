@@ -1,11 +1,15 @@
 import { Grid, Switch, TextField, Typography } from "@mui/material";
+import { useEffect } from "react";
 import DataTableDialog from "src/components/DataTable/DataTableDialog";
 import DialogFormat from "src/components/Dialog/DialogFormat";
 import TextArea from "src/components/Input/TextArea";
+import TreeCheckBox from "src/components/TreeCheckBox/TreeCheckBox";
+import { MenuTree } from "src/middleware/authMenuMiddleware";
 
 
 interface RoleAddAndEditDialogProp {
   selectedId: number,
+  menuCheckboxList: MenuTree,
   addAndEditStatus: string,
   addAndEditOpen: boolean,
   handleAddAndEditClose: () => void,
@@ -21,6 +25,7 @@ interface RoleAddAndEditDialogProp {
 export default function RoleAddAndEditDialog(props: RoleAddAndEditDialogProp) {
   const {
     selectedId,
+    menuCheckboxList,
     addAndEditStatus,
     addAndEditOpen,
     handleAddAndEditClose,
@@ -32,6 +37,11 @@ export default function RoleAddAndEditDialog(props: RoleAddAndEditDialogProp) {
     getRoleValue,
     roleErrors,
   } = props;
+
+  useEffect(() => {
+    console.log(menuCheckboxList);
+  }, []);
+  console.log(menuCheckboxList);
 
   return (
     <DataTableDialog
@@ -100,6 +110,9 @@ export default function RoleAddAndEditDialog(props: RoleAddAndEditDialogProp) {
             error={!!roleErrors?.weight}
             helperText={roleErrors?.weight ? roleErrors.weight.message : null}
           />
+        </DialogFormat>
+        <DialogFormat title="備註 :" >
+          <TreeCheckBox data={menuCheckboxList} />
         </DialogFormat>
         <DialogFormat title="備註 :" >
           <TextArea

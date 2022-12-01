@@ -3,6 +3,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { Box, Button, Grid, TextField } from "@mui/material";
 
 interface RoleSearchProp {
+  checkFeatureCreate: boolean,
   register: any,
   handleSubmit: any,
   onFormSubmit: (formObj, event) => void,
@@ -11,6 +12,7 @@ interface RoleSearchProp {
 
 export default function RoleSearch(props: RoleSearchProp) {
   const {
+    checkFeatureCreate,
     register,
     handleSubmit,
     onFormSubmit,
@@ -57,16 +59,19 @@ export default function RoleSearch(props: RoleSearchProp) {
           >
             Search</Button>
         </Grid>
-        <Grid item >
-          <Button
-            variant="contained"
-            color='warning'
-            startIcon={<AddTwoToneIcon fontSize="small" />}
-            onClick={handleAddClickOpen}
-          >
-            Create
-          </Button>
-        </Grid>
+        {
+          (checkFeatureCreate) &&
+          <Grid item >
+            <Button
+              variant="contained"
+              color='warning'
+              startIcon={<AddTwoToneIcon fontSize="small" />}
+              onClick={handleAddClickOpen}
+            >
+              Create
+            </Button>
+          </Grid>
+        }
       </Grid>
     </Box>
   )

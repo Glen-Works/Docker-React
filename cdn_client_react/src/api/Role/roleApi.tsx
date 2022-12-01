@@ -16,3 +16,6 @@ export const roleEditApi = (id: number, data: null | any, auth: Auth) => {
 export const roleDeleteApi = (id: number, auth: Auth) => {
     return api("delete", "/api/v1/role/" + id, { headers: { ...setAuthHeader(auth).headers, } }, null);
 }
+export const menuAllListApi = (data: null | any, auth: Auth) => {
+    return api("get", "/api/v1/menu/all", { headers: { ...setAuthHeader(auth).headers } }, null);
+}

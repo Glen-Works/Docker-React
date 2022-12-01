@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { unstable_batchedUpdates } from "react-dom";
 import { Helmet } from 'react-helmet-async';
 import { useForm } from "react-hook-form";
-import { roleAddApi, roleDeleteApi, roleEditApi, roleInfoApi, roleListApi } from 'src/api/Role/roleApi';
+import { menuAllListApi, roleAddApi, roleDeleteApi, roleEditApi, roleInfoApi, roleListApi } from 'src/api/Role/roleApi';
 import { ColumnIconButton } from 'src/components/DataTable/CustomerIconRender';
 import { CustomBodyTime } from 'src/components/DataTable/CustomerRender';
 import DataTableDialog from 'src/components/DataTable/DataTableDialog';
@@ -18,9 +18,12 @@ import Label from 'src/components/Label';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
+import { useAuthMenuContext } from 'src/contexts/AuthMenuContext';
+import { makeMenuTree, menuCheckboxFeatureType, MenuTree, validAuthMenuFeature } from 'src/middleware/authMenuMiddleware';
 import PageHeader from '../../PageBase/PageHeader';
 import RoleAddAndEditDialog from './RoleAddAndEditDialog';
 import RoleSearch from './RoleSearch';
+
 
 interface MapStyle {
   [key: number]: { label: string, color: "primary" | "secondary" | "error" | "black" | "warning" | "success" | "info" }
@@ -42,13 +45,21 @@ interface RoleData {
 function Role() {
 
   const theme = useTheme();
+  const AuthMenu = useAuthMenuContext();
   const { state } = useAuthStateContext();
+  const [menuCheckboxList, setMenuCheckboxList] = useState<MenuTree>(null);
   const [tableState, setTableState] = useState<DataTableStatus>(getDataTableState());
   const [selectedId, setSelectedId] = useState<number>(0);
   const [selectedData, setSelectedData] = useState<string>("");
   const [addAndEditStatus, setAddAndEditStatus] = useState<"edit" | "add" | "">("");
   const [addAndEditOpen, setAddAndEditOpen] = useState<boolean>(false);
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
+
+  const [checkFeatureList, setCheckFeatureList] = useState<boolean>(false);
+  const [checkFeatureCreate, setCheckFeatureCreate] = useState<boolean>(false);
+  const [checkFeatureUpdate, setCheckFeatureUpdate] = useState<boolean>(false);
+  const [checkFeatureDelete, setCheckFeatureDelete] = useState<boolean>(false);
+
   const onError = (errors, e) => console.log(errors, e);
   const { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -67,6 +78,12 @@ function Role() {
 
   useEffect(() => {
     getData(null);
+    unstable_batchedUpdates(() => {
+      setCheckFeatureList(validAuthMenuFeature(AuthMenu.state, "user_list"));   //權限 列表
+      setCheckFeatureCreate(validAuthMenuFeature(AuthMenu.state, "user_create")); //權限 新增
+      setCheckFeatureUpdate(validAuthMenuFeature(AuthMenu.state, "user_update")); //權限 修改
+      setCheckFeatureDelete(validAuthMenuFeature(AuthMenu.state, "user_delete")); //權限 刪除
+    });
   }, []);
 
   useEffect(() => { }, [watchRole()]);
@@ -82,19 +99,23 @@ function Role() {
   }
 
   const handleAddClickOpen = () => {
-    unstable_batchedUpdates(() => {
-      setAddAndEditStatus("add");
-      setAddAndEditOpen(true);
-      resetRole();
+    getMenuCheckBoxList().then(() => {
+      unstable_batchedUpdates(() => {
+        setAddAndEditStatus("add");
+        setAddAndEditOpen(true);
+        resetRole();
+      });
     });
   };
 
-  const handleEditClickOpen = (id: number) => {
-    unstable_batchedUpdates(() => {
-      setAddAndEditStatus("edit");
-      getEditDataById(id).then(() => { setAddAndEditOpen(true) });
-      setSelectedId(id);
-    });
+  const handleEditClickOpen = async (id: number) => {
+    await Promise.all([getMenuCheckBoxList(), getEditDataById(id)]).then(() => {
+      unstable_batchedUpdates(() => {
+        setAddAndEditStatus("edit");
+        setAddAndEditOpen(true)
+        setSelectedId(id);
+      });
+    })
   };
 
   const handleAddAndEditClose = () => {
@@ -154,6 +175,26 @@ function Role() {
     console.log(roleData);
     editRole(roleData);
   };
+
+  async function getMenuCheckBoxList() {
+    await menuAllListApi(null, state)
+      .then(res => {
+        let defaultRootNode: MenuTree = {
+          feature: "T",
+          id: 0,
+          key: "",
+          name: "全選",
+          parent: 0,
+          status: 1,
+          url: "",
+          weight: 9999,
+        }
+        defaultRootNode.children = makeMenuTree(res.data, 0, menuCheckboxFeatureType);
+        setMenuCheckboxList(defaultRootNode);
+      }).catch(error => {
+        console.log("error:" + error.response?.data?.msg);
+      });
+  }
 
   function addRole(data: any) {
     // console.log(data);
@@ -285,22 +326,28 @@ function Role() {
           let data = `id:${rowData.id},key:${rowData.key}`;
           return (
             <Box sx={{ display: 'inline-flex' }}>
-              <ColumnIconButton
-                title="修改"
-                handleClickOpen={() => { handleEditClickOpen(id) }}
-                color={theme.palette.primary.main}
-                background={theme.colors.primary.lighter}
-              >
-                <EditTwoToneIcon fontSize="small" />
-              </ColumnIconButton>
-              <ColumnIconButton
-                title="刪除"
-                handleClickOpen={() => handleDeleteClickOpen(id, data)}
-                color={theme.palette.error.main}
-                background={theme.colors.error.lighter}
-              >
-                <DeleteTwoToneIcon fontSize="small" />
-              </ColumnIconButton>
+              {
+                (checkFeatureUpdate) &&
+                <ColumnIconButton
+                  title="修改"
+                  handleClickOpen={() => { handleEditClickOpen(id) }}
+                  color={theme.palette.primary.main}
+                  background={theme.colors.primary.lighter}
+                >
+                  <EditTwoToneIcon fontSize="small" />
+                </ColumnIconButton>
+              }
+              {
+                (checkFeatureDelete) &&
+                <ColumnIconButton
+                  title="刪除"
+                  handleClickOpen={() => handleDeleteClickOpen(id, data)}
+                  color={theme.palette.error.main}
+                  background={theme.colors.error.lighter}
+                >
+                  <DeleteTwoToneIcon fontSize="small" />
+                </ColumnIconButton>
+              }
             </Box>
           );
         }
@@ -331,8 +378,11 @@ function Role() {
         case 'sort':
           changePage(tableState);
           break;
+        case 'changeRowsPerPage':
+          changePage(tableState);
+          break;
         default:
-        // console.log('action not handled.');
+          console.log('action name:' + action);
       }
     },
   };
@@ -362,6 +412,7 @@ function Role() {
           spacing={1}
         >
           <RoleSearch
+            checkFeatureCreate={checkFeatureCreate}
             register={register}
             handleSubmit={handleSubmit}
             onFormSubmit={onFormSubmit}
@@ -370,21 +421,24 @@ function Role() {
 
           <Grid item xs={12}>
             <DataTableThemeProvider>
-              <MUIDataTable
-                title={
-                  <Typography variant="h4">
-                    Role List
-                    {tableState.isLoading && <CircularProgress size={24} style={{ marginLeft: 15, position: 'relative', top: 4 }} />}
-                  </Typography>
-                }
-                data={tableState.data}
-                columns={columns}
-                options={options}
-              />
+              {
+                (checkFeatureList) &&
+                <MUIDataTable
+                  title={
+                    <Typography variant="h4">
+                      Role List
+                      {tableState.isLoading && <CircularProgress size={24} style={{ marginLeft: 15, position: 'relative', top: 4 }} />}
+                    </Typography>
+                  }
+                  data={tableState.data}
+                  columns={columns}
+                  options={options}
+                />
+              }
             </DataTableThemeProvider>
-
             <RoleAddAndEditDialog
               selectedId={selectedId}
+              menuCheckboxList={menuCheckboxList}
               addAndEditStatus={addAndEditStatus}
               addAndEditOpen={addAndEditOpen}
               handleAddAndEditClose={handleAddAndEditClose}

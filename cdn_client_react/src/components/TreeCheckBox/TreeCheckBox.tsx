@@ -5,11 +5,11 @@ import { TreeItem, TreeView } from "@mui/lab";
 import React from "react";
 import { MenuTree } from "src/middleware/authMenuMiddleware";
 
-interface MenuTreeViewProp {
+interface TreeCheckBoxProp {
   data: MenuTree
 }
 
-export default function MenuTreeView(prop: MenuTreeViewProp) {
+export default function TreeCheckBox(prop: TreeCheckBoxProp) {
   const { data } = prop;
   const [selected, setSelected] = React.useState<number[]>([]);
 
@@ -20,7 +20,7 @@ export default function MenuTreeView(prop: MenuTreeViewProp) {
   }, []);
 
   function goThroughAllNodes(nodes: MenuTree, map: Record<string, any> = {}) {
-    if (!nodes.children) {
+    if (!nodes?.children) {
       return null;
     }
 
@@ -78,7 +78,6 @@ export default function MenuTreeView(prop: MenuTreeViewProp) {
     }
 
     const nodeToToggle = getNodeById(nodes, id, path);
-    // console.log(path);
 
     return { childNodesToToggle: getAllChild(nodeToToggle, array), path };
   };
@@ -146,7 +145,6 @@ export default function MenuTreeView(prop: MenuTreeViewProp) {
   return (
     <TreeView
       defaultCollapseIcon={<ExpandMoreIcon />}
-      defaultExpanded={selected?.map(String) ?? ["0"]}
       defaultExpandIcon={<ChevronRightIcon />}
     >
       {renderTree(data)}
