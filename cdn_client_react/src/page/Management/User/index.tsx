@@ -456,8 +456,11 @@ function User() {
         case 'sort':
           changePage(tableState);
           break;
+        case 'changeRowsPerPage':
+          changePage(tableState);
+          break;
         default:
-        // console.log('action not handled.');
+          console.log('action name:' + action);
       }
     },
   };

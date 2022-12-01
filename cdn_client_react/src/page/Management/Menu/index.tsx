@@ -84,7 +84,7 @@ function Menu() {
           name: "",
           key: "",
           url: "",
-          feature: "",
+          feature: "T",
           status: true,
           parent: 0,
           weight: 0,
@@ -427,8 +427,11 @@ function Menu() {
         case 'sort':
           changePage(tableState);
           break;
+        case 'changeRowsPerPage':
+          changePage(tableState);
+          break;
         default:
-        // console.log('action not handled.');
+          console.log('action name:' + action);
       }
     },
   };

@@ -91,8 +91,7 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
           <TextField
             name="feature"
             select
-            defaultValue={"T"}
-            value={getMenuValue("feature") ?? "T"}
+            value={getMenuValue("feature")}
             {...registerMenu("feature", {
               required: "Required field"
             })}
