@@ -18,6 +18,8 @@ import Label from 'src/components/Label';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
+import { useAuthMenuContext } from 'src/contexts/AuthMenuContext';
+import { validAuthMenuFeature } from 'src/middleware/authMenuMiddleware';
 import PageHeader from '../../PageBase/PageHeader';
 import MenuAddAndEditDialog from './MenuAddAndEditDialog';
 import MenuSearch from './MenuSearch';
@@ -57,6 +59,7 @@ interface MenuData {
 
 function Menu() {
   const theme = useTheme();
+  const AuthMenu = useAuthMenuContext();
   const { state } = useAuthStateContext();
   const [tableState, setTableState] = useState<DataTableStatus>(getDataTableState());
   const [menuListSelect, setMenuListSelect] = useState<MenuListSelect[]>([]);
@@ -65,6 +68,12 @@ function Menu() {
   const [addAndEditStatus, setAddAndEditStatus] = useState<"edit" | "add" | "">("");
   const [addAndEditOpen, setAddAndEditOpen] = useState<boolean>(false);
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
+
+  const [checkFeatureList, setCheckFeatureList] = useState<boolean>(false);
+  const [checkFeatureCreate, setCheckFeatureCreate] = useState<boolean>(false);
+  const [checkFeatureUpdate, setCheckFeatureUpdate] = useState<boolean>(false);
+  const [checkFeatureDelete, setCheckFeatureDelete] = useState<boolean>(false);
+
   const onError = (errors, e) => console.log(errors, e);
   const { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -86,6 +95,12 @@ function Menu() {
 
   useEffect(() => {
     getData(null);
+    unstable_batchedUpdates(() => {
+      setCheckFeatureList(validAuthMenuFeature(AuthMenu.state, "menu_list"));   //權限 列表
+      setCheckFeatureCreate(validAuthMenuFeature(AuthMenu.state, "menu_create")); //權限 新增
+      setCheckFeatureUpdate(validAuthMenuFeature(AuthMenu.state, "menu_update")); //權限 修改
+      setCheckFeatureDelete(validAuthMenuFeature(AuthMenu.state, "menu_delete")); //權限 刪除
+    });
   }, []);
 
   useEffect(() => { }, [watchMenu()]);
@@ -101,20 +116,22 @@ function Menu() {
   }
 
   const handleAddClickOpen = () => {
-    unstable_batchedUpdates(() => {
-      getMenuAllList();
-      setAddAndEditStatus("add");
-      setAddAndEditOpen(true);
-      resetMenu();
+    getMenuAllList().then(() => {
+      unstable_batchedUpdates(() => {
+        setAddAndEditStatus("add");
+        setAddAndEditOpen(true);
+        resetMenu();
+      })
     });
   };
 
-  const handleEditClickOpen = (id: number) => {
-    unstable_batchedUpdates(() => {
-      setAddAndEditStatus("edit");
-      getMenuAllList();
-      getEditDataById(id).then(() => { setAddAndEditOpen(true) });
-      setSelectedId(id);
+  const handleEditClickOpen = async (id: number) => {
+    await Promise.all([getMenuAllList(), getEditDataById(id)]).then(() => {
+      unstable_batchedUpdates(() => {
+        setAddAndEditStatus("edit");
+        setAddAndEditOpen(true);
+        setSelectedId(id);
+      });
     });
   };
 
@@ -358,22 +375,28 @@ function Menu() {
           let data = `id:${rowData.id},key:${rowData.key}`;
           return (
             <Box sx={{ display: 'inline-flex' }}>
-              <ColumnIconButton
-                title="修改"
-                handleClickOpen={() => { handleEditClickOpen(id) }}
-                color={theme.palette.primary.main}
-                background={theme.colors.primary.lighter}
-              >
-                <EditTwoToneIcon fontSize="small" />
-              </ColumnIconButton>
-              <ColumnIconButton
-                title="刪除"
-                handleClickOpen={() => handleDeleteClickOpen(id, data)}
-                color={theme.palette.error.main}
-                background={theme.colors.error.lighter}
-              >
-                <DeleteTwoToneIcon fontSize="small" />
-              </ColumnIconButton>
+              {
+                (checkFeatureUpdate) &&
+                <ColumnIconButton
+                  title="修改"
+                  handleClickOpen={() => { handleEditClickOpen(id) }}
+                  color={theme.palette.primary.main}
+                  background={theme.colors.primary.lighter}
+                >
+                  <EditTwoToneIcon fontSize="small" />
+                </ColumnIconButton>
+              }
+              {
+                (checkFeatureDelete) &&
+                <ColumnIconButton
+                  title="刪除"
+                  handleClickOpen={() => handleDeleteClickOpen(id, data)}
+                  color={theme.palette.error.main}
+                  background={theme.colors.error.lighter}
+                >
+                  <DeleteTwoToneIcon fontSize="small" />
+                </ColumnIconButton>
+              }
             </Box>
           );
         }
@@ -435,6 +458,7 @@ function Menu() {
           spacing={1}
         >
           <MenuSearch
+            checkFeatureCreate={checkFeatureCreate}
             register={register}
             handleSubmit={handleSubmit}
             onFormSubmit={onFormSubmit}
@@ -442,17 +466,20 @@ function Menu() {
           />
           <Grid item xs={12}>
             <DataTableThemeProvider>
-              <MUIDataTable
-                title={
-                  <Typography variant="h4">
-                    Menu List
-                    {tableState.isLoading && <CircularProgress size={24} style={{ marginLeft: 15, position: 'relative', top: 4 }} />}
-                  </Typography>
-                }
-                data={tableState.data}
-                columns={columns}
-                options={options}
-              />
+              {
+                (checkFeatureList) &&
+                <MUIDataTable
+                  title={
+                    <Typography variant="h4">
+                      Menu List
+                      {tableState.isLoading && <CircularProgress size={24} style={{ marginLeft: 15, position: 'relative', top: 4 }} />}
+                    </Typography>
+                  }
+                  data={tableState.data}
+                  columns={columns}
+                  options={options}
+                />
+              }
             </DataTableThemeProvider>
 
             <MenuAddAndEditDialog

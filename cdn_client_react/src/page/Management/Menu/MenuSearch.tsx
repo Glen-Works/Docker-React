@@ -3,6 +3,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { Box, Button, Grid, TextField } from "@mui/material";
 
 interface MenuSearchProp {
+  checkFeatureCreate: boolean,
   register: any,
   handleSubmit: any,
   onFormSubmit: (formObj, event) => void,
@@ -11,6 +12,7 @@ interface MenuSearchProp {
 
 export default function MenuSearch(props: MenuSearchProp) {
   const {
+    checkFeatureCreate,
     register,
     handleSubmit,
     onFormSubmit,
@@ -68,16 +70,19 @@ export default function MenuSearch(props: MenuSearchProp) {
           >
             Search</Button>
         </Grid>
-        <Grid item >
-          <Button
-            variant="contained"
-            color='warning'
-            startIcon={<AddTwoToneIcon fontSize="small" />}
-            onClick={handleAddClickOpen}
-          >
-            Create
-          </Button>
-        </Grid>
+        {
+          (checkFeatureCreate) &&
+          <Grid item >
+            <Button
+              variant="contained"
+              color='warning'
+              startIcon={<AddTwoToneIcon fontSize="small" />}
+              onClick={handleAddClickOpen}
+            >
+              Create
+            </Button>
+          </Grid>
+        }
       </Grid>
     </Box>
   )
