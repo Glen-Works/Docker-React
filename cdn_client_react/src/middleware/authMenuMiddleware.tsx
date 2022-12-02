@@ -27,17 +27,6 @@ export const exceptUriList = [
     "/404",
 ]
 
-// 菜單功能 
-export const menuFeatureType = [
-    "P",
-]
-
-// 菜單checkbox功能 
-export const menuCheckboxFeatureType = [
-    "P",
-    "F"
-]
-
 // 功能對照表 
 const featureList = [
     "user_list",                //使用者清單
@@ -126,21 +115,20 @@ export const getAuthMenu = async (auth: Auth): Promise<Menu[]> => {
 }
 
 
-export function makeMenuTree(menuList: MenuTree[], parent: number = 0, type: string[]): MenuTree[] {
+export function makeMenuTree(menuList: MenuTree[], parent: number = 0): MenuTree[] {
 
     let menuTree: MenuTree[] = [];
     menuList.forEach(value => {
         if (value.feature == "T" && value.parent == parent) {
-            value.children = makeMenuTree(menuList, value.id, type);
+            value.children = makeMenuTree(menuList, value.id);
             menuTree.push(value);
         }
 
-        for (let feature of type) {
-            if (value.feature == feature && value.parent == parent) {
-                value.children = [];
-                menuTree.push(value);
-            }
+        if (value.feature == "P" && value.parent == parent) {
+            value.children = [];
+            menuTree.push(value);
         }
+
         return value;
     });
     return menuTree;

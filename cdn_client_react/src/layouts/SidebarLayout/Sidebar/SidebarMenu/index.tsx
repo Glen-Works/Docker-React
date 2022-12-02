@@ -7,7 +7,7 @@ import {
 import { SidebarContext } from 'src/contexts/SidebarContext';
 
 import { useAuthMenuContext } from 'src/contexts/AuthMenuContext';
-import { makeMenuTree, menuFeatureType } from 'src/middleware/authMenuMiddleware';
+import { makeMenuTree } from 'src/middleware/authMenuMiddleware';
 import TreeMenuView from './TreeMenuView';
 
 const MenuWrapper = styled(Box)(
@@ -205,7 +205,7 @@ function SidebarMenu() {
   useEffect(() => {
     let authMenu = AuthMenu.state;
     if (authMenu != null) {
-      setMenuList(makeMenuTree(AuthMenu.state, 0, menuFeatureType));
+      setMenuList(makeMenuTree(AuthMenu.state, 0));
     }
   }, []);
 

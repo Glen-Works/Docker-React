@@ -1,5 +1,4 @@
 import { Grid, Switch, TextField, Typography } from "@mui/material";
-import { useEffect } from "react";
 import DataTableDialog from "src/components/DataTable/DataTableDialog";
 import DialogFormat from "src/components/Dialog/DialogFormat";
 import TextArea from "src/components/Input/TextArea";
@@ -37,11 +36,6 @@ export default function RoleAddAndEditDialog(props: RoleAddAndEditDialogProp) {
     getRoleValue,
     roleErrors,
   } = props;
-
-  useEffect(() => {
-    console.log(menuCheckboxList);
-  }, []);
-  console.log(menuCheckboxList);
 
   return (
     <DataTableDialog
@@ -120,7 +114,7 @@ export default function RoleAddAndEditDialog(props: RoleAddAndEditDialogProp) {
             maxRows={8}
             id="remark"
             name="remark"
-            value={getRoleValue("remark")}
+            value={getRoleValue("remark") ?? ""}
             {...registerRole("remark", {})}
           />
         </DialogFormat>

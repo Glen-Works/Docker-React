@@ -19,7 +19,7 @@ import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import { useAuthMenuContext } from 'src/contexts/AuthMenuContext';
-import { makeMenuTree, menuCheckboxFeatureType, MenuTree, validAuthMenuFeature } from 'src/middleware/authMenuMiddleware';
+import { MenuTree, validAuthMenuFeature } from 'src/middleware/authMenuMiddleware';
 import PageHeader from '../../PageBase/PageHeader';
 import RoleAddAndEditDialog from './RoleAddAndEditDialog';
 import RoleSearch from './RoleSearch';
@@ -189,11 +189,22 @@ function Role() {
           url: "",
           weight: 9999,
         }
-        defaultRootNode.children = makeMenuTree(res.data, 0, menuCheckboxFeatureType);
+        defaultRootNode.children = makeMenuCheckBoxTree(res.data, 0);
         setMenuCheckboxList(defaultRootNode);
       }).catch(error => {
         console.log("error:" + error.response?.data?.msg);
       });
+  }
+
+  function makeMenuCheckBoxTree(menuList: MenuTree[], parent: number = 0): MenuTree[] {
+    let menuTree: MenuTree[] = [];
+    for (let value of menuList) {
+      if (value.parent == parent) {
+        value.children = makeMenuCheckBoxTree(menuList, value.id);
+        menuTree.push(value);
+      }
+    }
+    return menuTree;
   }
 
   function addRole(data: any) {
