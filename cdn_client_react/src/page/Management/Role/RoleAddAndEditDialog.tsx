@@ -8,7 +8,9 @@ import { MenuTree } from "src/middleware/authMenuMiddleware";
 
 interface RoleAddAndEditDialogProp {
   selectedId: number,
-  menuCheckboxList: MenuTree,
+  menuCheckBoxList: MenuTree,
+  menuCheckBox: number[],
+  setMenuCheckBox: (value: number[]) => void,
   addAndEditStatus: string,
   addAndEditOpen: boolean,
   handleAddAndEditClose: () => void,
@@ -24,7 +26,9 @@ interface RoleAddAndEditDialogProp {
 export default function RoleAddAndEditDialog(props: RoleAddAndEditDialogProp) {
   const {
     selectedId,
-    menuCheckboxList,
+    menuCheckBoxList: menuCheckboxList,
+    menuCheckBox,
+    setMenuCheckBox,
     addAndEditStatus,
     addAndEditOpen,
     handleAddAndEditClose,
@@ -39,7 +43,7 @@ export default function RoleAddAndEditDialog(props: RoleAddAndEditDialogProp) {
 
   return (
     <DataTableDialog
-      title={(addAndEditStatus == "add") ? "新增角色" : "修改角色"}
+      title={(addAndEditStatus == "add") ? "新增權限" : "修改權限"}
       maxWidth="md"
       isOpen={addAndEditOpen}
       handleClose={handleAddAndEditClose}
@@ -105,8 +109,12 @@ export default function RoleAddAndEditDialog(props: RoleAddAndEditDialogProp) {
             helperText={roleErrors?.weight ? roleErrors.weight.message : null}
           />
         </DialogFormat>
-        <DialogFormat title="備註 :" >
-          <TreeCheckBox data={menuCheckboxList} />
+        <DialogFormat title="權限 :" >
+          <TreeCheckBox
+            data={menuCheckboxList}
+            setSelected={setMenuCheckBox}
+            selected={menuCheckBox} />
+          {/* (addAndEditStatus == "add") ? "新增權限" : "修改權限" */}
         </DialogFormat>
         <DialogFormat title="備註 :" >
           <TextArea

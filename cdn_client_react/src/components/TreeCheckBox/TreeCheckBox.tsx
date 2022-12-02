@@ -6,20 +6,20 @@ import React from "react";
 import { MenuTree } from "src/middleware/authMenuMiddleware";
 
 interface TreeCheckBoxProp {
-  data: MenuTree
+  data: MenuTree,
+  selected: number[],
+  setSelected: (value: number[]) => void
 }
 
 export default function TreeCheckBox(prop: TreeCheckBoxProp) {
-  const { data } = prop;
-  const [selected, setSelected] = React.useState<number[]>([]);
-
+  const { data, selected, setSelected } = prop;
   const selectedSet = React.useMemo(() => new Set(selected), [selected]);
 
   const parentMap = React.useMemo(() => {
     return goThroughAllNodes(data);
   }, []);
 
-  function goThroughAllNodes(nodes: MenuTree, map: Record<string, any> = {}) {
+  function goThroughAllNodes(nodes: MenuTree, map: Record<number, any> = {}) {
     if (!nodes?.children) {
       return null;
     }
@@ -34,12 +34,8 @@ export default function TreeCheckBox(prop: TreeCheckBoxProp) {
   }
 
   // Get all children from the current node.
-  function getAllChild(
-    childNode: MenuTree | null,
-    collectedNodes: any[] = []
-  ) {
+  function getAllChild(childNode: MenuTree | null, collectedNodes: number[] = []) {
     if (childNode === null) return collectedNodes;
-
     collectedNodes.push(childNode.id);
 
     if (Array.isArray(childNode.children)) {
@@ -70,47 +66,38 @@ export default function TreeCheckBox(prop: TreeCheckBoxProp) {
             return result;
           }
         }
-
         return result;
       }
-
       return result;
     }
-
     const nodeToToggle = getNodeById(nodes, id, path);
-
     return { childNodesToToggle: getAllChild(nodeToToggle, array), path };
   };
 
   function getOnChange(checked: boolean, nodes: MenuTree) {
     const { childNodesToToggle, path } = getChildById(data, nodes.id);
-    console.log("childNodesToChange", { childNodesToToggle, checked });
+    // console.log("childNodesToChange", { childNodesToToggle, checked });
 
-    let array = checked
+    let selectItems = checked
       ? [...selected, ...childNodesToToggle]
       : selected
-        .filter((value) => !childNodesToToggle.includes(value))
-        .filter((value) => !path.includes(value));
+        .filter((value: number) => !childNodesToToggle.includes(value))
+        .filter((value: number) => !path.includes(value));
 
-    array = array.filter((v, i) => array.indexOf(v) === i);
+    selectItems = selectItems.filter((v, i) => selectItems.indexOf(v) === i);
+    setSelected(selectItems);
+    // console.log("selectItems:", selectItems);
 
-    setSelected(array);
+
   }
 
   const renderTree = (nodes: MenuTree) => {
-    const allSelectedChildren = parentMap[
-      nodes.id
-    ]?.every((childNodeId: number) => selectedSet.has(childNodeId));
+    const allSelectedChildren = (parentMap[nodes.id].length > 0) ? parentMap[nodes.id]?.every((childNodeId: number) => selectedSet.has(childNodeId)) : false;
     const checked = selectedSet.has(nodes.id) || allSelectedChildren || false;
-
-    const indeterminate =
-      parentMap[nodes.id]?.some((childNodeId: number) =>
-        selectedSet.has(childNodeId)
-      ) || false;
+    const indeterminate = parentMap[nodes.id]?.some((childNodeId: number) => selectedSet.has(childNodeId)) || false;
 
     if (allSelectedChildren && !selectedSet.has(nodes.id)) {
-      console.log("if allSelectedChildren");
-
+      // console.log("if allSelectedChildren");
       setSelected([...selected, nodes.id]);
     }
 
@@ -124,9 +111,7 @@ export default function TreeCheckBox(prop: TreeCheckBoxProp) {
               <Checkbox
                 checked={checked}
                 indeterminate={!checked && indeterminate}
-                onChange={(event) =>
-                  getOnChange(event.currentTarget.checked, nodes)
-                }
+                onChange={(event) => getOnChange(event.currentTarget.checked, nodes)}
                 onClick={(e) => e.stopPropagation()}
               />
             }

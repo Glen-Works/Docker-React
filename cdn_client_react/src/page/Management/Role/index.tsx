@@ -20,6 +20,7 @@ import SuspenseLoader from 'src/components/SuspenseLoader';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import { useAuthMenuContext } from 'src/contexts/AuthMenuContext';
 import { MenuTree, validAuthMenuFeature } from 'src/middleware/authMenuMiddleware';
+import { makeRecursionTree } from 'src/utils/baseFunction';
 import PageHeader from '../../PageBase/PageHeader';
 import RoleAddAndEditDialog from './RoleAddAndEditDialog';
 import RoleSearch from './RoleSearch';
@@ -59,6 +60,8 @@ function Role() {
   const [checkFeatureCreate, setCheckFeatureCreate] = useState<boolean>(false);
   const [checkFeatureUpdate, setCheckFeatureUpdate] = useState<boolean>(false);
   const [checkFeatureDelete, setCheckFeatureDelete] = useState<boolean>(false);
+
+  const [menuCheckBoxSelected, setMenuCheckBoxSelected] = useState<number[]>([]);
 
   const onError = (errors, e) => console.log(errors, e);
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -101,6 +104,7 @@ function Role() {
   const handleAddClickOpen = () => {
     getMenuCheckBoxList().then(() => {
       unstable_batchedUpdates(() => {
+        setMenuCheckBoxSelected([]);
         setAddAndEditStatus("add");
         setAddAndEditOpen(true);
         resetRole();
@@ -176,6 +180,11 @@ function Role() {
     editRole(roleData);
   };
 
+  // 樹狀權限關聯
+  const setMenuCheckBox = (value: number[]) => {
+    setMenuCheckBoxSelected(value);
+  }
+
   async function getMenuCheckBoxList() {
     await menuAllListApi(null, state)
       .then(res => {
@@ -189,22 +198,11 @@ function Role() {
           url: "",
           weight: 9999,
         }
-        defaultRootNode.children = makeMenuCheckBoxTree(res.data, 0);
+        defaultRootNode.children = makeRecursionTree<MenuTree>(res.data, 0);
         setMenuCheckboxList(defaultRootNode);
       }).catch(error => {
         console.log("error:" + error.response?.data?.msg);
       });
-  }
-
-  function makeMenuCheckBoxTree(menuList: MenuTree[], parent: number = 0): MenuTree[] {
-    let menuTree: MenuTree[] = [];
-    for (let value of menuList) {
-      if (value.parent == parent) {
-        value.children = makeMenuCheckBoxTree(menuList, value.id);
-        menuTree.push(value);
-      }
-    }
-    return menuTree;
   }
 
   function addRole(data: any) {
@@ -392,8 +390,8 @@ function Role() {
         case 'changeRowsPerPage':
           changePage(tableState);
           break;
-        default:
-          console.log('action name:' + action);
+        // default:
+        //   console.log('action name:' + action);
       }
     },
   };
@@ -449,7 +447,9 @@ function Role() {
             </DataTableThemeProvider>
             <RoleAddAndEditDialog
               selectedId={selectedId}
-              menuCheckboxList={menuCheckboxList}
+              menuCheckBoxList={menuCheckboxList}
+              menuCheckBox={menuCheckBoxSelected}
+              setMenuCheckBox={setMenuCheckBox}
               addAndEditStatus={addAndEditStatus}
               addAndEditOpen={addAndEditOpen}
               handleAddAndEditClose={handleAddAndEditClose}

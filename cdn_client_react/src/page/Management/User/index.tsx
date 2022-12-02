@@ -459,8 +459,8 @@ function User() {
         case 'changeRowsPerPage':
           changePage(tableState);
           break;
-        default:
-          console.log('action name:' + action);
+        // default:
+        //   console.log('action name:' + action);
       }
     },
   };
