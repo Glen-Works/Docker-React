@@ -178,7 +178,7 @@ function User() {
   async function getEditDataById(id: number) {
     await userInfoApi(id, state)
       .then(res => {
-        let data = res.data[0];
+        let data = res.data.userInfo;
         setUserValue("name", data.name, { shouldValidate: true });
         setUserValue("email", data.email, { shouldValidate: true });
         setUserValue("status", data.status, { shouldValidate: true });

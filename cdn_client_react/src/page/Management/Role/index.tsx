@@ -144,7 +144,9 @@ function Role() {
   async function getEditDataById(id: number) {
     await roleInfoApi(id, state)
       .then(res => {
-        let data = res.data[0];
+        let data = res.data.roleInfo;
+        let roleMenu = res.data.roleMenu;
+        setMenuCheckBoxSelected(roleMenu);
         setRoleValue("name", data.name, { shouldValidate: true });
         setRoleValue("key", data.key, { shouldValidate: true });
         setRoleValue("status", data.status, { shouldValidate: true });
@@ -198,7 +200,7 @@ function Role() {
           url: "",
           weight: 9999,
         }
-        defaultRootNode.children = makeRecursionTree<MenuTree>(res.data, 0);
+        defaultRootNode.children = makeRecursionTree<MenuTree>(res.data.menuList, 0);
         setMenuCheckboxList(defaultRootNode);
       }).catch(error => {
         console.log("error:" + error.response?.data?.msg);

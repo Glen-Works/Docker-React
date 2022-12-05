@@ -165,7 +165,7 @@ function Menu() {
         }
         setMenuListSelect([
           defaultMenuList,
-          ...res.data
+          ...res.data.menuList
         ]);
       }).catch(error => {
         console.log("error:" + error.response?.data?.msg);
@@ -175,7 +175,7 @@ function Menu() {
   async function getEditDataById(id: number) {
     await menuInfoApi(id, state)
       .then(res => {
-        let data = res.data[0];
+        let data = res.data.menuInfo;
         setMenuValue("name", data.name, { shouldValidate: true });
         setMenuValue("key", data.key, { shouldValidate: true });
         setMenuValue("url", data.url, { shouldValidate: true });
