@@ -41,6 +41,7 @@ interface RoleData {
   status: boolean,
   weight: number,
   remark: string,
+  roleMenu: number[],
 }
 
 function Role() {
@@ -82,10 +83,10 @@ function Role() {
   useEffect(() => {
     getData(null);
     unstable_batchedUpdates(() => {
-      setCheckFeatureList(validAuthMenuFeature(AuthMenu.state, "user_list"));   //權限 列表
-      setCheckFeatureCreate(validAuthMenuFeature(AuthMenu.state, "user_create")); //權限 新增
-      setCheckFeatureUpdate(validAuthMenuFeature(AuthMenu.state, "user_update")); //權限 修改
-      setCheckFeatureDelete(validAuthMenuFeature(AuthMenu.state, "user_delete")); //權限 刪除
+      setCheckFeatureList(validAuthMenuFeature(AuthMenu.state, "role_list"));   //權限 列表
+      setCheckFeatureCreate(validAuthMenuFeature(AuthMenu.state, "role_create")); //權限 新增
+      setCheckFeatureUpdate(validAuthMenuFeature(AuthMenu.state, "role_update")); //權限 修改
+      setCheckFeatureDelete(validAuthMenuFeature(AuthMenu.state, "role_delete")); //權限 刪除
     });
   }, []);
 
@@ -165,12 +166,12 @@ function Role() {
       status: Boolean(Number(getRoleValue("status"))),
       weight: Number(getRoleValue("weight")),
       remark: getRoleValue("remark"),
+      roleMenu: menuCheckBoxSelected,
     }
     return roleData;
   }
 
   const submitAddRole = (formObj, event) => {
-
     let roleData = getDialogRoleData();
     console.log(roleData);
     addRole(roleData);
