@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { unstable_batchedUpdates } from "react-dom";
 import { Helmet } from 'react-helmet-async';
 import { useForm } from "react-hook-form";
-import { userAddApi, userDeleteApi, userEditApi, userInfoApi, userListApi, userPwdEditApi } from 'src/api/Sample/sampleDataTableApi';
+import { roleAllListApi, userAddApi, userDeleteApi, userEditApi, userInfoApi, userListApi, userPwdEditApi } from 'src/api/User/userApi';
 import { ColumnIconButton } from 'src/components/DataTable/CustomerIconRender';
 import { CustomBodyTime } from 'src/components/DataTable/CustomerRender';
 import DataTableDialog from 'src/components/DataTable/DataTableDialog';
@@ -41,19 +41,27 @@ const statusMap: MapStyle = {
   1: { label: '啟用', color: 'primary' }
 }
 
+export interface RoleListSelect {
+  id: number,
+  name: string,
+  key: string,
+  status: boolean,
+}
+
 interface UserData {
   name: string,
   email: string,
   status: boolean,
   userType: number,
   remark: string,
+  roleUser: number[],
 }
 
-interface UserAdd extends UserData {
+interface UserWithPassword extends UserData {
   password: string,
 }
 
-interface UserPwd {
+interface UserPassword {
   newPassword: string,
   checkPassword: string,
 }
@@ -76,6 +84,9 @@ function User() {
   const [checkFeatureUpdate, setCheckFeatureUpdate] = useState<boolean>(false);
   const [checkFeatureDelete, setCheckFeatureDelete] = useState<boolean>(false);
   const [checkFeaturePassword, setCheckFeaturePassword] = useState<boolean>(false);
+
+  const [roleListSelect, setRoleListSelect] = useState<RoleListSelect[]>([]);
+  const [roleCheckBoxSelected, setRoleCheckBoxSelected] = useState<number[]>([]);
 
   const onError = (errors, e) => console.log(errors, e);
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -102,10 +113,8 @@ function User() {
         }
       });
 
-
   useEffect(() => {
     getData(null);
-
     unstable_batchedUpdates(() => {
       setCheckFeatureList(validAuthMenuFeature(AuthMenu.state, "user_list"));   //權限 列表
       setCheckFeatureCreate(validAuthMenuFeature(AuthMenu.state, "user_create")); //權限 新增
@@ -129,18 +138,23 @@ function User() {
   }
 
   const handleAddClickOpen = () => {
-    unstable_batchedUpdates(() => {
-      setAddAndEditStatus("add");
-      setAddAndEditOpen(true);
-      resetUser();
+    getRoleAllList().then(() => {
+      unstable_batchedUpdates(() => {
+        setRoleCheckBoxSelected([]);
+        setAddAndEditStatus("add");
+        setAddAndEditOpen(true);
+        resetUser();
+      });
     });
   };
 
-  const handleEditClickOpen = (id: number) => {
-    unstable_batchedUpdates(() => {
-      setAddAndEditStatus("edit");
-      getEditDataById(id).then(() => { setAddAndEditOpen(true) });
-      setSelectedId(id);
+  const handleEditClickOpen = async (id: number) => {
+    await Promise.all([getRoleAllList(), getEditDataById(id)]).then(() => {
+      unstable_batchedUpdates(() => {
+        setAddAndEditStatus("edit");
+        setAddAndEditOpen(true);
+        setSelectedId(id);
+      });
     });
   };
 
@@ -175,10 +189,21 @@ function User() {
     setDeleteOpen(false);
   };
 
+  async function getRoleAllList() {
+    await roleAllListApi(null, state)
+      .then(res => {
+        setRoleListSelect(res.data.roleList);
+      }).catch(error => {
+        console.log("error:" + error.response?.data?.msg);
+      });
+  }
+
   async function getEditDataById(id: number) {
     await userInfoApi(id, state)
       .then(res => {
         let data = res.data.userInfo;
+        let roleUser = res.data.roleUser;
+        setRoleCheckBoxSelected(roleUser ?? []);
         setUserValue("name", data.name, { shouldValidate: true });
         setUserValue("email", data.email, { shouldValidate: true });
         setUserValue("status", data.status, { shouldValidate: true });
@@ -197,12 +222,13 @@ function User() {
       status: Boolean(Number(getUserValue("status"))),
       userType: Number(getUserValue("userType")),
       remark: getUserValue("remark"),
+      roleUser: roleCheckBoxSelected,
     }
     return userData;
   }
 
   const submitEditPwd = (formObj, event) => {
-    var userPwd: UserPwd = {
+    var userPwd: UserPassword = {
       newPassword: getPwdValue("password"),
       checkPassword: getPwdValue("password"),
     }
@@ -214,7 +240,7 @@ function User() {
   const submitAddUser = (formObj, event) => {
 
     let userData = getDialogUserData();
-    var userAddData: UserAdd = {
+    var userAddData: UserWithPassword = {
       ...userData,
       password: getUserValue("password"),
     }
@@ -517,6 +543,9 @@ function User() {
 
             <UserAddAndEditDialog
               selectedId={selectedId}
+              roleListSelect={roleListSelect}
+              roleCheckBoxSelected={roleCheckBoxSelected}
+              setRoleCheckBoxSelected={setRoleCheckBoxSelected}
               addAndEditStatus={addAndEditStatus}
               addAndEditOpen={addAndEditOpen}
               userTypeMap={userTypeMap}

@@ -1,11 +1,14 @@
-import { Grid, MenuItem, Switch, TextField, Typography } from "@mui/material";
+import { Checkbox, FormControlLabel, Grid, MenuItem, Switch, TextField, Typography } from "@mui/material";
 import DataTableDialog from "src/components/DataTable/DataTableDialog";
 import DialogFormat from "src/components/Dialog/DialogFormat";
 import TextArea from "src/components/Input/TextArea";
-import { MapStyle } from ".";
+import { MapStyle, RoleListSelect } from ".";
 
 interface UserAddAndEditDialogProp {
   selectedId: number,
+  roleListSelect: RoleListSelect[],
+  roleCheckBoxSelected: number[],
+  setRoleCheckBoxSelected: (value: number[]) => void,
   addAndEditStatus: string,
   addAndEditOpen: boolean,
   userTypeMap: MapStyle,
@@ -22,6 +25,9 @@ interface UserAddAndEditDialogProp {
 export default function UserAddAndEditDialog(props: UserAddAndEditDialogProp) {
   const {
     selectedId,
+    roleListSelect,
+    roleCheckBoxSelected,
+    setRoleCheckBoxSelected,
     addAndEditStatus,
     addAndEditOpen,
     userTypeMap,
@@ -34,6 +40,14 @@ export default function UserAddAndEditDialog(props: UserAddAndEditDialogProp) {
     getUserValue,
     userErrors,
   } = props;
+
+  function getOnChange(checked: boolean, id: number) {
+    let selectItems = checked
+      ? [...roleCheckBoxSelected, id]
+      : roleCheckBoxSelected.filter((value: number) => (value != id));
+
+    setRoleCheckBoxSelected(selectItems);
+  }
 
   return (
     <>
@@ -127,6 +141,19 @@ export default function UserAddAndEditDialog(props: UserAddAndEditDialogProp) {
               ))
               }
             </TextField>
+          </DialogFormat>
+          <DialogFormat title="權限 :" >
+            {roleListSelect.map((role) => (
+              <FormControlLabel
+                control={<Checkbox
+                  checked={roleCheckBoxSelected.includes(role.id)}
+                  onChange={(event) => getOnChange(event.currentTarget.checked, role.id)}
+                />
+                }
+                label={<>{role.name}</>}
+                key={"role_" + role.id}
+              />
+            ))}
           </DialogFormat>
           <DialogFormat title="備註 :" >
             <TextArea
