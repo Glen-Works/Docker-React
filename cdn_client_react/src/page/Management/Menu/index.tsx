@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { unstable_batchedUpdates } from "react-dom";
 import { Helmet } from 'react-helmet-async';
 import { useForm } from "react-hook-form";
-import { menuAddApi, menuAllListApi, menuDeleteApi, menuEditApi, menuInfoApi, menuListApi } from 'src/api/Menu/menuApi';
+import { menuAddApi, menuAllListApi, menuDeleteApi, menuDeleteMultipleApi, menuEditApi, menuInfoApi, menuListApi } from 'src/api/Menu/menuApi';
 import { ColumnIconButton } from 'src/components/DataTable/CustomerIconRender';
 import { CustomBodyTime } from 'src/components/DataTable/CustomerRender';
 import DataTableDialog from 'src/components/DataTable/DataTableDialog';
@@ -252,6 +252,16 @@ function Menu() {
       });
   }
 
+  function deleteMultipleMenu(ids: number[]) {
+    menuDeleteMultipleApi({ id: ids }, state)
+      .then(res => {
+        getData({ ...tableState.pageManagement });
+      })
+      .catch(error => {
+        console.log("error:" + error.response?.data?.msg);
+      });
+  }
+
   const changePage = (ds: MUIDataTableState) => {
     setTableState({ ...tableState, isLoading: true });
     getData(setPageManagement(ds));
@@ -268,6 +278,18 @@ function Menu() {
 
     var pageManagement: PageManagement = { ...tableState.pageManagement, search: searchData };
     getData(pageManagement);
+  };
+
+  const onMultipleDelete = (rowsDeleted: {
+    lookup: { [dataIndex: number]: boolean };
+    data: Array<{ index: number; dataIndex: number }>;
+  },
+    newTableData: any[],
+  ) => {
+    let deleteIds: number[] = rowsDeleted.data.map((item) => {
+      return tableState.data[item.dataIndex].id;
+    });
+    deleteMultipleMenu(deleteIds);
   };
 
   const columns: MUIDataTableColumn[] = [
@@ -418,6 +440,8 @@ function Menu() {
     rowsPerPage: limit,
     // rowsPerPageOptions: [],
     sortOrder: { name: sortColumn, direction: sort },
+
+    onRowsDelete: onMultipleDelete,
     onTableChange: (action, tableState) => {
       // console.log(action, tableState);
       switch (action) {

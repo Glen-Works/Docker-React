@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { unstable_batchedUpdates } from "react-dom";
 import { Helmet } from 'react-helmet-async';
 import { useForm } from "react-hook-form";
-import { roleAllListApi, userAddApi, userDeleteApi, userEditApi, userInfoApi, userListApi, userPwdEditApi } from 'src/api/User/userApi';
+import { roleAllListApi, userAddApi, userDeleteApi, userDeleteMultipleApi, userEditApi, userInfoApi, userListApi, userPwdEditApi } from 'src/api/User/userApi';
 import { ColumnIconButton } from 'src/components/DataTable/CustomerIconRender';
 import { CustomBodyTime } from 'src/components/DataTable/CustomerRender';
 import DataTableDialog from 'src/components/DataTable/DataTableDialog';
@@ -301,6 +301,16 @@ function User() {
       });
   }
 
+  function deleteMultipleUser(ids: number[]) {
+    userDeleteMultipleApi({ id: ids }, state)
+      .then(res => {
+        getData({ ...tableState.pageManagement });
+      })
+      .catch(error => {
+        console.log("error:" + error.response?.data?.msg);
+      });
+  }
+
   const changePage = (ds: MUIDataTableState) => {
     setTableState({ ...tableState, isLoading: true });
     getData(setPageManagement(ds));
@@ -317,6 +327,18 @@ function User() {
 
     var pageManagement: PageManagement = { ...tableState.pageManagement, search: searchData };
     getData(pageManagement);
+  };
+
+  const onMultipleDelete = (rowsDeleted: {
+    lookup: { [dataIndex: number]: boolean };
+    data: Array<{ index: number; dataIndex: number }>;
+  },
+    newTableData: any[],
+  ) => {
+    let deleteIds: number[] = rowsDeleted.data.map((item) => {
+      return tableState.data[item.dataIndex].id;
+    });
+    deleteMultipleUser(deleteIds);
   };
 
   const columns: MUIDataTableColumn[] = [
@@ -473,6 +495,8 @@ function User() {
     rowsPerPage: limit,
     // rowsPerPageOptions: [],
     sortOrder: { name: sortColumn, direction: sort },
+
+    onRowsDelete: onMultipleDelete,
     onTableChange: (action, tableState) => {
       // console.log(action, tableState);
       switch (action) {
@@ -487,6 +511,7 @@ function User() {
           break;
         // default:
         //   console.log('action name:' + action);
+        //   console.log(tableState);
       }
     },
   };

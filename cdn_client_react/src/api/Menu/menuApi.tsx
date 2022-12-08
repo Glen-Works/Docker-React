@@ -16,6 +16,9 @@ export const menuAddApi = (data: null | any, auth: Auth) => {
 export const menuEditApi = (id: number, data: null | any, auth: Auth) => {
     return api("put", "/api/v1/menu/" + id, { headers: { ...setAuthHeader(auth).headers, } }, data);
 }
+export const menuDeleteMultipleApi = (ids: null | any, auth: Auth) => {
+    return api("delete", "/api/v1/menu/multiple/ids", { headers: { ...setAuthHeader(auth).headers, }, params: ids }, null);
+}
 export const menuDeleteApi = (id: number, auth: Auth) => {
     return api("delete", "/api/v1/menu/" + id, { headers: { ...setAuthHeader(auth).headers, } }, null);
 }
