@@ -1,5 +1,7 @@
 
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import BrightnessLowTwoToneIcon from '@mui/icons-material/BrightnessLowTwoTone';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 import { ReactNode } from 'react';
 import api, { setAuthHeader } from "src/api/baseApi";
 import { Auth } from "src/stores/reducer/authReducer";
@@ -8,11 +10,13 @@ interface RouterList {
     [key: string]: { uri: string, icon: ReactNode }
 }
 
+
+
 // 權限頁面 與 Icon
 export const routerList: RouterList = {
     "user_page": { uri: '/user', icon: <BrightnessLowTwoToneIcon /> },
-    "role_page": { uri: '/role', icon: <BrightnessLowTwoToneIcon /> },
-    "menu_page": { uri: '/menu', icon: <BrightnessLowTwoToneIcon /> },
+    "role_page": { uri: '/role', icon: <AdminPanelSettingsIcon /> },
+    "menu_page": { uri: '/menu', icon: <MenuBookIcon /> },
     "management6": { uri: '/dashboard', icon: <BrightnessLowTwoToneIcon /> },
     "management3": { uri: '/samplecontent', icon: <BrightnessLowTwoToneIcon /> },
     "manageamentp0": { uri: '/sampledatatable', icon: <BrightnessLowTwoToneIcon /> },

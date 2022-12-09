@@ -3,12 +3,9 @@ import { useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import {
-  Avatar,
   Box,
   Button,
-  Divider,
-  Hidden,
-  lighten,
+  Divider, lighten,
   List,
   ListItem,
   ListItemText,
@@ -16,12 +13,11 @@ import {
   Typography
 } from '@mui/material';
 
-import InboxTwoToneIcon from '@mui/icons-material/InboxTwoTone';
-import { styled } from '@mui/material/styles';
-import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 import AccountBoxTwoToneIcon from '@mui/icons-material/AccountBoxTwoTone';
+import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
-import AccountTreeTwoToneIcon from '@mui/icons-material/AccountTreeTwoTone';
+import { styled } from '@mui/material/styles';
+import { useAuthStateContext } from 'src/contexts/AuthContext';
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -59,10 +55,13 @@ const UserBoxDescription = styled(Typography)(
 );
 
 function HeaderUserbox() {
+  const { state } = useAuthStateContext();
+
+
   const user = {
-    name: 'Catherine Pike',
-    avatar: '/static/images/avatars/1.jpg',
-    jobtitle: 'Project Manager'
+    name: state.userInfo.name,
+    // avatar: '/static/images/avatars/1.jpg',
+    // jobtitle: 'Project Manager'
   };
 
   const ref = useRef<any>(null);
@@ -84,7 +83,7 @@ function HeaderUserbox() {
           <UserBoxText>
             <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
             <UserBoxDescription variant="body2">
-              {user.jobtitle}
+              {/* {user.jobtitle} */}
             </UserBoxDescription>
           </UserBoxText>
         </Box>
@@ -110,7 +109,7 @@ function HeaderUserbox() {
           <UserBoxText>
             <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
             <UserBoxDescription variant="body2">
-              {user.jobtitle}
+              {/* {user.jobtitle} */}
             </UserBoxDescription>
           </UserBoxText>
         </MenuUserBox>
@@ -120,7 +119,7 @@ function HeaderUserbox() {
             <AccountBoxTwoToneIcon fontSize="small" />
             <ListItemText primary="My Profile" />
           </ListItem>
-          <ListItem button to="/dashboards/messenger" component={NavLink}>
+          {/* <ListItem button to="/dashboards/messenger" component={NavLink}>
             <InboxTwoToneIcon fontSize="small" />
             <ListItemText primary="Messenger" />
           </ListItem>
@@ -131,7 +130,7 @@ function HeaderUserbox() {
           >
             <AccountTreeTwoToneIcon fontSize="small" />
             <ListItemText primary="Account Settings" />
-          </ListItem>
+          </ListItem> */}
         </List>
         <Divider />
         <Box sx={{ m: 1 }}>

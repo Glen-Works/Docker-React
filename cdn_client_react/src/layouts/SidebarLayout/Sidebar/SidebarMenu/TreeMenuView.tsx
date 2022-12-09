@@ -1,9 +1,10 @@
 import { FormControlLabel } from "@material-ui/core";
 import { TreeItem, TreeView } from "@mui/lab";
 import { Avatar, Link } from "@mui/material";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useEffect, useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
-import { NavLink as RouterLink, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getMenuKeyByValue, MenuTree, routerList } from "src/middleware/authMenuMiddleware";
 
 type setMenu = (data: string[]) => void;
@@ -13,6 +14,21 @@ interface TreeMenuViewProp {
   selected: string[],
   setSelectMenu: setMenu,
 }
+
+const IconTheme = (Theme) =>
+  createTheme({
+    ...Theme,
+    components: {
+      MuiSvgIcon: {
+        styleOverrides: {
+          root: {
+            boxSizing: 'content-box',
+            fontSize: '1em',
+          },
+        },
+      },
+    },
+  });
 
 export default function TreeMenuView(prop: TreeMenuViewProp) {
   const { data, selected, setSelectMenu } = prop;
@@ -94,17 +110,21 @@ export default function TreeMenuView(prop: TreeMenuViewProp) {
                   >
                     <Avatar variant={"rounded"}
                       alt=""
-                      src={RouterLink[nodes.key]?.icon ?? null}
-                      style={{
-                        width: 10,
-                        height: 10,
-                      }} />
+                      sx={{
+                        height: "1em",
+                        width: "1em",
+                        marginRight: "0.4em"
+                      }} >
+                      <ThemeProvider theme={IconTheme} >
+                        {routerList[nodes.key]?.icon}
+                      </ThemeProvider>
+                    </Avatar>
                   </Link>
                 </>
                 }
               </>
             }
-            label={<>{nodes.name}</>}
+            label={<> {nodes.name}</>}
             key={nodes.id}
           />
         }

@@ -116,6 +116,10 @@ const routes: RouteObject[] = [
                     element: <User />
                   },
                   {
+                    path: 'user/profile',
+                    element: <User />
+                  },
+                  {
                     path: 'menu',
                     element: <Menu />
                   },
