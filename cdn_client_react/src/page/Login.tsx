@@ -42,7 +42,7 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function SignInSide() {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   const { state, dispatch } = useAuthStateContext();
   const { register, handleSubmit, formState: { errors } } = useForm();
 

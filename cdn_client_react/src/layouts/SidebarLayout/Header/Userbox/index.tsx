@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 import {
   Box,
@@ -15,9 +15,11 @@ import {
 
 import AccountBoxTwoToneIcon from '@mui/icons-material/AccountBoxTwoTone';
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
-import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { styled } from '@mui/material/styles';
+import { logoutApi } from 'src/api/Header/Userbox/userboxApi';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
+import { logoutRemoveCookie } from 'src/stores/action/authActions';
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -55,11 +57,11 @@ const UserBoxDescription = styled(Typography)(
 );
 
 function HeaderUserbox() {
-  const { state } = useAuthStateContext();
-
+  const navigate = useNavigate();
+  const { state, dispatch } = useAuthStateContext();
 
   const user = {
-    name: state.userInfo.name,
+    name: state.userInfo?.name ?? "",
     // avatar: '/static/images/avatars/1.jpg',
     // jobtitle: 'Project Manager'
   };
@@ -74,6 +76,15 @@ function HeaderUserbox() {
   const handleClose = (): void => {
     setOpen(false);
   };
+
+  const logout = () => {
+    logoutApi(state)?.then(res => {
+      logoutRemoveCookie(dispatch);
+      return navigate('/login');
+    }).catch(error => {
+      console.log("error:" + error.response?.data?.msg);
+    });
+  }
 
   return (
     <>
@@ -134,9 +145,9 @@ function HeaderUserbox() {
         </List>
         <Divider />
         <Box sx={{ m: 1 }}>
-          <Button color="primary" fullWidth>
-            <LockOpenTwoToneIcon sx={{ mr: 1 }} />
-            Sign out
+          <Button color="primary" fullWidth onClick={logout}>
+            <LogoutIcon sx={{ mr: 1 }} />
+            Log out
           </Button>
         </Box>
       </Popover>
