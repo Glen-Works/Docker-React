@@ -49,7 +49,7 @@ export default function SignInSide() {
   useEffect(() => {
     const fetchData = async () => {
       if (state.authorisation?.accessToken == undefined || state.authorisation?.accessToken == null) {
-        console.log('authorisation:', "no");
+        // console.log('authorisation:', "no");
         return;
       }
       //判斷 是否已登入

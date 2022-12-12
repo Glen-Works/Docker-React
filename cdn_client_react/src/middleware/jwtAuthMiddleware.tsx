@@ -9,9 +9,8 @@ export const jwtAuthMiddleware = async (dispatch, auth: Auth): Promise<boolean> 
     //無 token 踢出
     var jwt: string = auth.authorisation?.accessToken ?? "";
     if (jwt == "" || jwt.length < 10) {
-        // console.log("nontoken");
         //跳回 login 頁面
-        console.log("無 token");
+        // console.log("無 token");
         return false;
     }
 
@@ -21,7 +20,7 @@ export const jwtAuthMiddleware = async (dispatch, auth: Auth): Promise<boolean> 
         //refresh token 更新
         if (await jwtRefesh(dispatch, auth)) {
             // 成功  return true;
-            console.log("refresh token 更新成功");
+            // console.log("refresh token 更新成功");
             return true;
         };
         // 失敗  return false;
@@ -42,7 +41,7 @@ export async function jwtRefesh(dispatch, auth: Auth): Promise<boolean> {
     try {
         return await apiData?.then(res => {
             setUserInfo(dispatch, res.data);
-            console.log("更新 jwt成功");
+            // console.log("更新 jwt成功");
             return Promise.resolve(true);
         }).catch(error => {
             console.log(error);

@@ -79,7 +79,7 @@ export default function api(method: string, url: string, config: AxiosRequestCon
     method = method.toLowerCase();
     switch (method) {
         case "post":
-            console.log(instance.getUri());
+            // console.log(instance.getUri());
             return instance.post(url, data, config);
         case "get":
             return instance.get(url, config);
