@@ -2,7 +2,7 @@ import { Grid, TextField, Typography } from "@mui/material";
 import DataTableDialog from "src/components/DataTable/DataTableDialog";
 import DialogFormat from "src/components/Dialog/DialogFormat";
 
-interface UserAddAbdEditDialogProp {
+interface UserAddAndEditDialogProp {
   selectedId: number,
   editPasswordOpen: boolean,
   handleEditPwdClose: () => void,
@@ -14,7 +14,7 @@ interface UserAddAbdEditDialogProp {
   pwdErrors: any,
 }
 
-export default function UserAddAbdEditDialog(props: UserAddAbdEditDialogProp) {
+export default function UserAddAbdEditDialog(props: UserAddAndEditDialogProp) {
   const {
     selectedId,
     editPasswordOpen,
