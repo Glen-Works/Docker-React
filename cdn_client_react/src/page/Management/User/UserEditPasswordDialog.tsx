@@ -14,7 +14,7 @@ interface UserAddAndEditDialogProp {
   pwdErrors: any,
 }
 
-export default function UserAddAbdEditDialog(props: UserAddAndEditDialogProp) {
+export default function UserAddAndEditDialog(props: UserAddAndEditDialogProp) {
   const {
     selectedId,
     editPasswordOpen,
