@@ -23,7 +23,7 @@ import { useAuthMenuContext } from 'src/contexts/AuthMenuContext';
 import { validAuthMenuFeature } from 'src/middleware/authMenuMiddleware';
 import PageHeader from 'src/page/PageBase/PageHeader';
 import UserAddAndEditDialog from './UserAddAndEditDialog';
-import UserAddAbdEditDialog from './UserEditPasswordDialog';
+import UserEditPasswordDialog from './UserEditPasswordDialog';
 import UserSearch from './UserSearch';
 
 
@@ -584,7 +584,7 @@ function User() {
               userErrors={userErrors}
             />
 
-            <UserAddAbdEditDialog
+            <UserEditPasswordDialog
               selectedId={selectedId}
               editPasswordOpen={editPasswordOpen}
               handleEditPwdClose={handleEditPwdClose}
