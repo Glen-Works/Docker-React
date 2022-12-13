@@ -16,12 +16,12 @@ import DataTableThemeProvider from 'src/components/DataTable/DataTableThemeProvi
 import getTextLabels from 'src/components/DataTable/TextLabels';
 import Footer from 'src/components/Footer';
 import Label from 'src/components/Label';
+import PageHeader from 'src/components/PageHeader';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import { useAuthMenuContext } from 'src/contexts/AuthMenuContext';
 import { validAuthMenuFeature } from 'src/middleware/authMenuMiddleware';
-import PageHeader from 'src/page/PageBase/PageHeader';
 import UserAddAndEditDialog from './UserAddAndEditDialog';
 import UserEditPasswordDialog from './UserEditPasswordDialog';
 import UserSearch from './UserSearch';
@@ -523,7 +523,10 @@ function User() {
         <title>Transactions - Applications</title>
       </Helmet>
       <PageTitleWrapper>
-        <PageHeader />
+        <PageHeader
+          title={"使用者"}
+          subTitle={""}
+        />
       </PageTitleWrapper>
       <Container maxWidth={false}
         sx={{

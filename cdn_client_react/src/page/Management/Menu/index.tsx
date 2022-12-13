@@ -15,12 +15,12 @@ import DataTableThemeProvider from 'src/components/DataTable/DataTableThemeProvi
 import getTextLabels from 'src/components/DataTable/TextLabels';
 import Footer from 'src/components/Footer';
 import Label from 'src/components/Label';
+import PageHeader from 'src/components/PageHeader';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import { useAuthMenuContext } from 'src/contexts/AuthMenuContext';
 import { validAuthMenuFeature } from 'src/middleware/authMenuMiddleware';
-import PageHeader from '../../PageBase/PageHeader';
 import MenuAddAndEditDialog from './MenuAddAndEditDialog';
 import MenuSearch from './MenuSearch';
 
@@ -467,7 +467,10 @@ function Menu() {
         <title>Menu</title>
       </Helmet>
       <PageTitleWrapper>
-        <PageHeader />
+        <PageHeader
+          title={"菜單"}
+          subTitle={""}
+        />
       </PageTitleWrapper>
       <Container maxWidth={false}
         sx={{

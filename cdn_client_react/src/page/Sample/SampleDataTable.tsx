@@ -21,10 +21,10 @@ import DialogFormat from 'src/components/Dialog/DialogFormat';
 import Footer from 'src/components/Footer';
 import TextArea from 'src/components/Input/TextArea';
 import Label from 'src/components/Label';
+import PageHeader from 'src/components/PageHeader';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
-import PageHeader from '../PageBase/PageHeader';
 
 interface MapStyle {
   [key: number]: { label: string, color: "primary" | "secondary" | "error" | "black" | "warning" | "success" | "info" }
@@ -442,7 +442,10 @@ function SampleDataTable() {
         <title>Transactions - Applications</title>
       </Helmet>
       <PageTitleWrapper>
-        <PageHeader />
+        <PageHeader
+          title={"SampleDataTable"}
+          subTitle={""}
+        />
       </PageTitleWrapper>
       <Container maxWidth={false}
         sx={{

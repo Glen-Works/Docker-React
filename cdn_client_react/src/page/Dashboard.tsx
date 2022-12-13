@@ -3,9 +3,9 @@ import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import Footer from 'src/components/Footer';
+import PageHeader from 'src/components/PageHeader';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
-import PageHeader from './PageBase/PageHeader';
 
 
 
@@ -23,7 +23,10 @@ function Dashboard() {
         <title>Transactions - Applications</title>
       </Helmet>
       <PageTitleWrapper>
-        <PageHeader />
+        <PageHeader
+          title={"Dashboard"}
+          subTitle={""}
+        />
       </PageTitleWrapper>
       <Container maxWidth={false} >
         <Grid
