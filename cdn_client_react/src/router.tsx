@@ -30,7 +30,7 @@ const SignInSide = Loader(
   lazy(() => import('src/page/Login'))
 );
 
-//login
+//Dashboard
 const Dashboard = Loader(
   lazy(() => import('src/page/Dashboard'))
 );
@@ -43,6 +43,11 @@ const AuthLayout = Loader(
 //AuthMenuLayout
 const AuthMenuLayout = Loader(
   lazy(() => import('src/layouts/AuthMenuLayout'))
+);
+
+// UserProfile page
+const UserProfile = Loader(
+  lazy(() => import('src/page/Client/Header/UserProfile/index'))
 );
 
 // User page
@@ -112,11 +117,11 @@ const routes: RouteObject[] = [
                     element: <Dashboard />
                   },
                   {
-                    path: 'user',
-                    element: <User />
+                    path: 'user/profile',
+                    element: <UserProfile />
                   },
                   {
-                    path: 'user/profile',
+                    path: 'user',
                     element: <User />
                   },
                   {

@@ -27,6 +27,7 @@ export const exceptUriList = [
     "/dashboard",
     "/samplecontent",
     "/sampledatatable",
+    "/user/profile",
     "/500",
     "/404",
 ]
