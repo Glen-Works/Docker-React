@@ -1,4 +1,4 @@
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -72,7 +72,7 @@ export default function SignInSide() {
 
     loginApi(loginData)?.then(res => {
       setUserInfo(dispatch, res.data);
-      return navigate("/SampleDataTable");
+      return navigate("/dashboard");
     }).catch(error => {
       console.log("error:" + error.response?.data?.msg);
     });
@@ -106,8 +106,8 @@ export default function SignInSide() {
               alignItems: 'center',
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-              <LockOutlinedIcon />
+            <Avatar sx={{ m: 1, bgcolor: 'background.main', width: 85, height: 85 }}>
+              <PersonOutlineIcon sx={{ m: 1, width: 60, height: 60 }} />
             </Avatar>
             <Typography component="h1" variant="h5">
               Sign in
@@ -174,7 +174,7 @@ export default function SignInSide() {
                   </Link>
                 </Grid>
               </Grid>
-              <Copyright sx={{ mt: 5 }} />
+              {/* <Copyright sx={{ mt: 5 }} /> */}
             </Box>
           </Box>
         </Grid>
