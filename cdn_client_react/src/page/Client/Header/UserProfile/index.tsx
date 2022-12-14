@@ -1,15 +1,15 @@
 import EditIcon from '@mui/icons-material/Edit';
 import KeyTwoToneIcon from '@mui/icons-material/KeyTwoTone';
-import { Container, Grid, Typography, useTheme } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
 import { userProfileInfoApi, userUpdateProfileApi, userUpdateProfilePasswordApi } from 'src/api/Client/UserProfile/userProfileApi';
 import { ColumnIconButton } from 'src/components/DataTable/CustomerIconRender';
 import DialogFormat from "src/components/Dialog/DialogFormat";
-import Footer from 'src/components/Footer';
+import PageContent from 'src/components/PageContent';
 import PageHeader from 'src/components/PageHeader';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
+import Title from 'src/components/Title';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import ProfileEditDialog from './ProfileEditDialog';
 import ProfileEditPasswordDialog from './ProfileEditPasswordDialog';
@@ -137,22 +137,20 @@ function UserProfile() {
 
   return (
     <>
-      <Helmet>
-        <title>Transactions - Applications</title>
-      </Helmet>
+      <Title />
       <PageTitleWrapper>
         <PageHeader
           title={"個人設定"}
           subTitle={""}
         />
       </PageTitleWrapper>
-      <Container maxWidth={false} >
+      <PageContent>
         <Grid
           container
           direction="row"
           justifyContent="center"
           alignItems="stretch"
-          spacing={3}
+
           height={542}
         >
           <Grid item xs={12}>
@@ -160,6 +158,7 @@ function UserProfile() {
             <Grid container justifyContent="center" alignItems="center" direction="column" >
               <Grid container justifyContent="flex-end" alignItems="center" direction="row" >
                 <Grid item xs={3} >
+
                   <ColumnIconButton
                     title="修改使用者"
                     handleClickOpen={handleEditProfileOpen}
@@ -167,17 +166,21 @@ function UserProfile() {
                     background={theme.colors.error.lighter}
                   >
                     <EditIcon fontSize="small" sx={{ mr: '0.3em' }} />
-                    {"資料修改"}
+                    <Typography color={theme.colors.alpha.black[100]}>
+                      {"資料修改"}
+                    </Typography>
                   </ColumnIconButton>
 
                   <ColumnIconButton
                     title="修改密碼"
                     handleClickOpen={handleEditPwdOpen}
-                    color={theme.palette.info.main}
+                    color={theme.palette.error.main}
                     background={theme.colors.error.lighter}
                   >
                     <KeyTwoToneIcon fontSize="small" sx={{ mr: '0.3em' }} />
-                    {"密碼修改"}
+                    <Typography color={theme.colors.alpha.black[100]}>
+                      {"密碼修改"}
+                    </Typography>
                   </ColumnIconButton>
                 </Grid>
               </Grid>
@@ -214,8 +217,8 @@ function UserProfile() {
             </Grid>
           </Grid>
         </Grid>
-      </Container>
-      <Footer />
+      </PageContent>
+      {/* <Footer /> */}
     </>
   );
 }

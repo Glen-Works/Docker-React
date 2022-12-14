@@ -8,6 +8,9 @@ const TableTheme = (Theme) =>
       MUIDataTable: {
         styleOverrides: {
           paper: {
+            // border: "none",
+            marginTop: '25px',
+            boxShadow: "0.8px 0.8px 10px 1px " + Theme.colors.alpha.black[30],
             borderRadius: 25,
           },
         },

@@ -1,6 +1,6 @@
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
-import { Box, CircularProgress, Container, Grid, Typography, useTheme } from '@mui/material';
+import { Box, CircularProgress, Grid, Typography, useTheme } from '@mui/material';
 import MUIDataTable, { MUIDataTableColumn, MUIDataTableOptions, MUIDataTableState } from "mui-datatables";
 import { useEffect, useState } from 'react';
 import { unstable_batchedUpdates } from "react-dom";
@@ -13,8 +13,8 @@ import DataTableDialog from 'src/components/DataTable/DataTableDialog';
 import getDataTableState, { DataTableStatus, PageManagement, Search, setPageManagement } from 'src/components/DataTable/DataTableState';
 import DataTableThemeProvider from 'src/components/DataTable/DataTableThemeProvider';
 import getTextLabels from 'src/components/DataTable/TextLabels';
-import Footer from 'src/components/Footer';
 import Label from 'src/components/Label';
+import PageContent from 'src/components/PageContent';
 import PageHeader from 'src/components/PageHeader';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import SuspenseLoader from 'src/components/SuspenseLoader';
@@ -472,20 +472,13 @@ function Menu() {
           subTitle={""}
         />
       </PageTitleWrapper>
-      <Container maxWidth={false}
-        sx={{
-          width: 1,
-          background: `${theme.colors.alpha.white[100]}`,
-          minHeight: 'calc(100vh - 200px)',
-          pb: '50px'
-        }}
+      <PageContent
       >
         <Grid
           container
           direction="row"
           justifyContent="center"
           alignItems="stretch"
-          spacing={1}
         >
           <MenuSearch
             checkFeatureCreate={checkFeatureCreate}
@@ -500,7 +493,7 @@ function Menu() {
                 (checkFeatureList) &&
                 <MUIDataTable
                   title={
-                    <Typography variant="h4">
+                    <Typography variant="h5">
                       Menu List
                       {tableState.isLoading && <CircularProgress size={24} style={{ marginLeft: 15, position: 'relative', top: 4 }} />}
                     </Typography>
@@ -543,8 +536,8 @@ function Menu() {
             </DataTableDialog >
           </Grid >
         </Grid >
-      </Container >
-      <Footer />
+      </PageContent >
+      {/* <Footer /> */}
     </>
   );
 }

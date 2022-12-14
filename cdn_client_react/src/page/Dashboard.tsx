@@ -1,16 +1,14 @@
-import { Container, Grid } from '@mui/material';
+import { Grid, useTheme } from '@mui/material';
 import { useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
-import Footer from 'src/components/Footer';
+import PageContent from 'src/components/PageContent';
 import PageHeader from 'src/components/PageHeader';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
+import Title from 'src/components/Title';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 
-
-
 function Dashboard() {
-
+  const theme = useTheme();
   let navigate = useNavigate();
   const { state } = useAuthStateContext();
   useEffect(() => {
@@ -19,22 +17,19 @@ function Dashboard() {
 
   return (
     <>
-      <Helmet>
-        <title>Transactions - Applications</title>
-      </Helmet>
+      <Title />
       <PageTitleWrapper>
         <PageHeader
           title={"Dashboard"}
           subTitle={""}
         />
       </PageTitleWrapper>
-      <Container maxWidth={false} >
+      <PageContent>
         <Grid
           container
           direction="row"
           justifyContent="center"
           alignItems="stretch"
-          spacing={3}
         >
           <Grid item xs={12}>
 
@@ -42,8 +37,8 @@ function Dashboard() {
 
           </Grid>
         </Grid>
-      </Container>
-      <Footer />
+      </PageContent>
+      {/* <Footer /> */}
     </>
   );
 }

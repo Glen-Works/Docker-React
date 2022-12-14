@@ -3,12 +3,11 @@ import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import KeyTwoToneIcon from '@mui/icons-material/KeyTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
-import { Box, Button, CircularProgress, Container, Grid, Switch, Typography, useTheme } from '@mui/material';
+import { Box, Button, CircularProgress, Grid, Switch, Typography, useTheme } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import MUIDataTable, { MUIDataTableColumn, MUIDataTableOptions, MUIDataTableState } from "mui-datatables";
 import { useEffect, useState } from 'react';
 import { unstable_batchedUpdates } from "react-dom";
-import { Helmet } from 'react-helmet-async';
 import { useForm } from "react-hook-form";
 import { userAddApi, userDeleteApi, userEditApi, userInfoApi, userListApi, userPwdEditApi } from 'src/api/Sample/sampleDataTableApi';
 import { ColumnIconButton } from 'src/components/DataTable/CustomerIconRender';
@@ -18,12 +17,13 @@ import getDataTableState, { DataTableStatus, PageManagement, Search, setPageMana
 import DataTableThemeProvider from 'src/components/DataTable/DataTableThemeProvider';
 import getTextLabels from 'src/components/DataTable/TextLabels';
 import DialogFormat from 'src/components/Dialog/DialogFormat';
-import Footer from 'src/components/Footer';
 import TextArea from 'src/components/Input/TextArea';
 import Label from 'src/components/Label';
+import PageContent from 'src/components/PageContent';
 import PageHeader from 'src/components/PageHeader';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import SuspenseLoader from 'src/components/SuspenseLoader';
+import Title from 'src/components/Title';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 
 interface MapStyle {
@@ -438,22 +438,14 @@ function SampleDataTable() {
   return (
     <>
       <SuspenseLoader isOpen={tableState.isLoading} />
-      <Helmet>
-        <title>Transactions - Applications</title>
-      </Helmet>
+      <Title />
       <PageTitleWrapper>
         <PageHeader
           title={"SampleDataTable"}
           subTitle={""}
         />
       </PageTitleWrapper>
-      <Container maxWidth={false}
-        sx={{
-          width: 1,
-          background: `${theme.colors.alpha.white[100]}`,
-          minHeight: 'calc(100vh - 200px)',
-          pb: '50px'
-        }}
+      <PageContent
       >
         <Grid
           container
@@ -517,7 +509,7 @@ function SampleDataTable() {
             <DataTableThemeProvider>
               <MUIDataTable
                 title={
-                  <Typography variant="h4">
+                  <Typography variant="h5">
                     Sample List
                     {tableState.isLoading && <CircularProgress size={24} style={{ marginLeft: 15, position: 'relative', top: 4 }} />}
                   </Typography>
@@ -706,8 +698,8 @@ function SampleDataTable() {
             </DataTableDialog >
           </Grid >
         </Grid >
-      </Container >
-      <Footer />
+      </PageContent >
+      {/* <Footer /> */}
     </>
   );
 }

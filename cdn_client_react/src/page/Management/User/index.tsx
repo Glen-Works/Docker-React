@@ -1,11 +1,10 @@
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import KeyTwoToneIcon from '@mui/icons-material/KeyTwoTone';
-import { Box, CircularProgress, Container, Grid, Typography, useTheme } from '@mui/material';
+import { Box, CircularProgress, Grid, Typography, useTheme } from '@mui/material';
 import MUIDataTable, { MUIDataTableColumn, MUIDataTableOptions, MUIDataTableState } from "mui-datatables";
 import { useEffect, useState } from 'react';
 import { unstable_batchedUpdates } from "react-dom";
-import { Helmet } from 'react-helmet-async';
 import { useForm } from "react-hook-form";
 import { roleAllListApi, userAddApi, userDeleteApi, userDeleteMultipleApi, userEditApi, userInfoApi, userListApi, userPwdEditApi } from 'src/api/User/userApi';
 import { ColumnIconButton } from 'src/components/DataTable/CustomerIconRender';
@@ -14,18 +13,18 @@ import DataTableDialog from 'src/components/DataTable/DataTableDialog';
 import getDataTableState, { DataTableStatus, PageManagement, Search, setPageManagement } from 'src/components/DataTable/DataTableState';
 import DataTableThemeProvider from 'src/components/DataTable/DataTableThemeProvider';
 import getTextLabels from 'src/components/DataTable/TextLabels';
-import Footer from 'src/components/Footer';
 import Label from 'src/components/Label';
+import PageContent from 'src/components/PageContent';
 import PageHeader from 'src/components/PageHeader';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import SuspenseLoader from 'src/components/SuspenseLoader';
+import Title from 'src/components/Title';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import { useAuthMenuContext } from 'src/contexts/AuthMenuContext';
 import { validAuthMenuFeature } from 'src/middleware/authMenuMiddleware';
 import UserAddAndEditDialog from './UserAddAndEditDialog';
 import UserEditPasswordDialog from './UserEditPasswordDialog';
 import UserSearch from './UserSearch';
-
 
 export interface MapStyle {
   [key: number]: { label: string, color: "primary" | "secondary" | "error" | "black" | "warning" | "success" | "info" }
@@ -519,29 +518,20 @@ function User() {
   return (
     <>
       <SuspenseLoader isOpen={tableState.isLoading} />
-      <Helmet>
-        <title>Transactions - Applications</title>
-      </Helmet>
+      <Title />
       <PageTitleWrapper>
         <PageHeader
           title={"使用者"}
           subTitle={""}
         />
       </PageTitleWrapper>
-      <Container maxWidth={false}
-        sx={{
-          width: 1,
-          background: `${theme.colors.alpha.white[100]}`,
-          minHeight: 'calc(100vh - 200px)',
-          pb: '50px'
-        }}
+      <PageContent
       >
         <Grid
           container
           direction="row"
           justifyContent="center"
           alignItems="stretch"
-          spacing={1}
         >
           <UserSearch
             checkFeatureCreate={checkFeatureCreate}
@@ -557,7 +547,7 @@ function User() {
                 (checkFeatureList) &&
                 <MUIDataTable
                   title={
-                    <Typography variant="h4">
+                    <Typography variant="h5">
                       User List
                       {tableState.isLoading && <CircularProgress size={24} style={{ marginLeft: 15, position: 'relative', top: 4 }} />}
                     </Typography>
@@ -614,8 +604,8 @@ function User() {
             </DataTableDialog >
           </Grid >
         </Grid >
-      </Container >
-      <Footer />
+      </PageContent >
+      {/* <Footer /> */}
     </>
   );
 }
