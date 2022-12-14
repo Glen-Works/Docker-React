@@ -1,10 +1,10 @@
 import { Grid, useTheme } from '@mui/material';
 import { useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import PageContent from 'src/components/PageContent';
 import PageHeader from 'src/components/PageHeader';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
+import Title from 'src/components/Title';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 
 
@@ -18,9 +18,7 @@ function SampleContent() {
 
   return (
     <>
-      <Helmet>
-        <title>Transactions - Applications</title>
-      </Helmet>
+      <Title />
       <PageTitleWrapper>
         <PageHeader
           title={"SampleConetent"}

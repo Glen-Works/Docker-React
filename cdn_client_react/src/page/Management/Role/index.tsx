@@ -4,7 +4,6 @@ import { Box, CircularProgress, Grid, Typography, useTheme } from '@mui/material
 import MUIDataTable, { MUIDataTableColumn, MUIDataTableOptions, MUIDataTableState } from "mui-datatables";
 import { useEffect, useState } from 'react';
 import { unstable_batchedUpdates } from "react-dom";
-import { Helmet } from 'react-helmet-async';
 import { useForm } from "react-hook-form";
 import { menuAllListApi, roleAddApi, roleDeleteApi, roleDeleteMultipleApi, roleEditApi, roleInfoApi, roleListApi } from 'src/api/Role/roleApi';
 import { ColumnIconButton } from 'src/components/DataTable/CustomerIconRender';
@@ -18,6 +17,7 @@ import PageContent from 'src/components/PageContent';
 import PageHeader from 'src/components/PageHeader';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import SuspenseLoader from 'src/components/SuspenseLoader';
+import Title from 'src/components/Title';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import { useAuthMenuContext } from 'src/contexts/AuthMenuContext';
 import { MenuTree, validAuthMenuFeature } from 'src/middleware/authMenuMiddleware';
@@ -426,9 +426,7 @@ function Role() {
   return (
     <>
       <SuspenseLoader isOpen={tableState.isLoading} />
-      <Helmet>
-        <title>Role</title>
-      </Helmet>
+      <Title />
       <PageTitleWrapper>
         <PageHeader
           title={"權限"}
