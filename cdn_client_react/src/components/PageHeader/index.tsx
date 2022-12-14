@@ -10,15 +10,15 @@ function PageHeader(props: PageHeaderProp) {
 
   return (
     <Grid container justifyContent="space-between" alignItems="center">
-      <Grid item>
-        <Typography variant="h4" component="h4" gutterBottom>
+      <Grid item sx={{ margin: '8px 8px' }}>
+        <Typography variant="h5" component="h5">
           {title}
         </Typography>
-        <Typography variant="subtitle2">
+        < Typography variant="subtitle2" sx={{ paddingLeft: '15px' }}>
           {subTitle}
         </Typography>
       </Grid>
-    </Grid>
+    </Grid >
   );
 }
 

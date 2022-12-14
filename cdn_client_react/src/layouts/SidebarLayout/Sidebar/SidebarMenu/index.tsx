@@ -213,53 +213,8 @@ function SidebarMenu() {
     setSelected(data);
   }
 
-  // console.log(AuthMenu.state);
-  // console.log(menuList);
-
   return (
     <>
-      {/* <MenuWrapper>
-        <List component="div">
-          <SubMenuWrapper>
-            <List component="div">
-              <ListItem component="div">
-                <Button
-                  disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/user"
-                  startIcon={<DesignServicesTwoToneIcon />}
-                >
-                  User
-                </Button>
-              </ListItem>
-              <ListItem component="div">
-                <Button
-                  disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/menu"
-                  startIcon={<BrightnessLowTwoToneIcon />}
-                >
-                  Menu
-                </Button>
-              </ListItem>
-              <ListItem component="div">
-                <Button
-                  disableRipple
-                  component={RouterLink}
-                  onClick={closeSidebar}
-                  to="/role"
-                  startIcon={<MmsTwoToneIcon />}
-                >
-                  Role
-                </Button>
-              </ListItem>
-            </List>
-          </SubMenuWrapper>
-        </List>
-
-      </MenuWrapper> */}
       <MenuTreeWrapper>
         <MenuTreeItemWrapper>
           {

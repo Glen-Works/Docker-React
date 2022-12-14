@@ -47,7 +47,7 @@ function Sidebar() {
       >
         <Scrollbar>
           <Box
-            sx={{ mt: theme.spacing(2) }}
+            // sx={{ mt: theme.spacing(2) }}
             display="flex"
             justifyContent="center"
             alignItems="center">
@@ -55,7 +55,7 @@ function Sidebar() {
           </Box>
           <Divider
             sx={{
-              mt: theme.spacing(3),
+              mt: 0,
               mx: theme.spacing(2),
               background: theme.colors.alpha.trueWhite[10]
             }}

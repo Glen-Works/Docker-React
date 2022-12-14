@@ -1,12 +1,14 @@
-import { Box, styled, Tooltip, tooltipClasses, TooltipProps, useTheme, CardMedia } from '@mui/material';
+import { CardMedia, styled, Tooltip, tooltipClasses, TooltipProps, useTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 const LogoWrapper = styled(Link)(
   ({ theme }) => `
         color: ${theme.palette.text.primary};
         display: flex;
+        justify-content: center;
+        align-items: center; 
         text-decoration: none;
-        margin: 0 auto;
+        margin: 0 0;
         font-weight: ${theme.typography.fontWeightBold};
 `
 );
@@ -33,17 +35,16 @@ function Logo() {
 
   return (
     <TooltipWrapper
-      title="wvt Dashboard"
+      title="CDN Dashboard"
       arrow
     >
-      <LogoWrapper to="/transactions" >
+      <LogoWrapper to="/dashboard" >
         <CardMedia
           component="img"
-          image="/static/images/logo/wvt.png"
+          image="/static/images/logo/cdn-256.svg"
           alt=""
           sx={{
-            width: '60%',
-            margin: 'auto',
+            width: '50%',
           }}
         />
       </LogoWrapper>
