@@ -10,149 +10,10 @@ import { useAuthMenuContext } from 'src/contexts/AuthMenuContext';
 import { makeMenuTree } from 'src/middleware/authMenuMiddleware';
 import TreeMenuView from './TreeMenuView';
 
-const MenuWrapper = styled(Box)(
-  ({ theme }) => `
-  .MuiList-root {
-    padding: ${theme.spacing(1)};
-
-    & > .MuiList-root {
-      padding: 0 ${theme.spacing(0)} ${theme.spacing(1)};
-    }
-  }
-
-    .MuiListSubheader-root {
-      text-transform: uppercase;
-      font-weight: bold;
-      font-size: ${theme.typography.pxToRem(12)};
-      color: ${theme.colors.alpha.trueWhite[50]};
-      padding: ${theme.spacing(0, 2.5)};
-      line-height: 1.4;
-    }
-`
-);
-
-const SubMenuWrapper = styled(Box)(
-  ({ theme }) => `
-    .MuiList-root {
-
-      .MuiListItem-root {
-        padding: 1px 0;
-
-        .MuiBadge-root {
-          position: absolute;
-          right: ${theme.spacing(3.2)};
-
-          .MuiBadge-standard {
-            background: ${theme.colors.primary.main};
-            font-size: ${theme.typography.pxToRem(10)};
-            font-weight: bold;
-            text-transform: uppercase;
-            color: ${theme.palette.primary.contrastText};
-          }
-        }
-    
-        .MuiButton-root {
-          display: flex;
-          color: ${theme.colors.alpha.trueWhite[70]};
-          background-color: transparent;
-          width: 100%;
-          justify-content: flex-start;
-          padding: ${theme.spacing(1.2, 3)};
-
-          .MuiButton-startIcon,
-          .MuiButton-endIcon {
-            transition: ${theme.transitions.create(['color'])};
-
-            .MuiSvgIcon-root {
-              font-size: inherit;
-              transition: none;
-            }
-          }
-
-          .MuiButton-startIcon {
-            color: ${theme.colors.alpha.trueWhite[30]};
-            font-size: ${theme.typography.pxToRem(20)};
-            margin-right: ${theme.spacing(1)};
-          }
-          
-          .MuiButton-endIcon {
-            color: ${theme.colors.alpha.trueWhite[50]};
-            margin-left: auto;
-            opacity: .8;
-            font-size: ${theme.typography.pxToRem(20)};
-          }
-
-          &.active,
-          &:hover {
-            background-color: ${alpha(theme.colors.alpha.trueWhite[100], 0.06)};
-            color: ${theme.colors.alpha.trueWhite[100]};
-
-            .MuiButton-startIcon,
-            .MuiButton-endIcon {
-              color: ${theme.colors.alpha.trueWhite[100]};
-            }
-          }
-        }
-
-        &.Mui-children {
-          flex-direction: column;
-
-          .MuiBadge-root {
-            position: absolute;
-            right: ${theme.spacing(7)};
-          }
-        }
-
-        .MuiCollapse-root {
-          width: 100%;
-
-          .MuiList-root {
-            padding: ${theme.spacing(1, 0)};
-          }
-
-          .MuiListItem-root {
-            padding: 1px 0;
-
-            .MuiButton-root {
-              padding: ${theme.spacing(0.8, 3)};
-
-              .MuiBadge-root {
-                right: ${theme.spacing(3.2)};
-              }
-
-              &:before {
-                content: ' ';
-                background: ${theme.colors.alpha.trueWhite[100]};
-                opacity: 0;
-                transition: ${theme.transitions.create(['transform', 'opacity'])};
-                width: 6px;
-                height: 6px;
-                transform: scale(0);
-                transform-origin: center;
-                border-radius: 20px;
-                margin-right: ${theme.spacing(1.8)};
-              }
-
-              &.active,
-              &:hover {
-
-                &:before {
-                  transform: scale(1);
-                  opacity: 1;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-`
-);
-
 const MenuTreeWrapper = styled(Box)(
   ({ theme }) => `
   .MuiTreeView-root {
-    padding: ${theme.spacing(0.5)};
+    padding: ${theme.spacing(0.5)} ${theme.spacing(0.5)} ${theme.spacing(0.5)} ${theme.spacing(3)};
   }
 `
 );
@@ -166,35 +27,46 @@ const MenuTreeItemWrapper = styled(Box)(
     background-color: transparent;
     width: 100%;
 
-    .MuiTreeItem-label{
+    .MuiTreeItem-content {
+      width: ${theme.sidebar.width}
       font-weight: bold;
-      font-size: ${theme.typography.pxToRem(12)};
-      line-height: 1.5;
+      border-radius: 20px;
 
-      &:hover {
+      &.Mui-selected,&:hover {
         background-color: ${alpha(theme.colors.alpha.trueWhite[100], 0.06)};
         color: ${theme.colors.alpha.trueWhite[100]};
-  
-        .MuiTreeItem-iconContainer {
+
+        .MuiSvgIcon-root {
           color: ${theme.colors.alpha.trueWhite[100]};
         }
     }
-    
-    
 
     .MuiTreeItem-iconContainer {
+      .MuiSvgIcon-root {      
+        font-size: 2em;
+        margin: ${theme.spacing(0.5)} ${theme.spacing(2)} 0 0 ;
+      }
+    }
+
+    .MuiSvgIcon-root {
       transition: ${theme.transitions.create(['color'])};
-      font-size: inherit;
+      font-size: 1.2em;
       transition: none;
       color: ${theme.colors.alpha.trueWhite[30]};
-      font-size: ${theme.typography.pxToRem(20)};
-      
+      margin: ${theme.spacing(0.8)} ${theme.spacing(1)} 0 0 ;
+    }
+
+    .MuiTypography-root {
+      font-size: 1.35em;
+      margin: ${theme.spacing(0.3)} 0 ${theme.spacing(0.3)} ;
+    }
+
+    .MuiFormControlLabel-root {
+      width: ${theme.sidebar.width};
     }
   }
-  
   `
 );
-
 
 function SidebarMenu() {
   const { closeSidebar } = useContext(SidebarContext);
@@ -224,6 +96,7 @@ function SidebarMenu() {
                 data={menu}
                 selected={selected}
                 setSelectMenu={setSelectMenu}
+                closeSidebar={closeSidebar}
               />
             ))
           }

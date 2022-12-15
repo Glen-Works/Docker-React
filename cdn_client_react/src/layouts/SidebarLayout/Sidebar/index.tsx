@@ -57,7 +57,8 @@ function Sidebar() {
             sx={{
               mt: 0,
               mx: theme.spacing(2),
-              background: theme.colors.alpha.trueWhite[10]
+              mb: theme.spacing(2),
+              background: theme.colors.alpha.trueWhite[10],
             }}
           />
           <SidebarMenu />
@@ -91,6 +92,7 @@ function Sidebar() {
               sx={{
                 mt: theme.spacing(3),
                 mx: theme.spacing(2),
+                mb: theme.spacing(2),
                 background: theme.colors.alpha.trueWhite[10]
               }}
             />

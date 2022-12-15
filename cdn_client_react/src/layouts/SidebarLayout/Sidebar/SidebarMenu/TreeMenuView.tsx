@@ -1,11 +1,13 @@
 import { FormControlLabel } from "@material-ui/core";
 import { TreeItem, TreeView } from "@mui/lab";
-import { Avatar, Link } from "@mui/material";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Box, Link } from "@mui/material";
 import { useEffect, useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getMenuKeyByValue, MenuTree, routerList } from "src/middleware/authMenuMiddleware";
+
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
 type setMenu = (data: string[]) => void;
 
@@ -13,25 +15,11 @@ interface TreeMenuViewProp {
   data: MenuTree,
   selected: string[],
   setSelectMenu: setMenu,
+  closeSidebar: () => void,
 }
 
-const IconTheme = (Theme) =>
-  createTheme({
-    ...Theme,
-    components: {
-      MuiSvgIcon: {
-        styleOverrides: {
-          root: {
-            boxSizing: 'content-box',
-            fontSize: '1em',
-          },
-        },
-      },
-    },
-  });
-
 export default function TreeMenuView(prop: TreeMenuViewProp) {
-  const { data, selected, setSelectMenu } = prop;
+  const { data, selected, setSelectMenu, closeSidebar } = prop;
   let location = useLocation();
   let navigate = useNavigate();
 
@@ -88,7 +76,7 @@ export default function TreeMenuView(prop: TreeMenuViewProp) {
     }
   }
 
-  const renderTree = (nodes: MenuTree) => {
+  const renderTree = (nodes: MenuTree, closeSidebar: () => void) => {
 
     return (
       <TreeItem
@@ -105,20 +93,11 @@ export default function TreeMenuView(prop: TreeMenuViewProp) {
                     onClick={() => {
                       // getOnChange(nodes);
                       setSelectMenu([nodes.id.toString()]);
+                      closeSidebar();
                       navigate(routerList[nodes.key]?.uri ?? "/dashboard");
                     }}
                   >
-                    <Avatar variant={"rounded"}
-                      alt=""
-                      sx={{
-                        height: "1em",
-                        width: "1em",
-                        marginRight: "0.4em"
-                      }} >
-                      <ThemeProvider theme={IconTheme} >
-                        {routerList[nodes.key]?.icon}
-                      </ThemeProvider>
-                    </Avatar>
+                    <Box component={routerList[nodes.key]?.icon} />
                   </Link>
                 </>
                 }
@@ -131,7 +110,7 @@ export default function TreeMenuView(prop: TreeMenuViewProp) {
       >
         {
           Array.isArray(nodes.children)
-            ? nodes.children.map((node) => renderTree(node))
+            ? nodes.children.map((node) => renderTree(node, closeSidebar))
             : null
         }
       </TreeItem >
@@ -144,8 +123,10 @@ export default function TreeMenuView(prop: TreeMenuViewProp) {
         expanded={expend}
         selected={selected}
         onNodeToggle={handleToggle}
+        defaultCollapseIcon={<ArrowDropDownIcon />}
+        defaultExpandIcon={<ArrowRightIcon />}
       >
-        {renderTree(data)}
+        {renderTree(data, closeSidebar)}
       </TreeView>
     </>
   );
