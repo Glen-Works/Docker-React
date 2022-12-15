@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import {
   Box,
@@ -77,6 +77,11 @@ function HeaderUserbox() {
     setOpen(false);
   };
 
+  const handleButton = (path: string): void => {
+    handleClose();
+    return navigate(path);
+  }
+
   const logout = () => {
     logoutApi(state)?.then(res => {
       logoutRemoveCookie(dispatch);
@@ -126,7 +131,7 @@ function HeaderUserbox() {
         </MenuUserBox>
         <Divider sx={{ mb: 0 }} />
         <List sx={{ p: 1 }} component="nav">
-          <ListItem button to="/user/profile" component={NavLink}>
+          <ListItem button onClick={() => handleButton("/user/profile")}>
             <AccountBoxTwoToneIcon fontSize="small" />
             <ListItemText primary="個人資訊" />
           </ListItem>
