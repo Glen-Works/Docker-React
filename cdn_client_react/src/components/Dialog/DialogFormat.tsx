@@ -18,6 +18,7 @@ const TextFieldTheme = (Theme) =>
   createTheme({
     ...Theme,
     components: {
+      ...Theme.components,
       MuiTypography: {
         styleOverrides: {
           root: {

@@ -57,7 +57,6 @@ export default function RoleAddAndEditDialog(props: RoleAddAndEditDialogProp) {
         }
         <DialogFormat title="名稱 :" >
           <TextField
-            id="name"
             name="name"
             value={getRoleValue("name")}
             {...registerRole("name", {
@@ -70,7 +69,6 @@ export default function RoleAddAndEditDialog(props: RoleAddAndEditDialogProp) {
         </DialogFormat>
         <DialogFormat title="key :" >
           <TextField
-            id="key"
             name="key"
             value={getRoleValue("key")}
             {...registerRole("key", {
@@ -83,7 +81,6 @@ export default function RoleAddAndEditDialog(props: RoleAddAndEditDialogProp) {
         </DialogFormat>
         <DialogFormat title="狀態 :" >
           <Switch
-            id="status"
             name="status"
             checked={Boolean(Number(getRoleValue("status")))}
             {...registerRole("status", {
@@ -92,7 +89,6 @@ export default function RoleAddAndEditDialog(props: RoleAddAndEditDialogProp) {
         </DialogFormat>
         <DialogFormat title="權重 :" >
           <TextField
-            id="weight"
             name="weight"
             type="number"
             value={Number(getRoleValue("weight"))}
@@ -120,7 +116,6 @@ export default function RoleAddAndEditDialog(props: RoleAddAndEditDialogProp) {
           <TextArea
             minRows={5}
             maxRows={8}
-            id="remark"
             name="remark"
             value={getRoleValue("remark") ?? ""}
             {...registerRole("remark", {})}
