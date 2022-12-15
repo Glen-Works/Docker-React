@@ -52,7 +52,7 @@ export default function RoleAddAndEditDialog(props: RoleAddAndEditDialogProp) {
       <Grid container justifyContent="center" alignItems="center" direction="column" >
         {(addAndEditStatus == "edit") &&
           <DialogFormat title="ID :" >
-            <Typography variant="h6" textAlign="left">{selectedId}</Typography>
+            <Typography >{selectedId}</Typography>
           </DialogFormat>
         }
         <DialogFormat title="名稱 :" >

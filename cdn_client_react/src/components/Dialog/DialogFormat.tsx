@@ -1,5 +1,5 @@
 import { Box, Grid, styled, Typography } from "@mui/material";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import { ReactNode } from "react";
 
 interface DialogFormatProp {
@@ -21,6 +21,9 @@ const TextFieldTheme = (Theme) =>
       MuiTypography: {
         styleOverrides: {
           root: {
+            textAlign: 'left',
+            height: '1.4375em',
+            fontSize: '1.4375em',
             mr: Theme.spacing(2)
           }
         }
@@ -47,11 +50,13 @@ const TextFieldTheme = (Theme) =>
 
 export default function DialogFormat(props: DialogFormatProp) {
   const { title, children } = props;
+  const theme = useTheme();
+
   return (
     <Grid container direction="row" justifyContent="flex-start" alignItems="center" m={0.5}>
       <Grid item xs={2} justifyContent="flex-end">
         <TypographyWrapper>
-          <Typography variant="h6" textAlign="right">{title}</Typography>
+          <Typography variant="h6" textAlign="right" >{title}</Typography>
         </TypographyWrapper>
       </Grid>
       <Grid item xs={9} >
@@ -59,7 +64,7 @@ export default function DialogFormat(props: DialogFormatProp) {
           {children}
         </ThemeProvider>
       </Grid>
-    </Grid>
+    </Grid >
   );
 }
 
