@@ -1,6 +1,7 @@
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
 import { Box, Button, Grid, TextField } from "@mui/material";
+import { FormattedMessage } from 'react-intl';
 
 interface UserSearchProp {
   checkFeatureCreate: boolean,
@@ -18,6 +19,8 @@ export default function UserSearch(props: UserSearchProp) {
     onFormSubmit,
     handleAddClickOpen,
   } = props;
+
+
 
   return (
     <Box component="form" noValidate onSubmit={handleSubmit(onFormSubmit)} sx={{ width: 1, mt: 1 }} >
@@ -57,7 +60,11 @@ export default function UserSearch(props: UserSearchProp) {
             variant="contained"
             startIcon={<SearchIcon fontSize="small" />}
           >
-            Search</Button>
+            <FormattedMessage
+              id="page.search"
+              defaultMessage="ywt"
+            />
+          </Button>
         </Grid>
 
         {
@@ -69,7 +76,10 @@ export default function UserSearch(props: UserSearchProp) {
               startIcon={<AddTwoToneIcon fontSize="small" />}
               onClick={handleAddClickOpen}
             >
-              Create
+              <FormattedMessage
+                id="page.create"
+                defaultMessage="xxxx"
+              />
             </Button>
           </Grid>
         }

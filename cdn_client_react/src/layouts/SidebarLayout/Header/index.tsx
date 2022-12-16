@@ -7,6 +7,7 @@ import {
 } from '@mui/material';
 import { SidebarContext } from 'src/contexts/SidebarContext';
 
+import LanguageBox from './LanguageBox';
 import HeaderUserbox from './Userbox';
 
 const HeaderWrapper = styled(Box)(
@@ -81,6 +82,7 @@ function Header() {
       </Stack>
       <Box display="flex" alignItems="center" justifyContent="flex-end" sx={{ minWidth: '170px' }}>
         {/* <HeaderButtons /> */}
+        <LanguageBox />
         <HeaderUserbox />
       </Box>
     </HeaderWrapper>

@@ -1,0 +1,9 @@
+{
+  "page.create": "新增",
+  "page.search": "搜寻",
+  "page.update": "修改",
+  "page.delete": "删除",
+  "page.user.title": "使用者列表",
+  "page.role.title": "权限列表",
+  "page.menu.title": "选单列表"
+}

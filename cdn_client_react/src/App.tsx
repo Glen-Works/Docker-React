@@ -8,6 +8,7 @@ import { CssBaseline } from '@mui/material';
 import UseAuthState from 'src/contexts/AuthContext';
 import UseAuthMenuState from './contexts/AuthMenuContext';
 // import FontStyle from './theme/FontStyle';
+import LanguageState from './contexts/LanguageContext';
 import ThemeProvider from './theme/ThemeProvider';
 
 function App() {
@@ -20,7 +21,9 @@ function App() {
         <CssBaseline />
         <UseAuthState>
           <UseAuthMenuState>
-            {content}
+            <LanguageState>
+              {content}
+            </LanguageState>
           </UseAuthMenuState>
         </UseAuthState>
       </LocalizationProvider>

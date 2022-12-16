@@ -1,0 +1,9 @@
+{
+  "page.create": "Create",
+  "page.search": "Search",
+  "page.update": "Update",
+  "page.delete": "Delete",
+  "page.user.title": "User list",
+  "page.role.title": "Role list",
+  "page.menu.title": "Menu List"
+}
