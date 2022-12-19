@@ -2,12 +2,12 @@ import { createContext, useContext, useEffect, useReducer, useState } from "reac
 import { IntlProvider } from "react-intl";
 import api from "src/api/baseApi";
 import { laguageMap } from "src/layouts/SidebarLayout/Header/LanguageBox";
-import { languageReducer } from "src/stores/reducer/languageReducer";
+import { defaultLanguageTyple, initialLanguageState, languageReducer } from "src/stores/reducer/languageReducer";
 
-const LanguageContext = createContext<any>(null);
+const LanguageContext = createContext<any>({ state: initialLanguageState() });
 
 export default function LanguageState({ children }: any) {
-    const [state, dispatch] = useReducer(languageReducer, "zh-TW");
+    const [state, dispatch] = useReducer(languageReducer, initialLanguageState());
 
     const [lang, setLang] = useState(null);
     useEffect(() => {
@@ -30,7 +30,7 @@ export default function LanguageState({ children }: any) {
             <IntlProvider
                 messages={lang}
                 locale={state}
-                defaultLocale="zh-TW"
+                defaultLocale={defaultLanguageTyple}
             >
                 {children}
             </IntlProvider>

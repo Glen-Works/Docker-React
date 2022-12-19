@@ -1,7 +1,6 @@
 import { MenuItem, TextField } from '@mui/material';
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
 import { useLanguageContext } from 'src/contexts/LanguageContext';
+import { initialLanguageState, setCookieLanguageType } from 'src/stores/reducer/languageReducer';
 
 export type MapStyle = {
   [key in "es-US" | "zh-CN" | "zh-TW"]: { label: "English" | "中文(繁)" | "中文(简)"; value: "en" | "tw" | "cn"; };
@@ -15,32 +14,19 @@ export const laguageMap = {
 
 function LanguageBox() {
 
-  const { state, dispatch } = useLanguageContext();
-
-  const { register, setValue, getValues,
-    watch, reset, formState: { errors } } = useForm(
-      {
-        defaultValues: {
-          language: "zh-TW",
-        }
-      });
+  const { dispatch } = useLanguageContext();
 
   const handleLanguageChange = (event) => {
     dispatch(event.target.value);
-    setValue("language", event.target.value, { shouldValidate: true });
+    setCookieLanguageType(event.target.value);
   };
-
-  useEffect(() => { }, [watch()]);
 
   return (
 
     <TextField
       name="language"
       select
-      value={getValues("language")}
-      {...register("language", {
-        required: "Required field"
-      })}
+      value={initialLanguageState()}
       onChange={handleLanguageChange}
       size="small"
     >
