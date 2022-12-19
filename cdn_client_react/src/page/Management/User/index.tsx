@@ -6,6 +6,7 @@ import MUIDataTable, { MUIDataTableColumn, MUIDataTableOptions, MUIDataTableStat
 import { useEffect, useState } from 'react';
 import { unstable_batchedUpdates } from "react-dom";
 import { useForm } from "react-hook-form";
+import { FormattedMessage, useIntl } from 'react-intl';
 import { roleAllListApi, userAddApi, userDeleteApi, userDeleteMultipleApi, userEditApi, userInfoApi, userListApi, userPwdEditApi } from 'src/api/User/userApi';
 import { ColumnIconButton } from 'src/components/DataTable/CustomerIconRender';
 import { CustomBodyTime } from 'src/components/DataTable/CustomerRender';
@@ -340,6 +341,8 @@ function User() {
     deleteMultipleUser(deleteIds);
   };
 
+  const intl = useIntl();
+
   const columns: MUIDataTableColumn[] = [
     {
       name: "id",
@@ -350,21 +353,31 @@ function User() {
     },
     {
       name: "name",
-      label: "名稱",
+      label: intl.formatMessage({
+        id: 'page.name',
+        defaultMessage: '名稱',
+      })
+      ,
       options: {
         sort: true,
       }
     },
     {
       name: "email",
-      label: "信箱",
+      label: intl.formatMessage({
+        id: 'page.user.email',
+        defaultMessage: '信箱',
+      }),
       options: {
         sort: true,
       }
     },
     {
       name: "status",
-      label: "狀態",
+      label: intl.formatMessage({
+        id: 'page.status',
+        defaultMessage: '狀態',
+      }),
       options: {
         sort: true,
         customBodyRender: (value, tableMeta, updateValue) => (
@@ -378,7 +391,10 @@ function User() {
     },
     {
       name: "userType",
-      label: "角色",
+      label: intl.formatMessage({
+        id: 'page.user.identity',
+        defaultMessage: '身份',
+      }),
       options: {
         sort: true,
         customBodyRender: (value, tableMeta, updateValue) => (
@@ -392,7 +408,10 @@ function User() {
     },
     {
       name: "loginIp",
-      label: "登入IP",
+      label: intl.formatMessage({
+        id: 'page.user.login.ip',
+        defaultMessage: '登入IP',
+      }),
       options: {
         sort: true,
         display: false,
@@ -400,7 +419,10 @@ function User() {
     },
     {
       name: "loginTime",
-      label: "登入時間",
+      label: intl.formatMessage({
+        id: 'page.user.login.time',
+        defaultMessage: '登入時間',
+      }),
       options: {
         sort: true,
         display: false,
@@ -409,7 +431,10 @@ function User() {
     },
     {
       name: "createdAt",
-      label: "創建日期",
+      label: intl.formatMessage({
+        id: 'page.create.day',
+        defaultMessage: '創建日期',
+      }),
       options: {
         sort: true,
         display: false,
@@ -418,7 +443,10 @@ function User() {
     },
     {
       name: "updatedAt",
-      label: "修改日期",
+      label: intl.formatMessage({
+        id: 'page.update.day',
+        defaultMessage: '修改日期',
+      }),
       options: {
         sort: true,
         display: false,
@@ -443,7 +471,12 @@ function User() {
               {
                 (checkFeatureUpdate) &&
                 <ColumnIconButton
-                  title="修改"
+                  title={
+                    intl.formatMessage({
+                      id: 'page.update',
+                      defaultMessage: '修改',
+                    })
+                  }
                   handleClickOpen={() => { handleEditClickOpen(id) }}
                   color={theme.palette.primary.main}
                   background={theme.colors.primary.lighter}
@@ -454,7 +487,12 @@ function User() {
               {
                 (checkFeatureDelete) &&
                 <ColumnIconButton
-                  title="刪除"
+                  title={
+                    intl.formatMessage({
+                      id: 'page.delete',
+                      defaultMessage: '刪除',
+                    })
+                  }
                   handleClickOpen={() => handleDeleteClickOpen(id, data)}
                   color={theme.palette.error.main}
                   background={theme.colors.error.lighter}
@@ -465,7 +503,12 @@ function User() {
               {
                 (checkFeaturePassword) &&
                 <ColumnIconButton
-                  title="修改密碼"
+                  title={
+                    intl.formatMessage({
+                      id: 'page.user.password.update',
+                      defaultMessage: '修改密碼',
+                    })
+                  }
                   handleClickOpen={() => { handlePwdClickOpen(id) }}
                   color={theme.palette.info.main}
                   background={theme.colors.error.lighter}
@@ -521,7 +564,12 @@ function User() {
       <Title />
       <PageTitleWrapper>
         <PageHeader
-          title={"使用者"}
+          title={
+            intl.formatMessage({
+              id: 'page.user',
+              defaultMessage: '使用者',
+            })
+          }
           subTitle={""}
         />
       </PageTitleWrapper>
@@ -548,7 +596,10 @@ function User() {
                 <MUIDataTable
                   title={
                     <Typography variant="h5">
-                      User List
+                      <FormattedMessage
+                        id="page.user.title"
+                        defaultMessage="選單列表"
+                      />
                       {tableState.isLoading && <CircularProgress size={24} style={{ marginLeft: 15, position: 'relative', top: 4 }} />}
                     </Typography>
                   }
@@ -591,14 +642,26 @@ function User() {
 
             {/* 刪除 */}
             <DataTableDialog
-              title={"刪除使用者"}
+              title={
+                intl.formatMessage({
+                  id: 'page.delete',
+                  defaultMessage: '刪除',
+                }) +
+                intl.formatMessage({
+                  id: 'page.user',
+                  defaultMessage: '使用者',
+                })
+              }
               maxWidth="xs"
               isOpen={deleteOpen}
               handleClose={handleDeleteClose}
               submit={deleteUser}
             >
               <Box component="span" sx={{ typography: "h4" }}>
-                {"是否確定要刪除" + selectedData}
+                {intl.formatMessage({
+                  id: 'page.delete.comfirm',
+                  defaultMessage: '是否要刪除',
+                }) + selectedData}
               </Box>
 
             </DataTableDialog >

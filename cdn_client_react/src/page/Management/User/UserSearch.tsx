@@ -1,7 +1,7 @@
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
 import { Box, Button, Grid, TextField } from "@mui/material";
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 interface UserSearchProp {
   checkFeatureCreate: boolean,
@@ -20,7 +20,7 @@ export default function UserSearch(props: UserSearchProp) {
     handleAddClickOpen,
   } = props;
 
-
+  const intl = useIntl();
 
   return (
     <Box component="form" noValidate onSubmit={handleSubmit(onFormSubmit)} sx={{ width: 1, mt: 1 }} >
@@ -34,7 +34,12 @@ export default function UserSearch(props: UserSearchProp) {
         <Grid item >
           <TextField
             id="name"
-            label="名稱"
+            label={
+              intl.formatMessage({
+                id: 'page.name',
+                defaultMessage: '名稱',
+              })
+            }
             name="name"
             autoComplete="name"
             size="small"
@@ -45,7 +50,12 @@ export default function UserSearch(props: UserSearchProp) {
         <Grid item >
           <TextField
             id="email"
-            label="信箱"
+            label={
+              intl.formatMessage({
+                id: 'page.user.email',
+                defaultMessage: '信箱',
+              })
+            }
             name="email"
             autoComplete="email"
             size="small"
@@ -62,7 +72,7 @@ export default function UserSearch(props: UserSearchProp) {
           >
             <FormattedMessage
               id="page.search"
-              defaultMessage="ywt"
+              defaultMessage="查詢"
             />
           </Button>
         </Grid>
@@ -78,7 +88,7 @@ export default function UserSearch(props: UserSearchProp) {
             >
               <FormattedMessage
                 id="page.create"
-                defaultMessage="xxxx"
+                defaultMessage="新增"
               />
             </Button>
           </Grid>

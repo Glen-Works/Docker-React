@@ -1,4 +1,5 @@
 import { Grid, Switch, TextField, Typography } from "@mui/material";
+import { useIntl } from "react-intl";
 import DataTableDialog from "src/components/DataTable/DataTableDialog";
 import DialogFormat from "src/components/Dialog/DialogFormat";
 import TextArea from "src/components/Input/TextArea";
@@ -41,9 +42,27 @@ export default function RoleAddAndEditDialog(props: RoleAddAndEditDialogProp) {
     roleErrors,
   } = props;
 
+  const intl = useIntl();
+
   return (
     <DataTableDialog
-      title={(addAndEditStatus == "add") ? "新增權限" : "修改權限"}
+      title={(addAndEditStatus == "add") ?
+        intl.formatMessage({
+          id: 'page.create',
+          defaultMessage: '新增',
+        }) +
+        intl.formatMessage({
+          id: 'page.role',
+          defaultMessage: '權限',
+        })
+        : intl.formatMessage({
+          id: 'page.update',
+          defaultMessage: '修改',
+        }) +
+        intl.formatMessage({
+          id: 'page.role',
+          defaultMessage: '權限',
+        })}
       maxWidth="md"
       isOpen={addAndEditOpen}
       handleClose={handleAddAndEditClose}
@@ -55,7 +74,12 @@ export default function RoleAddAndEditDialog(props: RoleAddAndEditDialogProp) {
             <Typography >{selectedId}</Typography>
           </DialogFormat>
         }
-        <DialogFormat title="名稱 :" >
+        <DialogFormat title={
+          intl.formatMessage({
+            id: 'page.name',
+            defaultMessage: '名稱',
+          })
+        } >
           <TextField
             name="name"
             value={getRoleValue("name")}
@@ -79,7 +103,12 @@ export default function RoleAddAndEditDialog(props: RoleAddAndEditDialogProp) {
             helperText={roleErrors?.key ? roleErrors.key.message : null}
           />
         </DialogFormat>
-        <DialogFormat title="狀態 :" >
+        <DialogFormat title={
+          intl.formatMessage({
+            id: 'page.status',
+            defaultMessage: '狀態',
+          })
+        } >
           <Switch
             name="status"
             checked={Boolean(Number(getRoleValue("status")))}
@@ -87,7 +116,12 @@ export default function RoleAddAndEditDialog(props: RoleAddAndEditDialogProp) {
             })}
           />
         </DialogFormat>
-        <DialogFormat title="權重 :" >
+        <DialogFormat title={
+          intl.formatMessage({
+            id: 'page.weight',
+            defaultMessage: '權重',
+          })
+        }>
           <TextField
             name="weight"
             type="number"
@@ -105,14 +139,24 @@ export default function RoleAddAndEditDialog(props: RoleAddAndEditDialogProp) {
             helperText={roleErrors?.weight ? roleErrors.weight.message : null}
           />
         </DialogFormat>
-        <DialogFormat title="權限 :" >
+        <DialogFormat title={
+          intl.formatMessage({
+            id: 'page.role',
+            defaultMessage: '權限',
+          })
+        } >
           <TreeCheckBox
             data={menuCheckboxList}
             setSelected={setMenuCheckBox}
             selected={menuCheckBox} />
           {/* (addAndEditStatus == "add") ? "新增權限" : "修改權限" */}
         </DialogFormat>
-        <DialogFormat title="備註 :" >
+        <DialogFormat title={
+          intl.formatMessage({
+            id: 'page.remark',
+            defaultMessage: '備註',
+          })
+        }>
           <TextArea
             minRows={5}
             maxRows={8}

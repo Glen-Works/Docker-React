@@ -1,4 +1,5 @@
 import { Grid, MenuItem, Switch, TextField, Typography } from "@mui/material";
+import { useIntl } from "react-intl";
 import DataTableDialog from "src/components/DataTable/DataTableDialog";
 import DialogFormat from "src/components/Dialog/DialogFormat";
 import TextArea from "src/components/Input/TextArea";
@@ -38,9 +39,27 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
     menuErrors,
   } = props;
 
+  const intl = useIntl();
+
   return (
     <DataTableDialog
-      title={(addAndEditStatus == "add") ? "新增菜單" : "修改菜單"}
+      title={(addAndEditStatus == "add") ?
+        intl.formatMessage({
+          id: 'page.create',
+          defaultMessage: '新增',
+        }) +
+        intl.formatMessage({
+          id: 'page.menu',
+          defaultMessage: '選單',
+        })
+        : intl.formatMessage({
+          id: 'page.update',
+          defaultMessage: '修改',
+        }) +
+        intl.formatMessage({
+          id: 'page.menu',
+          defaultMessage: '選單',
+        })}
       maxWidth="md"
       isOpen={addAndEditOpen}
       handleClose={handleAddAndEditClose}
@@ -52,7 +71,12 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
             <Typography >{selectedId}</Typography>
           </DialogFormat>
         }
-        <DialogFormat title="名稱 :" >
+        <DialogFormat title={
+          intl.formatMessage({
+            id: 'page.name',
+            defaultMessage: '名稱',
+          })
+        } >
           <TextField
             name="name"
             value={getMenuValue("name")}
@@ -76,7 +100,12 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
             helperText={menuErrors?.key ? menuErrors.key.message : null}
           />
         </DialogFormat>
-        <DialogFormat title="url :" >
+        <DialogFormat title={
+          intl.formatMessage({
+            id: 'page.menu.url',
+            defaultMessage: '網址',
+          })
+        }  >
           <TextField
             name="url"
             value={getMenuValue("url")}
@@ -87,7 +116,12 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
             helperText={menuErrors?.url ? menuErrors.url.message : null}
           />
         </DialogFormat>
-        <DialogFormat title="功能 :" >
+        <DialogFormat title={
+          intl.formatMessage({
+            id: 'page.menu.feature',
+            defaultMessage: '功能',
+          })
+        } >
           <TextField
             name="feature"
             select
@@ -107,7 +141,12 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
             }
           </TextField>
         </DialogFormat>
-        <DialogFormat title="狀態 :" >
+        <DialogFormat title={
+          intl.formatMessage({
+            id: 'page.status',
+            defaultMessage: '狀態',
+          })
+        } >
           <Switch
             name="status"
             checked={Boolean(Number(getMenuValue("status")))}
@@ -115,7 +154,12 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
             })}
           />
         </DialogFormat>
-        <DialogFormat title="選單(父類別) :" >
+        <DialogFormat title={
+          intl.formatMessage({
+            id: 'page.menu.parents',
+            defaultMessage: '選單(父類別)',
+          })
+        } >
           <TextField
             name="parent"
             select
@@ -137,7 +181,12 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
             }
           </TextField>
         </DialogFormat>
-        <DialogFormat title="權重 :" >
+        <DialogFormat title={
+          intl.formatMessage({
+            id: 'page.weight',
+            defaultMessage: '權重',
+          })
+        } >
           <TextField
             name="weight"
             type="number"
@@ -155,7 +204,12 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
             helperText={menuErrors?.weight ? menuErrors.weight.message : null}
           />
         </DialogFormat>
-        <DialogFormat title="備註 :" >
+        <DialogFormat title={
+          intl.formatMessage({
+            id: 'page.remark',
+            defaultMessage: '備註',
+          })
+        }>
           <TextArea
             minRows={5}
             maxRows={8}

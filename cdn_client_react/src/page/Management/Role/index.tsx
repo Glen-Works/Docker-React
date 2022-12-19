@@ -5,6 +5,7 @@ import MUIDataTable, { MUIDataTableColumn, MUIDataTableOptions, MUIDataTableStat
 import { useEffect, useState } from 'react';
 import { unstable_batchedUpdates } from "react-dom";
 import { useForm } from "react-hook-form";
+import { FormattedMessage, useIntl } from 'react-intl';
 import { menuAllListApi, roleAddApi, roleDeleteApi, roleDeleteMultipleApi, roleEditApi, roleInfoApi, roleListApi } from 'src/api/Role/roleApi';
 import { ColumnIconButton } from 'src/components/DataTable/CustomerIconRender';
 import { CustomBodyTime } from 'src/components/DataTable/CustomerRender';
@@ -284,6 +285,8 @@ function Role() {
     deleteMultipleRole(deleteIds);
   };
 
+  const intl = useIntl();
+
   const columns: MUIDataTableColumn[] = [
     {
       name: "id",
@@ -294,7 +297,10 @@ function Role() {
     },
     {
       name: "name",
-      label: "名稱",
+      label: intl.formatMessage({
+        id: 'page.name',
+        defaultMessage: '名稱',
+      }),
       options: {
         sort: true,
       }
@@ -308,7 +314,10 @@ function Role() {
     },
     {
       name: "status",
-      label: "狀態",
+      label: intl.formatMessage({
+        id: 'page.status',
+        defaultMessage: '狀態',
+      }),
       options: {
         sort: true,
         customBodyRender: (value, tableMeta, updateValue) => (
@@ -322,14 +331,20 @@ function Role() {
     },
     {
       name: "weight",
-      label: "權重",
+      label: intl.formatMessage({
+        id: 'page.weight',
+        defaultMessage: '權重',
+      }),
       options: {
         sort: true,
       }
     },
     {
       name: "createdAt",
-      label: "創建日期",
+      label: intl.formatMessage({
+        id: 'page.create.day',
+        defaultMessage: '創建日期',
+      }),
       options: {
         sort: true,
         display: false,
@@ -338,7 +353,10 @@ function Role() {
     },
     {
       name: "updatedAt",
-      label: "修改日期",
+      label: intl.formatMessage({
+        id: 'page.update.day',
+        defaultMessage: '修改日期',
+      }),
       options: {
         sort: true,
         display: false,
@@ -363,7 +381,12 @@ function Role() {
               {
                 (checkFeatureUpdate) &&
                 <ColumnIconButton
-                  title="修改"
+                  title={
+                    intl.formatMessage({
+                      id: 'page.update',
+                      defaultMessage: '修改',
+                    })
+                  }
                   handleClickOpen={() => { handleEditClickOpen(id) }}
                   color={theme.palette.primary.main}
                   background={theme.colors.primary.lighter}
@@ -374,7 +397,12 @@ function Role() {
               {
                 (checkFeatureDelete) &&
                 <ColumnIconButton
-                  title="刪除"
+                  title={
+                    intl.formatMessage({
+                      id: 'page.delete',
+                      defaultMessage: '刪除',
+                    })
+                  }
                   handleClickOpen={() => handleDeleteClickOpen(id, data)}
                   color={theme.palette.error.main}
                   background={theme.colors.error.lighter}
@@ -429,7 +457,12 @@ function Role() {
       <Title />
       <PageTitleWrapper>
         <PageHeader
-          title={"權限"}
+          title={
+            intl.formatMessage({
+              id: 'page.role',
+              defaultMessage: '權限',
+            })
+          }
           subTitle={""}
         />
       </PageTitleWrapper>
@@ -456,7 +489,10 @@ function Role() {
                 <MUIDataTable
                   title={
                     <Typography variant="h5">
-                      Role List
+                      <FormattedMessage
+                        id="page.role.title"
+                        defaultMessage="選單列表"
+                      />
                       {tableState.isLoading && <CircularProgress size={24} style={{ marginLeft: 15, position: 'relative', top: 4 }} />}
                     </Typography>
                   }
@@ -485,14 +521,26 @@ function Role() {
 
             {/* 刪除 */}
             <DataTableDialog
-              title={"刪除角色"}
+              title={
+                intl.formatMessage({
+                  id: 'page.delete',
+                  defaultMessage: '刪除',
+                }) +
+                intl.formatMessage({
+                  id: 'page.role',
+                  defaultMessage: '權限',
+                })
+              }
               maxWidth="xs"
               isOpen={deleteOpen}
               handleClose={handleDeleteClose}
               submit={deleteRole}
             >
               <Box component="span" sx={{ typography: "h4" }}>
-                {"是否確定要刪除" + selectedData}
+                {intl.formatMessage({
+                  id: 'page.delete.comfirm',
+                  defaultMessage: '是否要刪除',
+                }) + selectedData}
               </Box>
 
             </DataTableDialog >

@@ -1,4 +1,5 @@
 import { Grid, TextField, Typography } from "@mui/material";
+import { useIntl } from "react-intl";
 import DataTableDialog from "src/components/DataTable/DataTableDialog";
 import DialogFormat from "src/components/Dialog/DialogFormat";
 
@@ -27,6 +28,8 @@ export default function UserEditPasswordDialog(props: UserEditPasswordDialogProp
     onError
   } = props;
 
+  const intl = useIntl();
+
   return (
     <>
       <DataTableDialog
@@ -40,7 +43,12 @@ export default function UserEditPasswordDialog(props: UserEditPasswordDialogProp
           <DialogFormat title="ID :" >
             <Typography variant="h5" textAlign="left">{selectedId}</Typography>
           </DialogFormat>
-          <DialogFormat title="密碼 :" >
+          <DialogFormat title={
+            intl.formatMessage({
+              id: 'page.user.password',
+              defaultMessage: '密碼 :',
+            })
+          } >
             <TextField
               id="password"
               name="password"
@@ -55,7 +63,12 @@ export default function UserEditPasswordDialog(props: UserEditPasswordDialogProp
               helperText={pwdErrors?.password ? pwdErrors.password.message : null}
             />
           </DialogFormat>
-          <DialogFormat title="密碼確認 :" >
+          <DialogFormat title={
+            intl.formatMessage({
+              id: 'page.user.password.check',
+              defaultMessage: '密碼確認 :',
+            })
+          } >
             <TextField
               id="passwordCheck"
               name="passwordCheck"

@@ -57,7 +57,7 @@ export default function DialogFormat(props: DialogFormatProp) {
     <Grid container direction="row" justifyContent="flex-start" alignItems="center" m={0.5}>
       <Grid item xs={2} justifyContent="flex-end">
         <TypographyWrapper>
-          <Typography variant="h6" textAlign="right" >{title}</Typography>
+          <Typography variant="h6" textAlign="right" >{title}{" :"}</Typography>
         </TypographyWrapper>
       </Grid>
       <Grid item xs={9} >

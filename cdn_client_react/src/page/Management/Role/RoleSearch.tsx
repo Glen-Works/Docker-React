@@ -1,6 +1,7 @@
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
 import { Box, Button, Grid, TextField } from "@mui/material";
+import { FormattedMessage, useIntl } from 'react-intl';
 
 interface RoleSearchProp {
   checkFeatureCreate: boolean,
@@ -19,6 +20,8 @@ export default function RoleSearch(props: RoleSearchProp) {
     handleAddClickOpen,
   } = props;
 
+  const intl = useIntl();
+
   return (
     <Box component="form" noValidate onSubmit={handleSubmit(onFormSubmit)} sx={{ width: 1, mt: 1 }} >
       <Grid
@@ -31,7 +34,12 @@ export default function RoleSearch(props: RoleSearchProp) {
         <Grid item >
           <TextField
             id="name"
-            label="名稱"
+            label={
+              intl.formatMessage({
+                id: 'page.name',
+                defaultMessage: '名稱',
+              })
+            }
             name="name"
             autoComplete="name"
             size="small"
@@ -57,7 +65,11 @@ export default function RoleSearch(props: RoleSearchProp) {
             variant="contained"
             startIcon={<SearchIcon fontSize="small" />}
           >
-            Search</Button>
+            <FormattedMessage
+              id="page.search"
+              defaultMessage="查詢"
+            />
+          </Button>
         </Grid>
         {
           (checkFeatureCreate) &&
@@ -68,7 +80,10 @@ export default function RoleSearch(props: RoleSearchProp) {
               startIcon={<AddTwoToneIcon fontSize="small" />}
               onClick={handleAddClickOpen}
             >
-              Create
+              <FormattedMessage
+                id="page.create"
+                defaultMessage="新增"
+              />
             </Button>
           </Grid>
         }

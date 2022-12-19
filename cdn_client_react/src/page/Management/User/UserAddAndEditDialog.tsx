@@ -1,4 +1,5 @@
 import { Checkbox, FormControlLabel, Grid, MenuItem, Switch, TextField, Typography } from "@mui/material";
+import { useIntl } from "react-intl";
 import DataTableDialog from "src/components/DataTable/DataTableDialog";
 import DialogFormat from "src/components/Dialog/DialogFormat";
 import TextArea from "src/components/Input/TextArea";
@@ -49,10 +50,28 @@ export default function UserAddAndEditDialog(props: UserAddAndEditDialogProp) {
     setRoleCheckBoxSelected(selectItems);
   }
 
+  const intl = useIntl();
+
   return (
     <>
       <DataTableDialog
-        title={(addAndEditStatus == "add") ? "新增使用者" : "修改使用者"}
+        title={(addAndEditStatus == "add") ?
+          intl.formatMessage({
+            id: 'page.create',
+            defaultMessage: '新增',
+          }) +
+          intl.formatMessage({
+            id: 'page.user',
+            defaultMessage: '使用者',
+          })
+          : intl.formatMessage({
+            id: 'page.update',
+            defaultMessage: '修改',
+          }) +
+          intl.formatMessage({
+            id: 'page.user',
+            defaultMessage: '使用者',
+          })}
         maxWidth="md"
         isOpen={addAndEditOpen}
         handleClose={handleAddAndEditClose}
@@ -64,7 +83,12 @@ export default function UserAddAndEditDialog(props: UserAddAndEditDialogProp) {
               <Typography >{selectedId}</Typography>
             </DialogFormat>
           }
-          <DialogFormat title="名稱 :" >
+          <DialogFormat title={
+            intl.formatMessage({
+              id: 'page.name',
+              defaultMessage: '名稱',
+            })
+          } >
             <TextField
               name="name"
               value={getUserValue("name")}
@@ -77,7 +101,12 @@ export default function UserAddAndEditDialog(props: UserAddAndEditDialogProp) {
             />
           </DialogFormat>
 
-          <DialogFormat title="信箱 :" >
+          <DialogFormat title={
+            intl.formatMessage({
+              id: 'page.user.email',
+              defaultMessage: '信箱',
+            })
+          } >
             <TextField
               name="email"
               value={getUserValue("email")}
@@ -96,7 +125,12 @@ export default function UserAddAndEditDialog(props: UserAddAndEditDialogProp) {
             />
           </DialogFormat>
           {(addAndEditStatus == "add") &&
-            <DialogFormat title="密碼 :" >
+            <DialogFormat title={
+              intl.formatMessage({
+                id: 'page.user.password',
+                defaultMessage: '密碼',
+              })
+            } >
               <TextField
                 id="password"
                 name="password"
@@ -112,7 +146,12 @@ export default function UserAddAndEditDialog(props: UserAddAndEditDialogProp) {
               />
             </DialogFormat>
           }
-          <DialogFormat title="狀態 :" >
+          <DialogFormat title={
+            intl.formatMessage({
+              id: 'page.status',
+              defaultMessage: '狀態',
+            })
+          } >
             <Switch
               id="status"
               name="status"
@@ -121,7 +160,12 @@ export default function UserAddAndEditDialog(props: UserAddAndEditDialogProp) {
               })}
             />
           </DialogFormat>
-          <DialogFormat title="身份 :" >
+          <DialogFormat title={
+            intl.formatMessage({
+              id: 'page.user.identity',
+              defaultMessage: '身份',
+            })
+          } >
             <TextField
               id="userType"
               name="userType"
@@ -142,7 +186,12 @@ export default function UserAddAndEditDialog(props: UserAddAndEditDialogProp) {
               }
             </TextField>
           </DialogFormat>
-          <DialogFormat title="權限 :" >
+          <DialogFormat title={
+            intl.formatMessage({
+              id: 'page.user.role',
+              defaultMessage: '權限',
+            })
+          } >
             {roleListSelect.map((role) => (
               <FormControlLabel
                 control={<Checkbox
@@ -155,7 +204,12 @@ export default function UserAddAndEditDialog(props: UserAddAndEditDialogProp) {
               />
             ))}
           </DialogFormat>
-          <DialogFormat title="備註 :" >
+          <DialogFormat title={
+            intl.formatMessage({
+              id: 'page.remark',
+              defaultMessage: '備註',
+            })
+          } >
             <TextArea
               minRows={5}
               maxRows={8}

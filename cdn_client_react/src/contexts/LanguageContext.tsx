@@ -12,7 +12,7 @@ export default function LanguageState({ children }: any) {
     const [lang, setLang] = useState(null);
     useEffect(() => {
         const fetchData = async () => {
-            const url = process.env.NODE_ENV === 'development' ? "http://localhost:3000" : process.env.REACT_APP_PRODUCTION_BASE_URL;
+            const url = process.env.NODE_ENV === 'development' ? process.env.REACT_APP_DYNAMIC_UPDATE_BASEURL : process.env.REACT_APP_PRODUCTION_BASE_URL;
             const resp = await api("get", `${url}/static/lang/${laguageMap[state].value}.json`, {}, null).then(res => {
                 setLang(res);
             }).catch(error => {

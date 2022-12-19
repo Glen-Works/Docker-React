@@ -1,6 +1,7 @@
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import SearchIcon from '@mui/icons-material/Search';
 import { Box, Button, Grid, TextField } from "@mui/material";
+import { FormattedMessage, useIntl } from 'react-intl';
 
 interface MenuSearchProp {
   checkFeatureCreate: boolean,
@@ -19,6 +20,8 @@ export default function MenuSearch(props: MenuSearchProp) {
     handleAddClickOpen,
   } = props;
 
+  const intl = useIntl();
+
   return (
     <Box component="form" noValidate onSubmit={handleSubmit(onFormSubmit)} sx={{ width: 1, mt: 1 }} >
       <Grid
@@ -32,7 +35,12 @@ export default function MenuSearch(props: MenuSearchProp) {
           <TextField
             id="name"
             label="名稱"
-            name="name"
+            name={
+              intl.formatMessage({
+                id: 'page.name',
+                defaultMessage: '名稱',
+              })
+            }
             autoComplete="name"
             size="small"
             type="search"
@@ -53,7 +61,12 @@ export default function MenuSearch(props: MenuSearchProp) {
         <Grid item >
           <TextField
             id="url"
-            label="網址"
+            label={
+              intl.formatMessage({
+                id: 'page.menu.url',
+                defaultMessage: '網址',
+              })
+            }
             name="url"
             autoComplete="url"
             size="small"
@@ -68,7 +81,11 @@ export default function MenuSearch(props: MenuSearchProp) {
             variant="contained"
             startIcon={<SearchIcon fontSize="small" />}
           >
-            Search</Button>
+            <FormattedMessage
+              id="page.search"
+              defaultMessage="查詢"
+            />
+          </Button>
         </Grid>
         {
           (checkFeatureCreate) &&
@@ -79,7 +96,10 @@ export default function MenuSearch(props: MenuSearchProp) {
               startIcon={<AddTwoToneIcon fontSize="small" />}
               onClick={handleAddClickOpen}
             >
-              Create
+              <FormattedMessage
+                id="page.create"
+                defaultMessage="新增"
+              />
             </Button>
           </Grid>
         }
