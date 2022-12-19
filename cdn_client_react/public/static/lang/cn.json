@@ -15,7 +15,7 @@
   "page.user.email": "信箱",
   "page.user.identity": "身份",
   "page.user.role": "权限",
-  "page.user.login.ip": "登入IP",
+  "page.user.login.ip": "登入ip",
   "page.user.login.time": "登入时间",
   "page.user.password": "密码",
   "page.user.password.check": "密码确认",

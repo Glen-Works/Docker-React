@@ -34,13 +34,13 @@ export default function MenuSearch(props: MenuSearchProp) {
         <Grid item >
           <TextField
             id="name"
-            label="名稱"
-            name={
+            label={
               intl.formatMessage({
                 id: 'page.name',
                 defaultMessage: '名稱',
               })
             }
+            name="name"
             autoComplete="name"
             size="small"
             type="search"

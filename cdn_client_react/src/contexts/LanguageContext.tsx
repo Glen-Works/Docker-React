@@ -13,7 +13,7 @@ export default function LanguageState({ children }: any) {
     useEffect(() => {
         const fetchData = async () => {
             const url = process.env.NODE_ENV === 'development' ? process.env.REACT_APP_DYNAMIC_UPDATE_BASEURL : process.env.REACT_APP_PRODUCTION_BASE_URL;
-            const resp = await api("get", `${url}/static/lang/${laguageMap[state].value}.json`, {}, null).then(res => {
+            await api("get", `${url}/static/lang/${laguageMap[state].value}.json`, {}, null).then(res => {
                 setLang(res);
             }).catch(error => {
                 console.log("error:" + error.response);
@@ -21,7 +21,7 @@ export default function LanguageState({ children }: any) {
         };
         fetchData();
 
-    },);
+    }, [state]);
 
     //locale 參考：https://pjchender.dev/webapis/webapis-intl/ 、 https://www.w3schools.com/jsref/jsref_tolocalestring_number.asp
 
