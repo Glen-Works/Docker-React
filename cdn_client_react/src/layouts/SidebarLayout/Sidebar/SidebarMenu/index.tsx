@@ -21,7 +21,7 @@ const MenuTreeWrapper = styled(Box)(
 const MenuTreeItemWrapper = styled(Box)(
   ({ theme }) => `
   .MuiTreeItem-root{
-    text-transform: uppercase;
+    text-transform: capitalize;
     padding: ${theme.spacing(0.5, 0.2)};
     color: ${theme.colors.alpha.trueWhite[70]};
     background-color: transparent;

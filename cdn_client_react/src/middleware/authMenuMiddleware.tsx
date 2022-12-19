@@ -8,17 +8,15 @@ import api, { setAuthHeader } from "src/api/baseApi";
 import { Auth } from "src/stores/reducer/authReducer";
 
 interface RouterList {
-    [key: string]: { uri: string, icon: ElementType<SvgIconProps> }
+    [key: string]: { uri: string, langName: string, icon: ElementType<SvgIconProps> }
 }
 
 // 權限頁面 與 Icon
 export const routerList: RouterList = {
-    "user_page": { uri: '/user', icon: BrightnessLowTwoToneIcon },
-    "role_page": { uri: '/role', icon: AdminPanelSettingsIcon },
-    "menu_page": { uri: '/menu', icon: MenuBookIcon },
-    "management6": { uri: '/dashboard', icon: BrightnessLowTwoToneIcon },
-    "management3": { uri: '/samplecontent', icon: BrightnessLowTwoToneIcon },
-    "manageamentp0": { uri: '/sampledatatable', icon: BrightnessLowTwoToneIcon },
+    "management": { uri: '', langName: 'router.title.management', icon: BrightnessLowTwoToneIcon },
+    "user_page": { uri: '/user', langName: 'router.menu.user', icon: BrightnessLowTwoToneIcon },
+    "role_page": { uri: '/role', langName: 'router.menu.role', icon: AdminPanelSettingsIcon },
+    "menu_page": { uri: '/menu', langName: 'router.menu.menu', icon: MenuBookIcon },
 }
 
 // 預設頁面 (不需權限)

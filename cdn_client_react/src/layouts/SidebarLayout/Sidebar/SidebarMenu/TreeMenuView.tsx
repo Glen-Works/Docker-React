@@ -8,6 +8,7 @@ import { getMenuKeyByValue, MenuTree, routerList } from "src/middleware/authMenu
 
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import { FormattedMessage } from "react-intl";
 
 type setMenu = (data: string[]) => void;
 
@@ -103,7 +104,12 @@ export default function TreeMenuView(prop: TreeMenuViewProp) {
                 }
               </>
             }
-            label={<> {nodes.name}</>}
+            label={<>
+              <FormattedMessage
+                id={routerList[nodes.key]?.langName ?? ' '}
+                defaultMessage={nodes.name}
+              />
+            </>}
             key={nodes.id}
           />
         }

@@ -1,4 +1,10 @@
 {
+  "//router menu": "",
+  "router.title.management": "管理",
+  "router.menu.user": "使用者頁面",
+  "router.menu.role": "權限頁面",
+  "router.menu.menu": "菜單頁面",
+  "//page common": "",
   "page.create": "新增",
   "page.search": "搜尋",
   "page.update": "修改",

@@ -1,4 +1,10 @@
 {
+  "//router menu": "",
+  "router.title.management": "Management",
+  "router.menu.user": "User",
+  "router.menu.role": "Role",
+  "router.menu.menu": "Menu",
+  "//page common": "",
   "page.create": "Create",
   "page.search": "Search",
   "page.update": "Update",
