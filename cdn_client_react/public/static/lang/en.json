@@ -1,4 +1,11 @@
 {
+  "//login": "",
+  "login.sign.in": "Sign in",
+  "login.sign.up": "Don't have an account? Sign Up",
+  "login.account": "Account (Email)",
+  "login.password": "Password",
+  "login.password.forgot": "Forgot password?",
+  "login.password.remember": "Remember me",
   "//router menu": "",
   "router.title.management": "Management",
   "router.menu.user": "User",

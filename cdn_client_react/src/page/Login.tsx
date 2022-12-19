@@ -13,9 +13,11 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { useEffect } from 'react';
 import { useForm } from "react-hook-form";
+import { FormattedMessage, useIntl } from 'react-intl';
 import { useNavigate } from "react-router-dom";
 import { loginApi } from 'src/api/loginApi';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
+import LanguageBox from 'src/layouts/SidebarLayout/Header/LanguageBox';
 import { jwtValidate } from 'src/middleware/jwtAuthMiddleware';
 import setUserInfo from 'src/stores/action/authActions';
 
@@ -78,6 +80,8 @@ export default function SignInSide() {
     });
   };
 
+  const intl = useIntl();
+
   return (
     <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
@@ -97,6 +101,14 @@ export default function SignInSide() {
           }}
         />
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+          <Grid
+            container
+            direction="row"
+            justifyContent="flex-end"
+            alignItems="center"
+          >
+            <LanguageBox />
+          </Grid>
           <Box
             sx={{
               my: 8,
@@ -110,14 +122,22 @@ export default function SignInSide() {
               <PersonOutlineIcon sx={{ m: 1, width: 60, height: 60 }} />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign in
+              <FormattedMessage
+                id="login.sign.in"
+                defaultMessage="登入"
+              />
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit(onFormSubmit)} sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
                 fullWidth
                 id="email"
-                label="Email Address"
+                label={
+                  intl.formatMessage({
+                    id: 'login.account',
+                    defaultMessage: '帳號 (信箱)',
+                  })
+                }
                 name="email"
                 autoComplete="email"
                 autoFocus
@@ -138,7 +158,12 @@ export default function SignInSide() {
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                label={
+                  intl.formatMessage({
+                    id: 'login.password',
+                    defaultMessage: '密碼',
+                  })
+                }
                 type="password"
                 id="password"
                 autoComplete="current-password"
@@ -152,7 +177,12 @@ export default function SignInSide() {
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
+                label={
+                  intl.formatMessage({
+                    id: 'login.password.remember',
+                    defaultMessage: '記住帳號密碼',
+                  })
+                }
               />
               <Button
                 type="submit"
@@ -160,17 +190,26 @@ export default function SignInSide() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign In
+                <FormattedMessage
+                  id="login.sign.in"
+                  defaultMessage="登入"
+                />
               </Button>
               <Grid container>
                 <Grid item xs>
                   <Link href="#" variant="body2">
-                    Forgot password?
+                    <FormattedMessage
+                      id="login.password.forgot"
+                      defaultMessage="忘記密碼"
+                    />
                   </Link>
                 </Grid>
                 <Grid item>
                   <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
+                    <FormattedMessage
+                      id="login.sign.up"
+                      defaultMessage="目前無帳號，註冊"
+                    />
                   </Link>
                 </Grid>
               </Grid>

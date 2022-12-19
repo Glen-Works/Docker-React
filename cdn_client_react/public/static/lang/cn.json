@@ -1,4 +1,11 @@
 {
+  "//login": "",
+  "login.sign.in": "登入",
+  "login.sign.up": "目前无帐号，注册",
+  "login.account": "帐号 (信箱)",
+  "login.password": "密码",
+  "login.password.forgot": "忘记密码",
+  "login.password.remember": "记住帐号密码",
   "//router menu": "",
   "router.title.management": "管理",
   "router.menu.user": "使用者页面",
