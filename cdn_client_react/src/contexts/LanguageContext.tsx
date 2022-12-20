@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useReducer, useState } from "reac
 import { IntlProvider } from "react-intl";
 import api from "src/api/baseApi";
 import { laguageMap } from "src/layouts/SidebarLayout/Header/LanguageBox";
-import { defaultLanguageTyple, initialLanguageState, languageReducer } from "src/stores/reducer/languageReducer";
+import { DEFAULT_LANGUAGE_TYPE, initialLanguageState, languageReducer } from "src/stores/reducer/languageReducer";
 
 const LanguageContext = createContext<any>({ state: initialLanguageState() });
 
@@ -30,7 +30,7 @@ export default function LanguageState({ children }: any) {
             <IntlProvider
                 messages={lang}
                 locale={state}
-                defaultLocale={defaultLanguageTyple}
+                defaultLocale={DEFAULT_LANGUAGE_TYPE}
             >
                 {children}
             </IntlProvider>
