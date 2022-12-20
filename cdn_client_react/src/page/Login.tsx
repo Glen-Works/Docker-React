@@ -41,7 +41,7 @@ function Copyright(props: any) {
 
 
 // todo 記得密碼、註冊
-const theme = createTheme();
+const theme = (Theme) => createTheme({ ...Theme });
 
 export default function SignInSide() {
   const navigate = useNavigate();
