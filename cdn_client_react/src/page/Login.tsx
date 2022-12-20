@@ -20,7 +20,6 @@ import { useAuthStateContext } from 'src/contexts/AuthContext';
 import LanguageBox from 'src/layouts/SidebarLayout/Header/LanguageBox';
 import { jwtValidate } from 'src/middleware/jwtAuthMiddleware';
 import setUserInfo from 'src/stores/action/authActions';
-import { getCookie, removeCookie, setCookie } from 'src/utils/baseFunction';
 
 interface Login {
   account: string,
@@ -49,7 +48,14 @@ const COOKIE_USER_ACCOUNT_REMEMBER = "USER_ACCOUNT_REMEMBER";
 export default function SignInSide() {
   const navigate = useNavigate();
   const { state, dispatch } = useAuthStateContext();
-  const { register, handleSubmit, setValue, getValues, watch, formState: { errors } } = useForm();
+  const { register, handleSubmit, setValue, getValues, watch, formState: { errors } } = useForm(
+    {
+      defaultValues: {
+        account: "",
+        password: "",
+        remember: "",
+      }
+    });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,22 +70,15 @@ export default function SignInSide() {
       }
     };
 
-    fetchData().then(() => {
+    fetchData().then(async () => {
       //從cookie 提取帳密與狀態
-      let accountData = JSON.parse(JSON.stringify(
-        getCookie(COOKIE_USER_ACCOUNT_REMEMBER, {
-          account: "",
-          password: "",
-          remember: "",
-        })));
-      ;
-      setValue("email", accountData.account);
-      setValue("password", accountData.password);
-      setValue("remember", accountData.remember);
-
-      console.log(getValues("email"));
-      console.log(getValues("password"));
-      console.log(getValues("remember"));
+      const data = localStorage.getItem(COOKIE_USER_ACCOUNT_REMEMBER);
+      if (data != null) {
+        let loginData: Login = JSON.parse(data);
+        setValue("account", loginData.account);
+        setValue("password", loginData.password);
+        setValue("remember", loginData.remember);
+      }
     });
   }, []);
 
@@ -87,20 +86,16 @@ export default function SignInSide() {
 
   //login submit 
   const onFormSubmit = (formObj, event) => {
-
     var loginData: Login = {
-      account: getValues("email"),
+      account: getValues("account"),
       password: getValues("password"),
       remember: getValues("remember"),
     }
 
-    console.log(loginData);
-
     if (loginData.remember != "remember") {
-      removeCookie(COOKIE_USER_ACCOUNT_REMEMBER);
+      localStorage.removeItem(COOKIE_USER_ACCOUNT_REMEMBER);
     } else {
-      //set cookie
-      setCookie(COOKIE_USER_ACCOUNT_REMEMBER, JSON.stringify(loginData));
+      localStorage.setItem(COOKIE_USER_ACCOUNT_REMEMBER, JSON.stringify(loginData));
     }
 
     loginApi(loginData)?.then(res => {
@@ -162,18 +157,17 @@ export default function SignInSide() {
               <TextField
                 margin="normal"
                 fullWidth
-                id="email"
-                value={getValues("email")}
-                name="email"
-                // autoComplete="email"
-                autoFocus
+                id="account"
+                value={getValues("account")}
+                name="account"
+                // autoComplete="account"
                 label={
                   intl.formatMessage({
                     id: 'login.account',
                     defaultMessage: '帳號 (信箱)',
                   })
                 }
-                {...register("email", {
+                {...register("account", {
                   required: "Required field",
                   minLength: { value: 5, message: "at least 5 letter" },
                   maxLength: { value: 100, message: "need less 100 length" },
@@ -182,8 +176,8 @@ export default function SignInSide() {
                     message: "Invalid email address",
                   }
                 })}
-                error={!!errors?.email}
-                helperText={errors?.email ? errors.email.message : null}
+                error={!!errors?.account}
+                helperText={errors?.account ? errors.account.message : null}
               />
               <TextField
                 margin="normal"
