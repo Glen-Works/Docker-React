@@ -20,10 +20,12 @@ import { useAuthStateContext } from 'src/contexts/AuthContext';
 import LanguageBox from 'src/layouts/SidebarLayout/Header/LanguageBox';
 import { jwtValidate } from 'src/middleware/jwtAuthMiddleware';
 import setUserInfo from 'src/stores/action/authActions';
+import { getCookie, removeCookie, setCookie } from 'src/utils/baseFunction';
 
 interface Login {
   account: string,
   password: string,
+  remember: string
 }
 
 function Copyright(props: any) {
@@ -42,11 +44,12 @@ function Copyright(props: any) {
 
 // todo 記得密碼、註冊
 const theme = (Theme) => createTheme({ ...Theme });
+const COOKIE_USER_ACCOUNT_REMEMBER = "USER_ACCOUNT_REMEMBER";
 
 export default function SignInSide() {
   const navigate = useNavigate();
   const { state, dispatch } = useAuthStateContext();
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, setValue, getValues, watch, formState: { errors } } = useForm();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,19 +60,47 @@ export default function SignInSide() {
       //判斷 是否已登入
       const check = await jwtValidate(state);
       if (check == true) {
-        navigate('/SampleDataTable');
+        navigate('/dashboard');
       }
     };
-    fetchData();
+
+    fetchData().then(() => {
+      //從cookie 提取帳密與狀態
+      let accountData = JSON.parse(JSON.stringify(
+        getCookie(COOKIE_USER_ACCOUNT_REMEMBER, {
+          account: "",
+          password: "",
+          remember: "",
+        })));
+      ;
+      setValue("email", accountData.account);
+      setValue("password", accountData.password);
+      setValue("remember", accountData.remember);
+
+      console.log(getValues("email"));
+      console.log(getValues("password"));
+      console.log(getValues("remember"));
+    });
   }, []);
+
+  useEffect(() => { }, [watch()]);
 
   //login submit 
   const onFormSubmit = (formObj, event) => {
-    const data = new FormData(event.target);
 
     var loginData: Login = {
-      account: data.get("email").toString(),
-      password: data.get("password").toString(),
+      account: getValues("email"),
+      password: getValues("password"),
+      remember: getValues("remember"),
+    }
+
+    console.log(loginData);
+
+    if (loginData.remember != "remember") {
+      removeCookie(COOKIE_USER_ACCOUNT_REMEMBER);
+    } else {
+      //set cookie
+      setCookie(COOKIE_USER_ACCOUNT_REMEMBER, JSON.stringify(loginData));
     }
 
     loginApi(loginData)?.then(res => {
@@ -132,15 +163,16 @@ export default function SignInSide() {
                 margin="normal"
                 fullWidth
                 id="email"
+                value={getValues("email")}
+                name="email"
+                // autoComplete="email"
+                autoFocus
                 label={
                   intl.formatMessage({
                     id: 'login.account',
                     defaultMessage: '帳號 (信箱)',
                   })
                 }
-                name="email"
-                autoComplete="email"
-                autoFocus
                 {...register("email", {
                   required: "Required field",
                   minLength: { value: 5, message: "at least 5 letter" },
@@ -158,15 +190,16 @@ export default function SignInSide() {
                 required
                 fullWidth
                 name="password"
+                type="password"
+                id="password"
+                value={getValues("password")}
+                // autoComplete="current-password"
                 label={
                   intl.formatMessage({
                     id: 'login.password',
                     defaultMessage: '密碼',
                   })
                 }
-                type="password"
-                id="password"
-                autoComplete="current-password"
                 {...register("password", {
                   required: "Required field",
                   minLength: { value: 5, message: "at least 5 letter" },
@@ -176,7 +209,15 @@ export default function SignInSide() {
                 helperText={errors?.password ? errors.password.message : null}
               />
               <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
+                control={
+                  <Checkbox
+                    key="remember"
+                    value="remember"
+                    color="primary"
+                    checked={getValues("remember") == "remember"}
+                    {...register("remember", {
+                    })}
+                  />}
                 label={
                   intl.formatMessage({
                     id: 'login.password.remember',
