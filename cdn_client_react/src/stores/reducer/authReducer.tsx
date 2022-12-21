@@ -1,4 +1,4 @@
-import { getCookie, removeCookie, setCookie } from 'src/utils/baseFunction';
+import secureLocalStorage from "react-secure-storage";
 
 interface UserInfo {
     "id": number,
@@ -23,15 +23,21 @@ const COOKIE_USER_INFO = "USER_INFO";
 
 //儲存 cookie 登入資訊
 export const setCookieUserInfo = (data: Auth) => {
-    setCookie(COOKIE_USER_INFO, JSON.stringify(data));
+    secureLocalStorage.setItem(COOKIE_USER_INFO, data);
+    // setCookie(COOKIE_USER_INFO, JSON.stringify(data));
 }
 
 //刪除 cookie 登入資訊
 export const removeCookieUserInfo = () => {
-    removeCookie(COOKIE_USER_INFO);
+    secureLocalStorage.removeItem(COOKIE_USER_INFO);
+    // removeCookie(COOKIE_USER_INFO);
 }
 
 export const initialState = () => {
+    let data = secureLocalStorage.getItem(COOKIE_USER_INFO);
+    if (typeof data === "object") {
+        return data;
+    }
     let userAuth: Auth = {
         userInfo: null,
         authorisation: null,
@@ -40,8 +46,7 @@ export const initialState = () => {
         loading: false,
     };
 
-    let data = getCookie(COOKIE_USER_INFO, userAuth);
-    return JSON.parse(JSON.stringify(data));
+    return userAuth;
 };
 
 export const AuthReducer = (state: any, action: Auth) => {

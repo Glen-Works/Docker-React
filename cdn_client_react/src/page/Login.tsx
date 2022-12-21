@@ -15,6 +15,7 @@ import { useEffect } from 'react';
 import { useForm } from "react-hook-form";
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useNavigate } from "react-router-dom";
+import secureLocalStorage from "react-secure-storage";
 import { loginApi } from 'src/api/loginApi';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import LanguageBox from 'src/layouts/SidebarLayout/Header/LanguageBox';
@@ -72,12 +73,11 @@ export default function SignInSide() {
 
     fetchData().then(async () => {
       //從cookie 提取帳密與狀態
-      const data = localStorage.getItem(COOKIE_USER_ACCOUNT_REMEMBER);
-      if (data != null) {
-        let loginData: Login = JSON.parse(data);
-        setValue("account", loginData.account);
-        setValue("password", loginData.password);
-        setValue("remember", loginData.remember);
+      const data = secureLocalStorage.getItem(COOKIE_USER_ACCOUNT_REMEMBER);
+      if (typeof data === "object") {
+        setValue("account", data["account"]);
+        setValue("password", data["password"]);
+        setValue("remember", data["remember"]);
       }
     });
   }, []);
@@ -93,9 +93,9 @@ export default function SignInSide() {
     }
 
     if (loginData.remember != "remember") {
-      localStorage.removeItem(COOKIE_USER_ACCOUNT_REMEMBER);
+      secureLocalStorage.removeItem(COOKIE_USER_ACCOUNT_REMEMBER);
     } else {
-      localStorage.setItem(COOKIE_USER_ACCOUNT_REMEMBER, JSON.stringify(loginData));
+      secureLocalStorage.setItem(COOKIE_USER_ACCOUNT_REMEMBER, loginData);
     }
 
     loginApi(loginData)?.then(res => {
