@@ -25,10 +25,25 @@ const StatusMaintenance = Loader(
   lazy(() => import('src/page/Status/Maintenance'))
 );
 
-//login
-const SignInSide = Loader(
-  lazy(() => import('src/page/Login'))
+//LoginLayout
+const LoginLayout = Loader(
+  lazy(() => import('src/layouts/LoginLayout'))
 );
+
+//Login
+const Login = Loader(
+  lazy(() => import('src/page/Login/Login'))
+);
+
+//Register
+const Register = Loader(
+  lazy(() => import('src/page/Login/Register'))
+);
+
+// //ResetPassword
+// const ResetPassword = Loader(
+//   lazy(() => import('src/page/Login/ResetPassword'))
+// );
 
 //Dashboard
 const Dashboard = Loader(
@@ -77,8 +92,22 @@ const SampleDataTable = Loader(
 
 const routes: RouteObject[] = [
   {
-    path: '/login',
-    element: <SignInSide />
+    path: '',
+    element: <LoginLayout />,
+    children: [
+      {
+        path: 'login',
+        element: <Login />
+      },
+      {
+        path: 'register',
+        element: <Register />
+      },
+      // {
+      //   path: 'reset/password',
+      //   element: <ResetPassword />
+      // },
+    ]
   },
   {
     path: '',

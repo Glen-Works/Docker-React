@@ -46,4 +46,9 @@ export function getCookie(cookieName: string, defaultValue: any) {
     defaultValue = cookies.get(cookieName);
   }
   return defaultValue;
-};
+}
+
+export function validEmail(email: string): boolean {
+  const expression: RegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+  return expression.test(email);
+}

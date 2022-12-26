@@ -1,11 +1,11 @@
 {
   "//login": "",
-  "login.sign.in": "登入",
-  "login.sign.up": "目前无帐号，注册",
-  "login.account": "帐号 (信箱)",
-  "login.password": "密码",
-  "login.password.forgot": "忘记密码",
-  "login.password.remember": "记住帐号密码",
+  "page.login.login": "登入",
+  "page.login.register.link": "目前无帐号，注册",
+  "page.login.account": "帐号 (信箱)",
+  "page.login.password": "密码",
+  "page.login.password.forgot": "忘记密码",
+  "page.login.password.remember": "记住帐号密码",
   "//header menu": "",
   "header.profile": "个人资讯",
   "header.logout": "登出",
@@ -52,5 +52,9 @@
   "page.menu.url": "网址",
   "page.menu.feature": "功能",
   "page.menu.parents": "选单(父类别)",
-  "page.menu.weight": "权重"
+  "page.menu.weight": "权重",
+  "//error message": "",
+  "error.email.format": "信箱格式错误",
+  "error.min.length": "至少 {length} 字",
+  "error.max.length": "最多 {length} 字"
 }
