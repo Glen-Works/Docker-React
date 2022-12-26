@@ -7,7 +7,7 @@ import { Auth } from "src/stores/reducer/authReducer";
 export const jwtAuthMiddleware = async (dispatch, auth: Auth): Promise<boolean> => {
 
     //無 token 踢出
-    var jwt: string = auth.authorisation?.accessToken ?? "";
+    var jwt: string = auth?.authorisation?.accessToken ?? "";
     if (jwt == "" || jwt.length < 10) {
         //跳回 login 頁面
         // console.log("無 token");

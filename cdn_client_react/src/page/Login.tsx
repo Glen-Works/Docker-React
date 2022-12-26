@@ -60,8 +60,8 @@ export default function SignInSide() {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (state.authorisation?.accessToken == undefined || state.authorisation?.accessToken == null) {
-        // console.log('authorisation:', "no");
+      if (state?.authorisation?.accessToken == undefined || state?.authorisation?.accessToken == null) {
+
         return;
       }
       //判斷 是否已登入
@@ -72,9 +72,9 @@ export default function SignInSide() {
     };
 
     fetchData().then(async () => {
-      //從cookie 提取帳密與狀態
+      //從Storage 提取帳密與狀態
       const data = secureLocalStorage.getItem(COOKIE_USER_ACCOUNT_REMEMBER);
-      if (typeof data === "object") {
+      if (typeof data === "object" && data != null) {
         setValue("account", data["account"]);
         setValue("password", data["password"]);
         setValue("remember", data["remember"]);
