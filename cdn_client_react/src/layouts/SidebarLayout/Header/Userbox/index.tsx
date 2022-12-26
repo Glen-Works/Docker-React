@@ -17,6 +17,7 @@ import AccountBoxTwoToneIcon from '@mui/icons-material/AccountBoxTwoTone';
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { styled } from '@mui/material/styles';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { logoutApi } from 'src/api/Header/Userbox/userboxApi';
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import { logoutRemoveCookie } from 'src/stores/action/authActions';
@@ -91,6 +92,8 @@ function HeaderUserbox() {
     });
   }
 
+  const intl = useIntl();
+
   return (
     <>
       <UserBoxButton color="secondary" ref={ref} onClick={handleOpen}>
@@ -133,7 +136,12 @@ function HeaderUserbox() {
         <List sx={{ p: 1 }} component="nav">
           <ListItem button onClick={() => handleButton("/user/profile")}>
             <AccountBoxTwoToneIcon fontSize="small" />
-            <ListItemText primary="個人資訊" />
+            <ListItemText primary={
+              intl.formatMessage({
+                id: 'header.profile',
+                defaultMessage: '個人資訊',
+              })
+            } />
           </ListItem>
           {/* <ListItem button to="/dashboards/messenger" component={NavLink}>
             <InboxTwoToneIcon fontSize="small" />
@@ -152,7 +160,10 @@ function HeaderUserbox() {
         <Box sx={{ m: 1 }}>
           <Button color="primary" fullWidth onClick={logout}>
             <LogoutIcon sx={{ mr: 1 }} />
-            Log out
+            <FormattedMessage
+              id="header.logout"
+              defaultMessage="登出"
+            />
           </Button>
         </Box>
       </Popover>

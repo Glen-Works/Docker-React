@@ -1,4 +1,5 @@
 import { Grid, TextField } from "@mui/material";
+import { useIntl } from "react-intl";
 import DataTableDialog from "src/components/DataTable/DataTableDialog";
 import DialogFormat from "src/components/Dialog/DialogFormat";
 
@@ -27,17 +28,30 @@ export default function ProfileEditPasswordDialog(props: ProfileEditPasswordDial
     onError
   } = props;
 
+  const intl = useIntl();
+
   return (
     <>
       <DataTableDialog
-        title={"修改密碼"}
+        title={
+          intl.formatMessage({
+            id: 'header.page.profile.password.update',
+            defaultMessage: '密碼修改',
+          })
+        }
         maxWidth="md"
         isOpen={editPasswordOpen}
         handleClose={handleEditPwdClose}
         submit={handleSubmitPwd(submitEditPwd, onError)}
       >
         <Grid container justifyContent="center" alignItems="center" direction="column" >
-          <DialogFormat title="密碼 :" >
+          <DialogFormat
+            title={
+              intl.formatMessage({
+                id: 'header.page.profile.password',
+                defaultMessage: '密碼',
+              })
+            } >
             <TextField
               id="password"
               name="password"
@@ -52,7 +66,12 @@ export default function ProfileEditPasswordDialog(props: ProfileEditPasswordDial
               helperText={pwdErrors?.password ? pwdErrors.password.message : null}
             />
           </DialogFormat>
-          <DialogFormat title="密碼確認 :" >
+          <DialogFormat title={
+            intl.formatMessage({
+              id: 'header.page.profile.password.check',
+              defaultMessage: '密碼確認',
+            })
+          }>
             <TextField
               id="passwordCheck"
               name="passwordCheck"

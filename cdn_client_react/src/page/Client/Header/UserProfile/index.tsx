@@ -3,6 +3,7 @@ import KeyTwoToneIcon from '@mui/icons-material/KeyTwoTone';
 import { Grid, Typography, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { userProfileInfoApi, userUpdateProfileApi, userUpdateProfilePasswordApi } from 'src/api/Client/UserProfile/userProfileApi';
 import { ColumnIconButton } from 'src/components/DataTable/CustomerIconRender';
 import DialogFormat from "src/components/Dialog/DialogFormat";
@@ -135,12 +136,19 @@ function UserProfile() {
       });
   }
 
+  const intl = useIntl();
+
   return (
     <>
       <Title />
       <PageTitleWrapper>
         <PageHeader
-          title={"個人設定"}
+          title={
+            intl.formatMessage({
+              id: 'header.profile',
+              defaultMessage: '個人設定',
+            })
+          }
           subTitle={""}
         />
       </PageTitleWrapper>
@@ -160,35 +168,63 @@ function UserProfile() {
                 <Grid item xs={3} >
 
                   <ColumnIconButton
-                    title="修改使用者"
+                    title={
+                      intl.formatMessage({
+                        id: 'header.page.profile.update',
+                        defaultMessage: '資料修改',
+                      })
+                    }
                     handleClickOpen={handleEditProfileOpen}
                     color={theme.palette.info.main}
                     background={theme.colors.error.lighter}
                   >
                     <EditIcon fontSize="small" sx={{ mr: '0.3em' }} />
                     <Typography color={theme.colors.alpha.black[100]}>
-                      {"資料修改"}
+                      <FormattedMessage
+                        id="header.page.profile.update"
+                        defaultMessage="資料修改"
+                      />
                     </Typography>
                   </ColumnIconButton>
 
                   <ColumnIconButton
-                    title="修改密碼"
+                    title={
+                      intl.formatMessage({
+                        id: 'header.page.profile.password.update',
+                        defaultMessage: '密碼修改',
+                      })
+                    }
                     handleClickOpen={handleEditPwdOpen}
                     color={theme.palette.error.main}
                     background={theme.colors.error.lighter}
                   >
                     <KeyTwoToneIcon fontSize="small" sx={{ mr: '0.3em' }} />
                     <Typography color={theme.colors.alpha.black[100]}>
-                      {"密碼修改"}
+                      <FormattedMessage
+                        id="header.page.profile.password.update"
+                        defaultMessage="密碼修改"
+                      />
                     </Typography>
                   </ColumnIconButton>
                 </Grid>
               </Grid>
 
-              <DialogFormat title="名稱 :" >
+              <DialogFormat
+                title={
+                  intl.formatMessage({
+                    id: 'header.page.profile.name',
+                    defaultMessage: '名稱',
+                  })
+                } >
                 <Typography variant="h5" textAlign="left">{getProfileValue("name")}</Typography>
               </DialogFormat>
-              <DialogFormat title="信箱 :" >
+              <DialogFormat
+                title={
+                  intl.formatMessage({
+                    id: 'header.page.profile.email',
+                    defaultMessage: '信箱',
+                  })
+                }>
                 <Typography variant="h5" textAlign="left">{getProfileValue("email")}</Typography>
               </DialogFormat>
 

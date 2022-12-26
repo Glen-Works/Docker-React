@@ -1,4 +1,5 @@
 import { Grid, TextField } from "@mui/material";
+import { useIntl } from "react-intl";
 import DataTableDialog from "src/components/DataTable/DataTableDialog";
 import DialogFormat from "src/components/Dialog/DialogFormat";
 
@@ -25,17 +26,26 @@ export default function ProfileEditDialog(props: ProfileEditDialogProp) {
     errors,
   } = props;
 
+  const intl = useIntl();
+
   return (
     <>
       <DataTableDialog
-        title={"修改資料"}
+        title={intl.formatMessage({
+          id: 'header.page.profile.update',
+          defaultMessage: '資料修改',
+        })}
         maxWidth="md"
         isOpen={isOpen}
         handleClose={handleClose}
         submit={handleSubmit(submitEdit, onError)}
       >
         <Grid container justifyContent="center" alignItems="center" direction="column" >
-          <DialogFormat title="名稱 :" >
+          <DialogFormat
+            title={intl.formatMessage({
+              id: 'header.page.profile.name',
+              defaultMessage: '名稱',
+            })} >
             <TextField
               name="name"
               value={getValue("name")}
@@ -48,7 +58,11 @@ export default function ProfileEditDialog(props: ProfileEditDialogProp) {
             />
           </DialogFormat>
 
-          <DialogFormat title="信箱 :" >
+          <DialogFormat
+            title={intl.formatMessage({
+              id: 'header.page.profile.email',
+              defaultMessage: '信箱',
+            })} >
             <TextField
               name="email"
               value={getValue("email")}
