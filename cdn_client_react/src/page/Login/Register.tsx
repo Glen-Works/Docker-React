@@ -50,7 +50,7 @@ export default function Register() {
       //註冊成功
       return navigate("/login");
     }).catch(error => {
-      console.log("error:" + error.response?.data?.msg);
+      console.log("error:" + error.response?.msg);
     });
   };
 
@@ -68,7 +68,7 @@ export default function Register() {
     registerValidApi(account)?.then(res => {
       setSendEmail(true);
     }).catch(error => {
-      console.log("error:" + error.response?.data?.msg);
+      console.log("error:" + error.response?.data?.message);
     });
   }
 
@@ -84,7 +84,7 @@ export default function Register() {
     >
       <Typography component="h1" variant="h5">
         <FormattedMessage
-          id="page.login.register.title"
+          id="page.register.title"
           defaultMessage="註冊帳號"
         />
       </Typography>
@@ -142,16 +142,26 @@ export default function Register() {
           error={!!errors?.account}
           helperText={errors?.account ? errors.account.message : null}
         />
-        <Button
-          variant="text"
-          onClick={validCode}
-        // disabled={ }
+        <Grid
+          container
+          direction="row"
+          justifyContent="flex-start"
+          alignItems="center"
+          spacing={2}
+          sx={{ ml: 0, mt: 0 }}
         >
-          <FormattedMessage
-            id="page.login.valid.code.send"
-            defaultMessage="寄送驗證碼"
-          />
-        </Button>
+          <Button
+            variant="text"
+            onClick={validCode}
+          // disabled={ }
+          >
+            <FormattedMessage
+              id="page.login.valid.code.send"
+              defaultMessage="寄送驗證碼"
+            />
+          </Button>
+          {validMessage}
+        </Grid>
 
         <TextField
           margin="normal"
@@ -174,7 +184,7 @@ export default function Register() {
             },
             maxLength: {
               value: 10, message: intl.formatMessage({
-                id: 'error.man.length',
+                id: 'error.max.length',
                 defaultMessage: '最多 {length} 字',
               }, { 'length': '10' })
             },
@@ -219,7 +229,7 @@ export default function Register() {
           sx={{ mt: 3, mb: 2 }}
         >
           <FormattedMessage
-            id="page.login.register"
+            id="page.register.register"
             defaultMessage="註冊"
           />
         </Button>
@@ -227,7 +237,7 @@ export default function Register() {
           <Grid item xs>
             <Link href="/login" variant="body2">
               <FormattedMessage
-                id="page.login.login.link"
+                id="page.login.link"
                 defaultMessage="回登入頁"
               />
             </Link>

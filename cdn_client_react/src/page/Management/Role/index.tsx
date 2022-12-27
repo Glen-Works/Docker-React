@@ -99,7 +99,7 @@ function Role() {
         setTableState({ data: res.data.roleList, pageManagement: res.data.pageManagement, isLoading: false });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.msg);
+        console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -156,7 +156,7 @@ function Role() {
         setRoleValue("remark", data.remark, { shouldValidate: true });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.msg);
+        console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -205,7 +205,7 @@ function Role() {
         defaultRootNode.children = makeRecursionTree<MenuTree>(res.data.menuList, 0);
         setMenuCheckboxList(defaultRootNode);
       }).catch(error => {
-        console.log("error:" + error.response?.data?.msg);
+        console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -217,7 +217,7 @@ function Role() {
         getData({ ...tableState.pageManagement });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.msg);
+        console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -229,7 +229,7 @@ function Role() {
         getData({ ...tableState.pageManagement });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.msg);
+        console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -241,7 +241,7 @@ function Role() {
         getData({ ...tableState.pageManagement });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.msg);
+        console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -251,7 +251,7 @@ function Role() {
         getData({ ...tableState.pageManagement });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.msg);
+        console.log("error:" + error.response?.data?.message);
       });
   }
 

@@ -108,7 +108,7 @@ function SampleDataTable() {
         setTableState({ data: res.data.userList, pageManagement: res.data.pageManagement, isLoading: false });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.msg);
+        console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -170,7 +170,7 @@ function SampleDataTable() {
         setUserValue("remark", data.remark, { shouldValidate: true });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.msg);
+        console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -220,7 +220,7 @@ function SampleDataTable() {
         getData({ ...tableState.pageManagement });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.msg);
+        console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -232,7 +232,7 @@ function SampleDataTable() {
         getData({ ...tableState.pageManagement });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.msg);
+        console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -243,7 +243,7 @@ function SampleDataTable() {
         handleEditPwdClose();
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.msg);
+        console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -255,7 +255,7 @@ function SampleDataTable() {
         getData({ ...tableState.pageManagement });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.msg);
+        console.log("error:" + error.response?.data?.message);
       });
   }
 

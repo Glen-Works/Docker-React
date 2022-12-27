@@ -88,7 +88,7 @@ function HeaderUserbox() {
       logoutRemoveCookie(dispatch);
       return navigate('/login');
     }).catch(error => {
-      console.log("error:" + error.response?.data?.msg);
+      console.log("error:" + error.response?.data?.message);
     });
   }
 

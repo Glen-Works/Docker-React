@@ -47,9 +47,11 @@ export interface AxiosResponse<T = any, D = any> {
     request?: any;
 }
 
-instance.interceptors.response.use(response => {
-    let data: AxiosResponse = { ...response.data, msg: response.data.message, success: response.data.success };
-    return data;
+instance.interceptors.response.use(
+    response => {
+        let data: AxiosResponse = { ...response.data, msg: response.data.message, success: response.data.success };
+        return data;
+    }
     // }, err => {
     //     if (err && err.response) {
     //         switch (err.response.status) {
@@ -72,7 +74,7 @@ instance.interceptors.response.use(response => {
     //         }
     //     }
     //     return err;
-})
+);
 
 // 此處的instance為我們create的實體
 export default function api(method: string, url: string, config: AxiosRequestConfig<null> | any, data: null | any = null) {

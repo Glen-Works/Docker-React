@@ -85,7 +85,7 @@ export default function Login() {
       setUserInfo(dispatch, res.data);
       return navigate("/dashboard");
     }).catch(error => {
-      console.log("error:" + error.response?.data?.msg);
+      console.log("error:" + error.response?.data?.message);
     });
   };
 

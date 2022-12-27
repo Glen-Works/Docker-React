@@ -110,7 +110,7 @@ function UserProfile() {
         setProfileValue("email", data.email, { shouldValidate: true });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.msg);
+        console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -122,7 +122,7 @@ function UserProfile() {
         getData()
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.msg);
+        console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -133,7 +133,7 @@ function UserProfile() {
         handleEditPwdClose();
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.msg);
+        console.log("error:" + error.response?.data?.message);
       });
   }
 

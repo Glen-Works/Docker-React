@@ -113,7 +113,7 @@ function Menu() {
         setTableState({ data: res.data.menuList, pageManagement: res.data.pageManagement, isLoading: false });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.msg);
+        console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -170,7 +170,7 @@ function Menu() {
           ...res.data.menuList
         ]);
       }).catch(error => {
-        console.log("error:" + error.response?.data?.msg);
+        console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -188,7 +188,7 @@ function Menu() {
         setMenuValue("remark", data.remark, { shouldValidate: true });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.msg);
+        console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -226,7 +226,7 @@ function Menu() {
         getData({ ...tableState.pageManagement });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.msg);
+        console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -238,7 +238,7 @@ function Menu() {
         getData({ ...tableState.pageManagement });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.msg);
+        console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -250,7 +250,7 @@ function Menu() {
         getData({ ...tableState.pageManagement });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.msg);
+        console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -260,7 +260,7 @@ function Menu() {
         getData({ ...tableState.pageManagement });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.msg);
+        console.log("error:" + error.response?.data?.message);
       });
   }
 
