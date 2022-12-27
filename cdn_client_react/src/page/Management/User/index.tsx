@@ -67,7 +67,7 @@ interface UserPassword {
 }
 
 function User() {
-
+  const intl = useIntl();
   const theme = useTheme();
   const { state } = useAuthStateContext();
   const [tableState, setTableState] = useState<DataTableStatus>(getDataTableState());
@@ -340,8 +340,6 @@ function User() {
     });
     deleteMultipleUser(deleteIds);
   };
-
-  const intl = useIntl();
 
   const columns: MUIDataTableColumn[] = [
     {

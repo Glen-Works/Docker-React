@@ -68,8 +68,18 @@ export default function ProfileEditDialog(props: ProfileEditDialogProp) {
               value={getValue("email")}
               {...register("email", {
                 required: "Required field",
-                minLength: { value: 5, message: "at least 5 letter" },
-                maxLength: { value: 100, message: "need less 100 length" },
+                minLength: {
+                  value: 5, message: intl.formatMessage({
+                    id: 'error.min.length',
+                    defaultMessage: '至少 {length} 字',
+                  }, { 'length': '5' })
+                },
+                maxLength: {
+                  value: 100, message: intl.formatMessage({
+                    id: 'error.max.length',
+                    defaultMessage: '至少 {length} 字',
+                  }, { 'length': '100' })
+                },
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9._]+\.[A-Z]{2,}$/i,
                   message: "Invalid email address",

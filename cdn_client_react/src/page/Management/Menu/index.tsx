@@ -59,6 +59,7 @@ interface MenuData {
 }
 
 function Menu() {
+  const intl = useIntl();
   const theme = useTheme();
   const AuthMenu = useAuthMenuContext();
   const { state } = useAuthStateContext();
@@ -292,8 +293,6 @@ function Menu() {
     });
     deleteMultipleMenu(deleteIds);
   };
-
-  const intl = useIntl();
 
   const columns: MUIDataTableColumn[] = [
     {

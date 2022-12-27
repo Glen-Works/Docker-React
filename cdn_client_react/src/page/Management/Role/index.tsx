@@ -46,7 +46,7 @@ interface RoleData {
 }
 
 function Role() {
-
+  const intl = useIntl();
   const theme = useTheme();
   const AuthMenu = useAuthMenuContext();
   const { state } = useAuthStateContext();
@@ -284,8 +284,6 @@ function Role() {
     });
     deleteMultipleRole(deleteIds);
   };
-
-  const intl = useIntl();
 
   const columns: MUIDataTableColumn[] = [
     {

@@ -26,6 +26,7 @@ interface UserPassword {
 }
 
 function UserProfile() {
+  const intl = useIntl();
   const theme = useTheme();
   const { state } = useAuthStateContext();
 
@@ -135,8 +136,6 @@ function UserProfile() {
         console.log("error:" + error.response?.data?.msg);
       });
   }
-
-  const intl = useIntl();
 
   return (
     <>
