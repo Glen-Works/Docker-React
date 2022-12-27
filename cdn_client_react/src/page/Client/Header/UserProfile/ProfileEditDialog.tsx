@@ -50,7 +50,10 @@ export default function ProfileEditDialog(props: ProfileEditDialogProp) {
               name="name"
               value={getValue("name")}
               {...register("name", {
-                required: "Required field"
+                required: intl.formatMessage({
+                  id: 'error.required',
+                  defaultMessage: '必填欄位',
+                })
               })}
               fullWidth={true}
               error={!!errors?.name}
@@ -67,7 +70,10 @@ export default function ProfileEditDialog(props: ProfileEditDialogProp) {
               name="email"
               value={getValue("email")}
               {...register("email", {
-                required: "Required field",
+                required: intl.formatMessage({
+                  id: 'error.required',
+                  defaultMessage: '必填欄位',
+                }),
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9._]+\.[A-Z]{2,}$/i,
                   message: intl.formatMessage({

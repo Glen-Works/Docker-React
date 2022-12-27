@@ -81,7 +81,10 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
             name="name"
             value={getMenuValue("name")}
             {...registerMenu("name", {
-              required: "Required field"
+              required: intl.formatMessage({
+                id: 'error.required',
+                defaultMessage: '必填欄位',
+              })
             })}
             fullWidth={true}
             error={!!menuErrors?.name}
@@ -93,7 +96,10 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
             name="key"
             value={getMenuValue("key")}
             {...registerMenu("key", {
-              required: "Required field",
+              required: intl.formatMessage({
+                id: 'error.required',
+                defaultMessage: '必填欄位',
+              }),
             })}
             fullWidth={true}
             error={!!menuErrors?.key}
@@ -127,7 +133,10 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
             select
             value={getMenuValue("feature")}
             {...registerMenu("feature", {
-              required: "Required field"
+              required: intl.formatMessage({
+                id: 'error.required',
+                defaultMessage: '必填欄位',
+              })
             })}
             fullWidth={true}
             error={!!menuErrors?.feature}
@@ -165,7 +174,10 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
             select
             value={getMenuValue("parent")}
             {...registerMenu("parent", {
-              required: "Required field",
+              required: intl.formatMessage({
+                id: 'error.required',
+                defaultMessage: '必填欄位',
+              }),
             })}
             fullWidth={true}
             error={!!menuErrors?.parent}

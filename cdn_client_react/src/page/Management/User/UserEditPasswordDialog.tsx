@@ -54,7 +54,10 @@ export default function UserEditPasswordDialog(props: UserEditPasswordDialogProp
               name="password"
               type="password"
               {...registerPwd("password", {
-                required: "Required field",
+                required: intl.formatMessage({
+                  id: 'error.required',
+                  defaultMessage: '必填欄位',
+                }),
                 minLength: {
                   value: 5, message: intl.formatMessage({
                     id: 'error.min.length',
@@ -84,7 +87,10 @@ export default function UserEditPasswordDialog(props: UserEditPasswordDialogProp
               name="passwordCheck"
               type="password"
               {...registerPwd("passwordCheck", {
-                required: "Required field",
+                required: intl.formatMessage({
+                  id: 'error.required',
+                  defaultMessage: '必填欄位',
+                }),
                 validate: (val: string) => {
                   if (watchPwd('password') != val) {
                     return "Your passwords do no match";

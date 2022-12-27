@@ -84,7 +84,10 @@ export default function RoleAddAndEditDialog(props: RoleAddAndEditDialogProp) {
             name="name"
             value={getRoleValue("name")}
             {...registerRole("name", {
-              required: "Required field"
+              required: intl.formatMessage({
+                id: 'error.required',
+                defaultMessage: '必填欄位',
+              })
             })}
             fullWidth={true}
             error={!!roleErrors?.name}
@@ -96,7 +99,10 @@ export default function RoleAddAndEditDialog(props: RoleAddAndEditDialogProp) {
             name="key"
             value={getRoleValue("key")}
             {...registerRole("key", {
-              required: "Required field",
+              required: intl.formatMessage({
+                id: 'error.required',
+                defaultMessage: '必填欄位',
+              }),
             })}
             fullWidth={true}
             error={!!roleErrors?.key}
