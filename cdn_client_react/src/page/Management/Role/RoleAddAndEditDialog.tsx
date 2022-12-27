@@ -127,11 +127,11 @@ export default function RoleAddAndEditDialog(props: RoleAddAndEditDialogProp) {
             type="number"
             value={Number(getRoleValue("weight"))}
             {...registerRole("weight", {
-              min: { value: 0, message: "Minimum value is 0" },
-              max: { value: 32766, message: "Maximum value is 32766" },
-              pattern: {
-                value: /^[0-9]+$/,
-                message: "Invalid value,value must be a number",
+              max: {
+                value: 32766, message: intl.formatMessage({
+                  id: 'error.max.length',
+                  defaultMessage: '最大值為 {length}',
+                }, { 'length': '32766' })
               }
             })}
             fullWidth={true}

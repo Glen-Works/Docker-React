@@ -66,5 +66,6 @@
   "//error message": "",
   "error.email.format": "Invalid email address",
   "error.min.length": "at least {length} letter",
-  "error.max.length": "need less {length} length"
+  "error.max.length": "need less {length} length",
+  "error.max.value": "Maximum value is {length}"
 }

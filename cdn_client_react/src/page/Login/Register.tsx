@@ -128,12 +128,15 @@ export default function Register() {
             maxLength: {
               value: 100, message: intl.formatMessage({
                 id: 'error.max.length',
-                defaultMessage: '至少 {length} 字',
+                defaultMessage: '最多 {length} 字',
               }, { 'length': '100' })
             },
             pattern: {
               value: /^[A-Z0-9._%+-]+@[A-Z0-9._]+\.[A-Z]{2,}$/i,
-              message: "Invalid email address",
+              message: intl.formatMessage({
+                id: 'error.max.length',
+                defaultMessage: '信箱格式錯誤',
+              })
             }
           })}
           error={!!errors?.account}
@@ -169,7 +172,12 @@ export default function Register() {
                 defaultMessage: '至少 {length} 字',
               }, { 'length': '5' })
             },
-            maxLength: { value: 10, message: "need less 10 length" },
+            maxLength: {
+              value: 10, message: intl.formatMessage({
+                id: 'error.man.length',
+                defaultMessage: '最多 {length} 字',
+              }, { 'length': '10' })
+            },
           })}
           error={!!errors?.validCode}
           helperText={errors?.validCode ? errors.validCode.message : null}
@@ -197,7 +205,7 @@ export default function Register() {
             maxLength: {
               value: 100, message: intl.formatMessage({
                 id: 'error.max.length',
-                defaultMessage: '至少 {length} 字',
+                defaultMessage: '最多 {length} 字',
               }, { 'length': '100' })
             },
           })}

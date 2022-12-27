@@ -67,7 +67,7 @@ export default function ProfileEditPasswordDialog(props: ProfileEditPasswordDial
                 maxLength: {
                   value: 100, message: intl.formatMessage({
                     id: 'error.max.length',
-                    defaultMessage: '至少 {length} 字',
+                    defaultMessage: '最多 {length} 字',
                   }, { 'length': '100' })
                 },
               })}

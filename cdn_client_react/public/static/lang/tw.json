@@ -66,5 +66,6 @@
   "//error message": "",
   "error.email.format": "信箱格式錯誤",
   "error.min.length": "至少 {length} 字",
-  "error.max.length": "最多 {length} 字"
+  "error.max.length": "最多 {length} 字",
+  "error.max.value": "最大值為 {length}"
 }
