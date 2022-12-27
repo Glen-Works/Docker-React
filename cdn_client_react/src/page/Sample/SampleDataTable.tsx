@@ -573,7 +573,7 @@ function SampleDataTable() {
                       pattern: {
                         value: /^[A-Z0-9._%+-]+@[A-Z0-9._]+\.[A-Z]{2,}$/i,
                         message: intl.formatMessage({
-                          id: 'error.max.length',
+                          id: 'error.email.format',
                           defaultMessage: '信箱格式錯誤',
                         })
                       }
