@@ -5,6 +5,7 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
+import useCountDown from 'react-countdown-hook';
 import { useForm } from "react-hook-form";
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useNavigate } from "react-router-dom";
@@ -14,7 +15,7 @@ import { validEmail } from 'src/utils/baseFunction';
 interface RegisgerInfo {
   name: string,
   account: string,
-  validCode: string
+  validation: string
   password: string,
 }
 
@@ -22,7 +23,11 @@ export default function Register() {
   const intl = useIntl();
   const navigate = useNavigate();
 
-  const [sendEmail, setSendEmail] = useState<boolean>(false);
+  const initialTime = 10 * 1000; // initial time in milliseconds, defaults to 60000
+  const interval = 1000; // interval to change remaining time amount, defaults to 1000
+  const [timeLeft, { start, pause, resume, reset }] = useCountDown(initialTime, interval)
+
+  const [stopSendEmail, setStopSendEmail] = useState<boolean>(false);
   const [validMessage, setValidMessage] = useState<string>("");
 
   const { register, handleSubmit, setValue, getValues, watch, formState: { errors } } = useForm(
@@ -37,12 +42,16 @@ export default function Register() {
 
   useEffect(() => { }, [watch()]);
 
+  useEffect(() => {
+    if (timeLeft == 0) setStopSendEmail(false);
+  }, [timeLeft]);
+
   //login submit 
   const onFormSubmit = (formObj, event) => {
     var regisgerInfo: RegisgerInfo = {
       name: getValues("name"),
       account: getValues("account"),
-      validCode: getValues("validCode"),
+      validation: getValues("validCode"),
       password: getValues("password"),
     }
 
@@ -63,13 +72,17 @@ export default function Register() {
           defaultMessage: '信箱格式錯誤',
         })
       );
+      return;
     }
 
     registerValidApi(account)?.then(res => {
-      setSendEmail(true);
+      console.log(res.data);
     }).catch(error => {
       console.log("error:" + error.response?.data?.message);
     });
+    start();
+    setStopSendEmail(true);
+    setValidMessage("");
   }
 
   return (
@@ -101,7 +114,10 @@ export default function Register() {
             })
           }
           {...register("name", {
-            required: "Required field",
+            required: intl.formatMessage({
+              id: 'error.required',
+              defaultMessage: '必填欄位',
+            }),
           })}
           error={!!errors?.name}
           helperText={errors?.name ? errors.name.message : null}
@@ -118,7 +134,10 @@ export default function Register() {
             })
           }
           {...register("account", {
-            required: "Required field",
+            required: intl.formatMessage({
+              id: 'error.required',
+              defaultMessage: '必填欄位',
+            }),
             minLength: {
               value: 5, message: intl.formatMessage({
                 id: 'error.min.length',
@@ -153,13 +172,19 @@ export default function Register() {
           <Button
             variant="text"
             onClick={validCode}
-          // disabled={ }
+            disabled={stopSendEmail}
           >
             <FormattedMessage
               id="page.login.valid.code.send"
               defaultMessage="寄送驗證碼"
             />
           </Button>
+          {(timeLeft > 0)
+            ? intl.formatMessage({
+              id: 'page.login.valid.waitting.time',
+              defaultMessage: '等待，重新發送 {second} 秒',
+            }, { 'second': timeLeft / 1000 })
+            : ""}
           {validMessage}
         </Grid>
 
@@ -175,19 +200,10 @@ export default function Register() {
             })
           }
           {...register("validCode", {
-            required: "Required field",
-            minLength: {
-              value: 5, message: intl.formatMessage({
-                id: 'error.min.length',
-                defaultMessage: '至少 {length} 字',
-              }, { 'length': '5' })
-            },
-            maxLength: {
-              value: 10, message: intl.formatMessage({
-                id: 'error.max.length',
-                defaultMessage: '最多 {length} 字',
-              }, { 'length': '10' })
-            },
+            required: intl.formatMessage({
+              id: 'error.required',
+              defaultMessage: '必填欄位',
+            }),
           })}
           error={!!errors?.validCode}
           helperText={errors?.validCode ? errors.validCode.message : null}
@@ -205,7 +221,10 @@ export default function Register() {
             })
           }
           {...register("password", {
-            required: "Required field",
+            required: intl.formatMessage({
+              id: 'error.required',
+              defaultMessage: '必填欄位',
+            }),
             minLength: {
               value: 5, message: intl.formatMessage({
                 id: 'error.min.length',
