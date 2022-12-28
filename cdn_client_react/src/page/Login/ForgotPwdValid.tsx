@@ -8,20 +8,11 @@ import { useEffect, useState } from 'react';
 import useCountDown from 'react-countdown-hook';
 import { useForm } from "react-hook-form";
 import { FormattedMessage, useIntl } from 'react-intl';
-import { useNavigate } from "react-router-dom";
-import { registerApi, registerValidApi } from 'src/api/Login/RegisterApi';
+import { forgotPwdValidApi } from 'src/api/Login/ForgotPwdApi';
 import { validEmail } from 'src/utils/baseFunction';
-
-interface RegisgerInfo {
-  name: string,
-  account: string,
-  validation: string
-  password: string,
-}
-
-export default function Register() {
+export default function ForgotPwdValid() {
   const intl = useIntl();
-  const navigate = useNavigate();
+  const url = window.location.href;
 
   const initialTime = 30 * 1000; // initial time in milliseconds, defaults to 60000
   const interval = 1000; // interval to change remaining time amount, defaults to 1000
@@ -33,10 +24,7 @@ export default function Register() {
   const { register, handleSubmit, setValue, getValues, watch, formState: { errors } } = useForm(
     {
       defaultValues: {
-        name: "",
         account: "",
-        validCode: "",
-        password: "",
       }
     });
 
@@ -45,23 +33,6 @@ export default function Register() {
   useEffect(() => {
     if (timeLeft == 0) setStopSendEmail(false);
   }, [timeLeft]);
-
-  //login submit 
-  const onFormSubmit = (formObj, event) => {
-    var regisgerInfo: RegisgerInfo = {
-      name: getValues("name"),
-      account: getValues("account"),
-      validation: getValues("validCode"),
-      password: getValues("password"),
-    }
-
-    registerApi(regisgerInfo)?.then(res => {
-      //註冊成功
-      return navigate("/login");
-    }).catch(error => {
-      console.log("error:" + error.response?.msg);
-    });
-  };
 
   const validCode = () => {
     const account = getValues("account");
@@ -75,7 +46,7 @@ export default function Register() {
       return;
     }
 
-    registerValidApi(account)?.then(res => {
+    forgotPwdValidApi({ "url": url }, account)?.then(res => {
       console.log(res.data);
     }).catch(error => {
       console.log("error:" + error.response?.data?.message);
@@ -97,36 +68,16 @@ export default function Register() {
     >
       <Typography component="h1" variant="h5">
         <FormattedMessage
-          id="page.register.title"
-          defaultMessage="註冊帳號"
+          id="page.password.forgot"
+          defaultMessage="忘記密碼"
         />
       </Typography>
-      <Box component="form" noValidate onSubmit={handleSubmit(onFormSubmit)} sx={{ mt: 1 }}>
+      <Box component="form" noValidate sx={{ mt: 1, width: '81%', maxWidth: '559px' }}>
         <TextField
           margin="normal"
-          fullWidth
-          id="name"
-          name="name"
-          label={
-            intl.formatMessage({
-              id: 'page.login.name',
-              defaultMessage: '名稱',
-            })
-          }
-          {...register("name", {
-            required: intl.formatMessage({
-              id: 'error.required',
-              defaultMessage: '必填欄位',
-            }),
-          })}
-          error={!!errors?.name}
-          helperText={errors?.name ? errors.name.message : null}
-        />
-        <TextField
-          margin="normal"
-          fullWidth
           id="account"
           name="account"
+          fullWidth
           label={
             intl.formatMessage({
               id: 'page.login.account',
@@ -187,71 +138,6 @@ export default function Register() {
             : ""}
           {validMessage}
         </Grid>
-
-        <TextField
-          margin="normal"
-          fullWidth
-          name="validCode"
-          id="validCode"
-          label={
-            intl.formatMessage({
-              id: 'page.login.valid.code',
-              defaultMessage: '驗證碼',
-            })
-          }
-          {...register("validCode", {
-            required: intl.formatMessage({
-              id: 'error.required',
-              defaultMessage: '必填欄位',
-            }),
-          })}
-          error={!!errors?.validCode}
-          helperText={errors?.validCode ? errors.validCode.message : null}
-        />
-        <TextField
-          margin="normal"
-          fullWidth
-          name="password"
-          type="password"
-          id="password"
-          label={
-            intl.formatMessage({
-              id: 'page.login.password',
-              defaultMessage: '密碼',
-            })
-          }
-          {...register("password", {
-            required: intl.formatMessage({
-              id: 'error.required',
-              defaultMessage: '必填欄位',
-            }),
-            minLength: {
-              value: 5, message: intl.formatMessage({
-                id: 'error.min.length',
-                defaultMessage: '至少 {length} 字',
-              }, { 'length': '5' })
-            },
-            maxLength: {
-              value: 100, message: intl.formatMessage({
-                id: 'error.max.length',
-                defaultMessage: '最多 {length} 字',
-              }, { 'length': '100' })
-            },
-          })}
-          error={!!errors?.password}
-          helperText={errors?.password ? errors.password.message : null}
-        />
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
-        >
-          <FormattedMessage
-            id="page.register.register"
-            defaultMessage="註冊"
-          />
-        </Button>
         <Grid container sx={{ mt: 1 }}>
           <Grid item xs>
             <Link href="/login" variant="body2">
@@ -261,8 +147,12 @@ export default function Register() {
               />
             </Link>
           </Grid>
-          <Grid item>
-            <Link href="#" variant="body2">
+          <Grid item >
+            <Link href="/forgot/password" variant="body2">
+              <FormattedMessage
+                id="page.login.password.forgot"
+                defaultMessage="忘記密碼"
+              />
             </Link>
           </Grid>
         </Grid>

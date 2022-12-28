@@ -40,10 +40,15 @@ const Register = Loader(
   lazy(() => import('src/page/Login/Register'))
 );
 
-// //ResetPassword
-// const ResetPassword = Loader(
-//   lazy(() => import('src/page/Login/ResetPassword'))
-// );
+//ForgotPwdValid
+const ForgotPwdValid = Loader(
+  lazy(() => import('src/page/Login/ForgotPwdValid'))
+);
+
+//ForgotPwd
+const ForgotPwd = Loader(
+  lazy(() => import('src/page/Login/ForgotPwd'))
+);
 
 //Dashboard
 const Dashboard = Loader(
@@ -96,6 +101,10 @@ const routes: RouteObject[] = [
     element: <LoginLayout />,
     children: [
       {
+        path: '',
+        element: <Navigate to="login" replace />
+      },
+      {
         path: 'login',
         element: <Login />
       },
@@ -103,10 +112,14 @@ const routes: RouteObject[] = [
         path: 'register',
         element: <Register />
       },
-      // {
-      //   path: 'reset/password',
-      //   element: <ResetPassword />
-      // },
+      {
+        path: 'forgot/password',
+        element: <ForgotPwdValid />
+      },
+      {
+        path: 'forgot/password/:cachename',
+        element: <ForgotPwd />
+      },
     ]
   },
   {

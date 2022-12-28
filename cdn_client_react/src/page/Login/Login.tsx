@@ -213,9 +213,9 @@ export default function Login() {
             defaultMessage="登入"
           />
         </Button>
-        <Grid container>
+        <Grid container sx={{ mt: 1 }}>
           <Grid item xs>
-            <Link href="#" variant="body2">
+            <Link href="/forgot/password" variant="body2">
               <FormattedMessage
                 id="page.login.password.forgot"
                 defaultMessage="忘記密碼"
