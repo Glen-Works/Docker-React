@@ -108,7 +108,7 @@ export default function Login() {
           defaultMessage="登入"
         />
       </Typography>
-      <Box component="form" noValidate onSubmit={handleSubmit(onFormSubmit)} sx={{ mt: 1 }}>
+      <Box component="form" noValidate onSubmit={handleSubmit(onFormSubmit)} sx={{ mt: 1, width: '84%', maxWidth: '559px' }}>
         <TextField
           margin="normal"
           fullWidth

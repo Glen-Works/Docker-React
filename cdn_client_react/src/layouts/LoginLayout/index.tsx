@@ -55,7 +55,7 @@ export default function LoginLayout(props: LoginLayoutProps) {
             justifyContent="flex-end"
             alignItems="center"
           >
-            <LanguageBox />
+            <LanguageBox sx={{ mr: 4, mt: 1 }} />
           </Grid>
           {children || <Outlet />}
         </Grid>

@@ -1,4 +1,4 @@
-import { MenuItem, TextField } from '@mui/material';
+import { MenuItem, SxProps, TextField, Theme } from '@mui/material';
 import { useLanguageContext } from 'src/contexts/LanguageContext';
 import { initialLanguageState, setCookieLanguageType } from 'src/stores/reducer/languageReducer';
 
@@ -12,8 +12,13 @@ export const laguageMap = {
   "zh-CN": { label: "中文(简)", value: "cn" },
 }
 
-function LanguageBox() {
+interface LanguageBoxProp {
+  sx?: SxProps<Theme>;
+}
 
+
+function LanguageBox(props: LanguageBoxProp) {
+  const { sx } = props;
   const { dispatch } = useLanguageContext();
 
   const handleLanguageChange = (event) => {
@@ -29,6 +34,7 @@ function LanguageBox() {
       value={initialLanguageState()}
       onChange={handleLanguageChange}
       size="small"
+      sx={sx}
     >
       {Object.keys(laguageMap).map((key) => (
         <MenuItem key={key} value={key}>

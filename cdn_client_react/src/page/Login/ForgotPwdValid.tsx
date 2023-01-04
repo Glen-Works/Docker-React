@@ -72,7 +72,7 @@ export default function ForgotPwdValid() {
           defaultMessage="忘記密碼"
         />
       </Typography>
-      <Box component="form" noValidate sx={{ mt: 1, width: '81%', maxWidth: '559px' }}>
+      <Box component="form" noValidate sx={{ mt: 1, width: '84%', maxWidth: '559px' }}>
         <TextField
           margin="normal"
           id="account"
