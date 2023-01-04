@@ -88,14 +88,13 @@ export default function Register() {
   return (
     <Box
       sx={{
-        my: 8,
-        mx: 4,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        width: 1
       }}
     >
-      <Typography component="h1" variant="h5">
+      <Typography component="h1" variant="h4">
         <FormattedMessage
           id="page.register.title"
           defaultMessage="註冊帳號"
@@ -259,10 +258,6 @@ export default function Register() {
                 id="page.login.link"
                 defaultMessage="回登入頁"
               />
-            </Link>
-          </Grid>
-          <Grid item>
-            <Link href="#" variant="body2">
             </Link>
           </Grid>
         </Grid>

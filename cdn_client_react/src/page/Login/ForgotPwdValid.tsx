@@ -59,14 +59,13 @@ export default function ForgotPwdValid() {
   return (
     <Box
       sx={{
-        my: 8,
-        mx: 4,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        width: 1
       }}
     >
-      <Typography component="h1" variant="h5">
+      <Typography component="h1" variant="h4">
         <FormattedMessage
           id="page.password.forgot"
           defaultMessage="忘記密碼"
@@ -138,7 +137,7 @@ export default function ForgotPwdValid() {
             : ""}
           {validMessage}
         </Grid>
-        <Grid container sx={{ mt: 1 }}>
+        <Grid container sx={{ mt: 2 }}>
           <Grid item xs>
             <Link href="/login" variant="body2">
               <FormattedMessage

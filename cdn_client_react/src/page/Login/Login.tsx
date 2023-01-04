@@ -92,17 +92,16 @@ export default function Login() {
   return (
     <Box
       sx={{
-        my: 8,
-        mx: 4,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        width: 1
       }}
     >
       <Avatar sx={{ m: 1, bgcolor: 'background.main', width: 85, height: 85 }}>
         <PersonOutlineIcon sx={{ m: 1, width: 60, height: 60 }} />
       </Avatar>
-      <Typography component="h1" variant="h5">
+      <Typography component="h1" variant="h4">
         <FormattedMessage
           id="page.login.login"
           defaultMessage="登入"

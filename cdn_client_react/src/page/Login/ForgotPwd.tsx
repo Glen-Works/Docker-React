@@ -50,14 +50,13 @@ export default function ForgotPwd() {
   return (
     <Box
       sx={{
-        my: 8,
-        mx: 4,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        width: 1
       }}
     >
-      <Typography component="h1" variant="h5">
+      <Typography component="h1" variant="h4">
         <FormattedMessage
           id="page.password.reset"
           defaultMessage="重置密碼"
