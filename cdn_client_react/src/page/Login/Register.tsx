@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Typography, useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
@@ -22,6 +22,7 @@ interface RegisgerInfo {
 export default function Register() {
   const intl = useIntl();
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const initialTime = 30 * 1000; // initial time in milliseconds, defaults to 60000
   const interval = 1000; // interval to change remaining time amount, defaults to 1000
@@ -77,11 +78,13 @@ export default function Register() {
 
     registerValidApi(account)?.then(res => {
       console.log(res.data);
+      start();
+      setStopSendEmail(true);
     }).catch(error => {
       console.log("error:" + error.response?.data?.message);
+      reset();
     });
-    start();
-    setStopSendEmail(true);
+
     setValidMessage("");
   }
 
@@ -179,12 +182,23 @@ export default function Register() {
             />
           </Button>
           {(timeLeft > 0)
-            ? intl.formatMessage({
-              id: 'page.login.valid.waitting.time',
-              defaultMessage: '等待，重新發送 {second} 秒',
-            }, { 'second': timeLeft / 1000 })
+            ?
+            <Box
+              component="span"
+              sx={{ color: theme.colors.error.main }}
+            >
+              {intl.formatMessage({
+                id: 'page.login.valid.waitting.time',
+                defaultMessage: '等待，重新發送 {second} 秒',
+              }, { 'second': timeLeft / 1000 })}
+            </Box>
             : ""}
-          {validMessage}
+          <Box
+            component="span"
+            sx={{ color: theme.colors.error.main }}
+          >
+            {validMessage}
+          </Box>
         </Grid>
 
         <TextField

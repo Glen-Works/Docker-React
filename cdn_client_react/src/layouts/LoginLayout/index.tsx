@@ -63,7 +63,7 @@ export default function LoginLayout(props: LoginLayoutProps) {
             direction="column"
             justifyContent="center"
             alignItems="center"
-            sx={{ minHeight: 'calc(100vh - 60px)' }}
+            sx={{ minHeight: 'calc(100vh - 150px)' }}
           >
             {children || <Outlet />}
           </Grid>
