@@ -1,5 +1,9 @@
 import api from "../baseApi";
 
+export const forgotPwdCheckValiCodeApi = (valiCode: string) => {
+    return api("get", "/api/v1/password/forgot/check/" + valiCode, null, null);
+}
+
 export const forgotPwdApi = (data: null | any) => {
     return api("post", "/api/v1/password/forgot", null, data);
 }
