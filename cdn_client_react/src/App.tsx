@@ -8,6 +8,7 @@ import { CssBaseline } from '@mui/material';
 import UseAuthState from 'src/contexts/AuthContext';
 import UseAuthMenuState from './contexts/AuthMenuContext';
 // import FontStyle from './theme/FontStyle';
+import AlertContextState from './contexts/AlertContext';
 import LanguageState from './contexts/LanguageContext';
 import ThemeProvider from './theme/ThemeProvider';
 
@@ -19,13 +20,15 @@ function App() {
       {/* <FontStyle> */}
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <CssBaseline />
-        <UseAuthState>
-          <UseAuthMenuState>
-            <LanguageState>
-              {content}
-            </LanguageState>
-          </UseAuthMenuState>
-        </UseAuthState>
+        <AlertContextState>
+          <UseAuthState>
+            <UseAuthMenuState>
+              <LanguageState>
+                {content}
+              </LanguageState>
+            </UseAuthMenuState>
+          </UseAuthState>
+        </AlertContextState>
       </LocalizationProvider>
       {/* </FontStyle> */}
     </ThemeProvider >

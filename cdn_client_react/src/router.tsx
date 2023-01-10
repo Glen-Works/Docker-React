@@ -11,6 +11,10 @@ const Loader = (Component) => (props) =>
     <Component {...props} />
   </Suspense>
 );
+// // Test
+// const Test = Loader(
+//   lazy(() => import('src/page/Status/Test'))
+// );
 // Status
 const Status404 = Loader(
   lazy(() => import('src/page/Status/Status404'))
@@ -126,6 +130,10 @@ const routes: RouteObject[] = [
     path: '',
     element: <Navigate to="login" replace />
   },
+  // {
+  //   path: 'test',
+  //   element: <Test />
+  // },
   {
     path: '404',
     element: <Status404 />
