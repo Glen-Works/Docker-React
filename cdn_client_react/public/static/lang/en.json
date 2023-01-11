@@ -70,5 +70,8 @@
   "error.email.format": "Invalid email address",
   "error.min.length": "at least {length} letter",
   "error.max.length": "need less {length} length",
-  "error.max.value": "Maximum value is {length}"
+  "error.max.value": "Maximum value is {length}",
+  "//response message": "",
+  "response.success": "success",
+  "response.error": "error"
 }

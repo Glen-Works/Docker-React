@@ -6,6 +6,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { ReactNode } from 'react';
 import { Outlet } from 'react-router-dom';
+import Notification from "src/components/Notification";
 import LanguageBox from 'src/layouts/SidebarLayout/Header/LanguageBox';
 
 function Copyright(props: any) {
@@ -32,6 +33,7 @@ export default function LoginLayout(props: LoginLayoutProps) {
 
   return (
     <ThemeProvider theme={theme}>
+      <Notification />
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid

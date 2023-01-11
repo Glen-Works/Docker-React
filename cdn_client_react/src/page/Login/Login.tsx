@@ -14,9 +14,11 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { useNavigate } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
 import { loginApi } from 'src/api/Login/loginApi';
+import { useAlertContext } from "src/contexts/AlertContext";
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import { jwtValidate } from 'src/middleware/jwtAuthMiddleware';
 import setUserInfo from 'src/stores/action/authActions';
+import { notifyError } from 'src/utils/notificationFunction';
 
 interface LoginInfo {
   account: string,
@@ -29,6 +31,7 @@ const COOKIE_USER_ACCOUNT_REMEMBER = "USER_ACCOUNT_REMEMBER";
 
 export default function Login() {
   const intl = useIntl();
+  const { actions } = useAlertContext();
 
   const navigate = useNavigate();
   const { state, dispatch } = useAuthStateContext();
@@ -85,6 +88,7 @@ export default function Login() {
       setUserInfo(dispatch, res.data);
       return navigate("/dashboard");
     }).catch(error => {
+      notifyError(intl, actions, error.response?.data?.message);
       console.log("error:" + error.response?.data?.message);
     });
   };

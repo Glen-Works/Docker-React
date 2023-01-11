@@ -1,38 +1,42 @@
-import { Alert, AlertTitle, Box, styled, useTheme } from "@mui/material";
+import { Alert, AlertTitle, Box, useTheme } from "@mui/material";
 import { useEffect } from "react";
 import { useAlertContext } from "src/contexts/AlertContext";
 
-const NotificationWrapper = styled(Box)(
-  ({ theme }) => `
-  .root {
-    position: 'fixed',
-    right: ${theme.spacing(2)},
-    bottom: ${theme.spacing(2)},
-    zIndex: 2000
-  }
-`
-);
+interface NotificationWrapper {
+  duration?: number
+}
 
-export default function Notification(props) {
-  const { duration = 1000 } = props;
+export default function Notification(props: NotificationWrapper) {
+  const theme = useTheme();
+  const { duration = 3000 } = props;
   const { state, actions } = useAlertContext();
   const handleClose = (alert) => {
     actions.removeAlert(alert);
   };
   return (
-    <NotificationWrapper component={'div'}>
-      {state?.alerts.length > 0 &&
+    <Box
+      component={'div'}
+      sx={{
+        position: 'fixed',
+        width: `70vw`,
+        right: `calc((100vw - 70vw)/2)`,
+        top: theme.spacing(2),
+        zIndex: 2000
+      }}>
+      {
+        state?.alerts.length > 0 &&
         state.alerts.map((alert, index) => (
           <SnackbarProvider
             key={alert.id + index}
-            index={index}
             duration={duration}
             alert={alert}
             handleClose={handleClose}
             {...props}
           />
-        ))}
-    </NotificationWrapper>
+        ))
+      }
+    </Box >
+
   );
 }
 
