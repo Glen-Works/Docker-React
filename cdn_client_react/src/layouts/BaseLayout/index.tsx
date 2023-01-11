@@ -1,8 +1,9 @@
-import { FC, ReactNode } from 'react';
 import PropTypes from 'prop-types';
+import { FC, ReactNode } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { Box } from '@mui/material';
+import Notification from "src/components/Notification";
 
 interface BaseLayoutProps {
   children?: ReactNode;
@@ -10,14 +11,17 @@ interface BaseLayoutProps {
 
 const BaseLayout: FC<BaseLayoutProps> = ({ children }) => {
   return (
-    <Box
-      sx={{
-        flex: 1,
-        height: '100%'
-      }}
-    >
-      {children || <Outlet />}
-    </Box>
+    <>
+      <Notification />
+      <Box
+        sx={{
+          flex: 1,
+          height: '100%'
+        }}
+      >
+        {children || <Outlet />}
+      </Box>
+    </>
   );
 };
 

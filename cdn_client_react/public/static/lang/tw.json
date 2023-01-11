@@ -73,5 +73,9 @@
   "error.max.value": "最大值為 {length}",
   "//response message": "",
   "response.success": "成功",
-  "response.error": "錯誤"
+  "response.error": "錯誤",
+  "response.valid.code.send": "驗證碼已寄出",
+  "response.reset.password.success": "密碼重置成功",
+  "response.register.success": "註冊成功",
+  "response.logout.success": "登出成功"
 }

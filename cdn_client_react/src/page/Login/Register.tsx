@@ -10,7 +10,10 @@ import { useForm } from "react-hook-form";
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useNavigate } from "react-router-dom";
 import { registerApi, registerValidApi } from 'src/api/Login/RegisterApi';
+import { useAlertContext } from "src/contexts/AlertContext";
 import { validEmail } from 'src/utils/baseFunction';
+import { notifyError, notifySuccess } from 'src/utils/notificationFunction';
+
 
 interface RegisgerInfo {
   name: string,
@@ -21,6 +24,8 @@ interface RegisgerInfo {
 
 export default function Register() {
   const intl = useIntl();
+  const { actions } = useAlertContext();
+
   const navigate = useNavigate();
   const theme = useTheme();
 
@@ -58,9 +63,15 @@ export default function Register() {
 
     registerApi(regisgerInfo)?.then(res => {
       //註冊成功
+      let notifyMsg = intl.formatMessage({
+        id: 'response.register.success',
+        defaultMessage: '註冊成功',
+      })
+      notifySuccess(intl, actions, notifyMsg);
       return navigate("/login");
     }).catch(error => {
-      console.log("error:" + error.response?.msg);
+      notifyError(intl, actions, error.response?.data?.message);
+      console.log("error:" + error.response?.data?.message);
     });
   };
 
@@ -76,13 +87,21 @@ export default function Register() {
       return;
     }
 
+
+    setStopSendEmail(true);
     registerValidApi(account)?.then(res => {
-      console.log(res.data);
+      let notifyMsg = intl.formatMessage({
+        id: 'response.valid.code.send',
+        defaultMessage: '驗證碼已寄出',
+      })
+      notifySuccess(intl, actions, notifyMsg);
       start();
-      setStopSendEmail(true);
+      // console.log(res.data);
     }).catch(error => {
+      notifyError(intl, actions, error.response?.data?.message);
       console.log("error:" + error.response?.data?.message);
       reset();
+      setStopSendEmail(false);
     });
 
     setValidMessage("");

@@ -73,5 +73,9 @@
   "error.max.value": "Maximum value is {length}",
   "//response message": "",
   "response.success": "success",
-  "response.error": "error"
+  "response.error": "error",
+  "response.valid.code.send": "The verification code has been sent",
+  "response.reset.password.success": "Password reset successful",
+  "response.register.success": "Registration success",
+  "response.logout.success": "Logout successful"
 }

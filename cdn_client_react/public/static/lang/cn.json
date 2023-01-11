@@ -73,5 +73,9 @@
   "error.max.value": "最大值为 {length}",
   "//response message": "",
   "response.success": "成功",
-  "response.error": "错误"
+  "response.error": "错误",
+  "response.valid.code.send": "验证码已寄出",
+  "response.reset.password.success": "密码更新成功",
+  "response.register.success": "注册帐号成功",
+  "response.logout.success": "注销帐户成功"
 }

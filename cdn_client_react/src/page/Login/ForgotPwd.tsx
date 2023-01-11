@@ -9,6 +9,8 @@ import { useForm } from "react-hook-form";
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useNavigate, useParams } from "react-router-dom";
 import { forgotPwdApi, forgotPwdCheckValiCodeApi } from 'src/api/Login/ForgotPwdApi';
+import { useAlertContext } from "src/contexts/AlertContext";
+import { notifyError, notifySuccess } from 'src/utils/notificationFunction';
 
 interface ResetPasswordInfo {
   validation: string
@@ -18,11 +20,10 @@ interface ResetPasswordInfo {
 
 export default function ForgotPwd() {
   const intl = useIntl();
-  let { cachename } = useParams();
+  const { actions } = useAlertContext();
+  const { cachename } = useParams();
   const navigate = useNavigate();
-
   const [valiCode, setValiCode] = useState<boolean>(false);
-
   const { register, handleSubmit, setValue, getValues, watch, formState: { errors } } = useForm(
     {
       defaultValues: {
@@ -58,9 +59,15 @@ export default function ForgotPwd() {
 
     forgotPwdApi(resetPasswordInfo)?.then(res => {
       //密碼重置成功
+      let notifyMsg = intl.formatMessage({
+        id: 'response.reset.password.success',
+        defaultMessage: '密碼重置成功',
+      })
+      notifySuccess(intl, actions, notifyMsg);
       return navigate("/login");
     }).catch(error => {
-      console.log("error:" + error.response?.msg);
+      notifyError(intl, actions, error.response?.data?.message);
+      console.log("error:" + error.response?.message);
     });
   };
 

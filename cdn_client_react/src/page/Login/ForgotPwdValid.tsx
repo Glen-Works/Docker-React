@@ -9,9 +9,14 @@ import useCountDown from 'react-countdown-hook';
 import { useForm } from "react-hook-form";
 import { FormattedMessage, useIntl } from 'react-intl';
 import { forgotPwdValidApi } from 'src/api/Login/ForgotPwdApi';
+import { useAlertContext } from "src/contexts/AlertContext";
 import { validEmail } from 'src/utils/baseFunction';
+import { notifyError, notifySuccess } from 'src/utils/notificationFunction';
+
 export default function ForgotPwdValid() {
   const intl = useIntl();
+  const { actions } = useAlertContext();
+
   const url = window.location.href;
   const theme = useTheme();
 
@@ -47,13 +52,20 @@ export default function ForgotPwdValid() {
       return;
     }
 
+    setStopSendEmail(true);
     forgotPwdValidApi({ "url": url }, account)?.then(res => {
-      console.log(res.data);
+      let notifyMsg = intl.formatMessage({
+        id: 'response.valid.code.send',
+        defaultMessage: '驗證碼已寄出',
+      })
+      notifySuccess(intl, actions, notifyMsg);
       start();
-      setStopSendEmail(true);
+      // console.log(res.data);
     }).catch(error => {
+      notifyError(intl, actions, error.response?.data?.message);
       console.log("error:" + error.response?.data?.message);
       reset();
+      setStopSendEmail(false);
     });
     setValidMessage("");
   }
@@ -158,14 +170,14 @@ export default function ForgotPwdValid() {
               />
             </Link>
           </Grid>
-          <Grid item >
+          {/* <Grid item >
             <Link href="/forgot/password" variant="body2">
               <FormattedMessage
                 id="page.login.password.forgot"
                 defaultMessage="忘記密碼"
               />
             </Link>
-          </Grid>
+          </Grid> */}
         </Grid>
       </Box>
     </Box>

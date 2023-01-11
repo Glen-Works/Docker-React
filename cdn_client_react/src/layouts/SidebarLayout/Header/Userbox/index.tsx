@@ -2,16 +2,7 @@ import { useRef, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-import {
-  Box,
-  Button,
-  Divider, lighten,
-  List,
-  ListItem,
-  ListItemText,
-  Popover,
-  Typography
-} from '@mui/material';
+import { Box, Button, Divider, lighten, List, ListItem, ListItemText, Popover, Typography } from '@mui/material';
 
 import AccountBoxTwoToneIcon from '@mui/icons-material/AccountBoxTwoTone';
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
@@ -19,8 +10,10 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { styled } from '@mui/material/styles';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { logoutApi } from 'src/api/Header/Userbox/userboxApi';
+import { useAlertContext } from "src/contexts/AlertContext";
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import { logoutRemoveCookie } from 'src/stores/action/authActions';
+import { notifyError, notifySuccess } from 'src/utils/notificationFunction';
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -58,6 +51,8 @@ const UserBoxDescription = styled(Typography)(
 );
 
 function HeaderUserbox() {
+  const intl = useIntl();
+  const { actions } = useAlertContext();
   const navigate = useNavigate();
   const { state, dispatch } = useAuthStateContext();
 
@@ -86,13 +81,17 @@ function HeaderUserbox() {
   const logout = () => {
     logoutApi(state)?.then(res => {
       logoutRemoveCookie(dispatch);
+      let notifyMsg = intl.formatMessage({
+        id: 'response.logout.success',
+        defaultMessage: '登出成功',
+      })
+      notifySuccess(intl, actions, notifyMsg);
       return navigate('/login');
     }).catch(error => {
+      notifyError(intl, actions, error.response?.data?.message);
       console.log("error:" + error.response?.data?.message);
     });
   }
-
-  const intl = useIntl();
 
   return (
     <>
