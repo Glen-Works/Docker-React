@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { unstable_batchedUpdates } from "react-dom";
 import { useForm } from "react-hook-form";
 import { FormattedMessage, useIntl } from 'react-intl';
+import { pageSizeOption } from 'src/api/baseApi';
 import { menuAllListApi, roleAddApi, roleDeleteApi, roleDeleteMultipleApi, roleEditApi, roleInfoApi, roleListApi } from 'src/api/Role/roleApi';
 import { ColumnIconButton } from 'src/components/DataTable/CustomerIconRender';
 import { CustomBodyTime } from 'src/components/DataTable/CustomerRender';
@@ -427,7 +428,7 @@ function Role() {
     serverSide: true,
     count: count,
     rowsPerPage: limit,
-    // rowsPerPageOptions: [],
+    rowsPerPageOptions: pageSizeOption(),
     sortOrder: { name: sortColumn, direction: sort },
 
     onRowsDelete: onMultipleDelete,

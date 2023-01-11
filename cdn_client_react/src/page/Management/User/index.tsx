@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { unstable_batchedUpdates } from "react-dom";
 import { useForm } from "react-hook-form";
 import { FormattedMessage, useIntl } from 'react-intl';
+import { pageSizeOption } from 'src/api/baseApi';
 import { roleAllListApi, userAddApi, userDeleteApi, userDeleteMultipleApi, userEditApi, userInfoApi, userListApi, userPwdEditApi } from 'src/api/User/userApi';
 import { ColumnIconButton } from 'src/components/DataTable/CustomerIconRender';
 import { CustomBodyTime } from 'src/components/DataTable/CustomerRender';
@@ -533,7 +534,7 @@ function User() {
     serverSide: true,
     count: count,
     rowsPerPage: limit,
-    // rowsPerPageOptions: [],
+    rowsPerPageOptions: pageSizeOption(),
     sortOrder: { name: sortColumn, direction: sort },
 
     onRowsDelete: onMultipleDelete,

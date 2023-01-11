@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { unstable_batchedUpdates } from "react-dom";
 import { useForm } from "react-hook-form";
 import { FormattedMessage, useIntl } from 'react-intl';
+import { pageSizeOption } from 'src/api/baseApi';
 import { menuAddApi, menuAllListApi, menuDeleteApi, menuDeleteMultipleApi, menuEditApi, menuInfoApi, menuListApi } from 'src/api/Menu/menuApi';
 import { ColumnIconButton } from 'src/components/DataTable/CustomerIconRender';
 import { CustomBodyTime } from 'src/components/DataTable/CustomerRender';
@@ -474,7 +475,7 @@ function Menu() {
     serverSide: true,
     count: count,
     rowsPerPage: limit,
-    // rowsPerPageOptions: [],
+    rowsPerPageOptions: pageSizeOption(),
     sortOrder: { name: sortColumn, direction: sort },
 
     onRowsDelete: onMultipleDelete,
@@ -511,8 +512,7 @@ function Menu() {
           subTitle={""}
         />
       </PageTitleWrapper>
-      <PageContent
-      >
+      <PageContent>
         <Grid
           container
           direction="row"

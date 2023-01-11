@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { unstable_batchedUpdates } from "react-dom";
 import { useForm } from "react-hook-form";
 import { useIntl } from 'react-intl';
+import { pageSizeOption } from 'src/api/baseApi';
 import { userAddApi, userDeleteApi, userEditApi, userInfoApi, userListApi, userPwdEditApi } from 'src/api/Sample/sampleDataTableApi';
 import { ColumnIconButton } from 'src/components/DataTable/CustomerIconRender';
 import { CustomBodyTime } from 'src/components/DataTable/CustomerRender';
@@ -420,7 +421,7 @@ function SampleDataTable() {
     serverSide: true,
     count: count,
     rowsPerPage: limit,
-    // rowsPerPageOptions: [],
+    rowsPerPageOptions: pageSizeOption(),
     sortOrder: { name: sortColumn, direction: sort },
     onTableChange: (action, tableState) => {
       // console.log(action, tableState);
