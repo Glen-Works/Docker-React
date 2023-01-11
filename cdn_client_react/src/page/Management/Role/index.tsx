@@ -20,10 +20,12 @@ import PageHeader from 'src/components/PageHeader';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import Title from 'src/components/Title';
+import { useAlertContext } from "src/contexts/AlertContext";
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import { useAuthMenuContext } from 'src/contexts/AuthMenuContext';
 import { MenuTree, validAuthMenuFeature } from 'src/middleware/authMenuMiddleware';
 import { makeRecursionTree } from 'src/utils/baseFunction';
+import { notifyError, notifySuccess } from 'src/utils/notificationFunction';
 import RoleAddAndEditDialog from './RoleAddAndEditDialog';
 import RoleSearch from './RoleSearch';
 
@@ -48,6 +50,7 @@ interface RoleData {
 
 function Role() {
   const intl = useIntl();
+  const { actions } = useAlertContext();
   const theme = useTheme();
   const AuthMenu = useAuthMenuContext();
   const { state } = useAuthStateContext();
@@ -100,7 +103,8 @@ function Role() {
         setTableState({ data: res.data.roleList, pageManagement: res.data.pageManagement, isLoading: false });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -157,7 +161,8 @@ function Role() {
         setRoleValue("remark", data.remark, { shouldValidate: true });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -206,7 +211,8 @@ function Role() {
         defaultRootNode.children = makeRecursionTree<MenuTree>(res.data.menuList, 0);
         setMenuCheckboxList(defaultRootNode);
       }).catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -214,11 +220,17 @@ function Role() {
     // console.log(data);
     roleAddApi(data, state)
       .then(res => {
+        let notifyMsg = intl.formatMessage({
+          id: 'response.create.success',
+          defaultMessage: '新增成功',
+        })
+        notifySuccess(intl, actions, notifyMsg);
         handleAddAndEditClose();
         getData({ ...tableState.pageManagement });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -226,11 +238,17 @@ function Role() {
     // console.log(data);
     roleEditApi(selectedId, data, state)
       .then(res => {
+        let notifyMsg = intl.formatMessage({
+          id: 'response.update.success',
+          defaultMessage: '修改成功',
+        })
+        notifySuccess(intl, actions, notifyMsg);
         handleAddAndEditClose();
         getData({ ...tableState.pageManagement });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -238,21 +256,33 @@ function Role() {
     // console.log(selectedIndex);
     roleDeleteApi(selectedId, state)
       .then(res => {
+        let notifyMsg = intl.formatMessage({
+          id: 'response.delete.success',
+          defaultMessage: '刪除成功',
+        })
+        notifySuccess(intl, actions, notifyMsg);
         handleDeleteClose();
         getData({ ...tableState.pageManagement });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 
   function deleteMultipleRole(ids: number[]) {
     roleDeleteMultipleApi({ id: ids }, state)
       .then(res => {
+        let notifyMsg = intl.formatMessage({
+          id: 'response.delete.success',
+          defaultMessage: '刪除成功',
+        })
+        notifySuccess(intl, actions, notifyMsg);
         getData({ ...tableState.pageManagement });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 

@@ -21,9 +21,11 @@ import PageHeader from 'src/components/PageHeader';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import Title from 'src/components/Title';
+import { useAlertContext } from "src/contexts/AlertContext";
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import { useAuthMenuContext } from 'src/contexts/AuthMenuContext';
 import { validAuthMenuFeature } from 'src/middleware/authMenuMiddleware';
+import { notifyError, notifySuccess } from 'src/utils/notificationFunction';
 import UserAddAndEditDialog from './UserAddAndEditDialog';
 import UserEditPasswordDialog from './UserEditPasswordDialog';
 import UserSearch from './UserSearch';
@@ -69,6 +71,7 @@ interface UserPassword {
 
 function User() {
   const intl = useIntl();
+  const { actions } = useAlertContext();
   const theme = useTheme();
   const { state } = useAuthStateContext();
   const [tableState, setTableState] = useState<DataTableStatus>(getDataTableState());
@@ -134,7 +137,8 @@ function User() {
         setTableState({ data: res.data.userList, pageManagement: res.data.pageManagement, isLoading: false });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -195,7 +199,8 @@ function User() {
       .then(res => {
         setRoleListSelect(res.data.roleList);
       }).catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -212,7 +217,8 @@ function User() {
         setUserValue("remark", data.remark, { shouldValidate: true });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -259,11 +265,17 @@ function User() {
     // console.log(data);
     userAddApi(data, state)
       .then(res => {
+        let notifyMsg = intl.formatMessage({
+          id: 'response.create.success',
+          defaultMessage: '新增成功',
+        })
+        notifySuccess(intl, actions, notifyMsg);
         handleAddAndEditClose();
         getData({ ...tableState.pageManagement });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -271,11 +283,17 @@ function User() {
     // console.log(data);
     userEditApi(selectedId, data, state)
       .then(res => {
+        let notifyMsg = intl.formatMessage({
+          id: 'response.update.success',
+          defaultMessage: '修改成功',
+        })
+        notifySuccess(intl, actions, notifyMsg);
         handleAddAndEditClose();
         getData({ ...tableState.pageManagement });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -283,10 +301,16 @@ function User() {
     // console.log(data);
     userPwdEditApi(selectedId, data, state)
       .then(res => {
+        let notifyMsg = intl.formatMessage({
+          id: 'response.update.success',
+          defaultMessage: '修改成功',
+        })
+        notifySuccess(intl, actions, notifyMsg);
         handleEditPwdClose();
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -294,21 +318,33 @@ function User() {
     // console.log(selectedIndex);
     userDeleteApi(selectedId, state)
       .then(res => {
+        let notifyMsg = intl.formatMessage({
+          id: 'response.delete.success',
+          defaultMessage: '刪除成功',
+        })
+        notifySuccess(intl, actions, notifyMsg);
         handleDeleteClose();
         getData({ ...tableState.pageManagement });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 
   function deleteMultipleUser(ids: number[]) {
     userDeleteMultipleApi({ id: ids }, state)
       .then(res => {
+        let notifyMsg = intl.formatMessage({
+          id: 'response.delete.success',
+          defaultMessage: '刪除成功',
+        })
+        notifySuccess(intl, actions, notifyMsg);
         getData({ ...tableState.pageManagement });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 

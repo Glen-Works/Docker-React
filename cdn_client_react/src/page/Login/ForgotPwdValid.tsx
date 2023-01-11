@@ -63,7 +63,7 @@ export default function ForgotPwdValid() {
       // console.log(res.data);
     }).catch(error => {
       notifyError(intl, actions, error.response?.data?.message);
-      console.log("error:" + error.response?.data?.message);
+      //console.log("error:" + error.response?.data?.message);
       reset();
       setStopSendEmail(false);
     });

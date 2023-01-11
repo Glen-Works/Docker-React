@@ -44,7 +44,7 @@ export default function ForgotPwd() {
       setValiCode(true);
     }).catch(error => {
       // setValiCode(false);
-      console.log("error:" + error.response?.msg);
+      console.log("error:" + error.response?.message);
       return navigate("/login");
     });
   }

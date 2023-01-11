@@ -20,9 +20,11 @@ import PageHeader from 'src/components/PageHeader';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import Title from 'src/components/Title';
+import { useAlertContext } from "src/contexts/AlertContext";
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import { useAuthMenuContext } from 'src/contexts/AuthMenuContext';
 import { validAuthMenuFeature } from 'src/middleware/authMenuMiddleware';
+import { notifyError, notifySuccess } from 'src/utils/notificationFunction';
 import MenuAddAndEditDialog from './MenuAddAndEditDialog';
 import MenuSearch from './MenuSearch';
 
@@ -61,6 +63,7 @@ interface MenuData {
 
 function Menu() {
   const intl = useIntl();
+  const { actions } = useAlertContext();
   const theme = useTheme();
   const AuthMenu = useAuthMenuContext();
   const { state } = useAuthStateContext();
@@ -114,7 +117,8 @@ function Menu() {
         setTableState({ data: res.data.menuList, pageManagement: res.data.pageManagement, isLoading: false });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -171,7 +175,8 @@ function Menu() {
           ...res.data.menuList
         ]);
       }).catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -189,7 +194,8 @@ function Menu() {
         setMenuValue("remark", data.remark, { shouldValidate: true });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -223,11 +229,17 @@ function Menu() {
     // console.log(data);
     menuAddApi(data, state)
       .then(res => {
+        let notifyMsg = intl.formatMessage({
+          id: 'response.create.success',
+          defaultMessage: '新增成功',
+        })
+        notifySuccess(intl, actions, notifyMsg);
         handleAddAndEditClose();
         getData({ ...tableState.pageManagement });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -235,11 +247,17 @@ function Menu() {
     // console.log(data);
     menuEditApi(selectedId, data, state)
       .then(res => {
+        let notifyMsg = intl.formatMessage({
+          id: 'response.update.success',
+          defaultMessage: '修改成功',
+        })
+        notifySuccess(intl, actions, notifyMsg);
         handleAddAndEditClose();
         getData({ ...tableState.pageManagement });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -247,21 +265,33 @@ function Menu() {
     // console.log(selectedIndex);
     menuDeleteApi(selectedId, state)
       .then(res => {
+        let notifyMsg = intl.formatMessage({
+          id: 'response.delete.success',
+          defaultMessage: '刪除成功',
+        })
+        notifySuccess(intl, actions, notifyMsg);
         handleDeleteClose();
         getData({ ...tableState.pageManagement });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 
   function deleteMultipleMenu(ids: number[]) {
     menuDeleteMultipleApi({ id: ids }, state)
       .then(res => {
+        let notifyMsg = intl.formatMessage({
+          id: 'response.delete.success',
+          defaultMessage: '刪除成功',
+        })
+        notifySuccess(intl, actions, notifyMsg);
         getData({ ...tableState.pageManagement });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 

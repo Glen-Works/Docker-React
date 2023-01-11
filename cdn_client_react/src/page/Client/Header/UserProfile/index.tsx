@@ -11,7 +11,9 @@ import PageContent from 'src/components/PageContent';
 import PageHeader from 'src/components/PageHeader';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import Title from 'src/components/Title';
+import { useAlertContext } from "src/contexts/AlertContext";
 import { useAuthStateContext } from 'src/contexts/AuthContext';
+import { notifyError, notifySuccess } from 'src/utils/notificationFunction';
 import ProfileEditDialog from './ProfileEditDialog';
 import ProfileEditPasswordDialog from './ProfileEditPasswordDialog';
 
@@ -27,6 +29,7 @@ interface UserPassword {
 
 function UserProfile() {
   const intl = useIntl();
+  const { actions } = useAlertContext();
   const theme = useTheme();
   const { state } = useAuthStateContext();
 
@@ -110,7 +113,8 @@ function UserProfile() {
         setProfileValue("email", data.email, { shouldValidate: true });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -118,11 +122,17 @@ function UserProfile() {
     // console.log(data);
     userUpdateProfileApi(data, state)
       .then(res => {
+        let notifyMsg = intl.formatMessage({
+          id: 'response.update.success',
+          defaultMessage: '修改成功',
+        })
+        notifySuccess(intl, actions, notifyMsg);
         handleEditProfileClose();
         getData()
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -130,10 +140,16 @@ function UserProfile() {
     // console.log(data);
     userUpdateProfilePasswordApi(data, state)
       .then(res => {
+        let notifyMsg = intl.formatMessage({
+          id: 'response.update.success',
+          defaultMessage: '修改成功',
+        })
+        notifySuccess(intl, actions, notifyMsg);
         handleEditPwdClose();
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 

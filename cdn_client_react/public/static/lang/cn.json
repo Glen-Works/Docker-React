@@ -77,5 +77,8 @@
   "response.valid.code.send": "验证码已寄出",
   "response.reset.password.success": "密码更新成功",
   "response.register.success": "注册帐号成功",
-  "response.logout.success": "注销帐户成功"
+  "response.logout.success": "注销帐号成功",
+  "response.create.success": "新增成功",
+  "response.update.success": "修改成功",
+  "response.delete.success": "刪除成功"
 }

@@ -26,7 +26,9 @@ import PageHeader from 'src/components/PageHeader';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import SuspenseLoader from 'src/components/SuspenseLoader';
 import Title from 'src/components/Title';
+import { useAlertContext } from "src/contexts/AlertContext";
 import { useAuthStateContext } from 'src/contexts/AuthContext';
+import { notifyError, notifySuccess } from 'src/utils/notificationFunction';
 
 interface MapStyle {
   [key: number]: { label: string, color: "primary" | "secondary" | "error" | "black" | "warning" | "success" | "info" }
@@ -61,6 +63,7 @@ interface UserPwd {
 
 function SampleDataTable() {
   const intl = useIntl();
+  const { actions } = useAlertContext();
 
   const theme = useTheme();
   const { state } = useAuthStateContext();
@@ -109,7 +112,8 @@ function SampleDataTable() {
         setTableState({ data: res.data.userList, pageManagement: res.data.pageManagement, isLoading: false });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -171,7 +175,8 @@ function SampleDataTable() {
         setUserValue("remark", data.remark, { shouldValidate: true });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -217,11 +222,17 @@ function SampleDataTable() {
     // console.log(data);
     userAddApi(data, state)
       .then(res => {
+        let notifyMsg = intl.formatMessage({
+          id: 'response.update.success',
+          defaultMessage: '修改成功',
+        })
+        notifySuccess(intl, actions, notifyMsg);
         handleAddAndEditClose();
         getData({ ...tableState.pageManagement });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -229,11 +240,17 @@ function SampleDataTable() {
     // console.log(data);
     userEditApi(selectedId, data, state)
       .then(res => {
+        let notifyMsg = intl.formatMessage({
+          id: 'response.delete.success',
+          defaultMessage: '刪除成功',
+        })
+        notifySuccess(intl, actions, notifyMsg);
         handleAddAndEditClose();
         getData({ ...tableState.pageManagement });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -244,7 +261,8 @@ function SampleDataTable() {
         handleEditPwdClose();
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 
@@ -252,11 +270,17 @@ function SampleDataTable() {
     // console.log(selectedIndex);
     userDeleteApi(selectedId, state)
       .then(res => {
+        let notifyMsg = intl.formatMessage({
+          id: 'response.delete.success',
+          defaultMessage: '刪除成功',
+        })
+        notifySuccess(intl, actions, notifyMsg);
         handleDeleteClose();
         getData({ ...tableState.pageManagement });
       })
       .catch(error => {
-        console.log("error:" + error.response?.data?.message);
+        notifyError(intl, actions, error.response?.data?.message);
+        //console.log("error:" + error.response?.data?.message);
       });
   }
 

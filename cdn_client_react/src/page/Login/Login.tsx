@@ -89,7 +89,7 @@ export default function Login() {
       return navigate("/dashboard");
     }).catch(error => {
       notifyError(intl, actions, error.response?.data?.message);
-      console.log("error:" + error.response?.data?.message);
+      //console.log("error:" + error.response?.data?.message);
     });
   };
 
