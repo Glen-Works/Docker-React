@@ -13,7 +13,7 @@ import { CustomBodyTime } from 'src/components/DataTable/CustomerRender';
 import DataTableDialog from 'src/components/DataTable/DataTableDialog';
 import getDataTableState, { DataTableStatus, PageManagement, Search, setPageManagement } from 'src/components/DataTable/DataTableState';
 import DataTableThemeProvider from 'src/components/DataTable/DataTableThemeProvider';
-import getTextLabels from 'src/components/DataTable/TextLabels';
+import { getTextLabelsByLang } from 'src/components/DataTable/TextLabels';
 import Label from 'src/components/Label';
 import PageContent from 'src/components/PageContent';
 import PageHeader from 'src/components/PageHeader';
@@ -23,12 +23,12 @@ import Title from 'src/components/Title';
 import { useAlertContext } from "src/contexts/AlertContext";
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import { useAuthMenuContext } from 'src/contexts/AuthMenuContext';
+import { useLanguageContext } from 'src/contexts/LanguageContext';
 import { MenuTree, validAuthMenuFeature } from 'src/middleware/authMenuMiddleware';
 import { makeRecursionTree } from 'src/utils/baseFunction';
 import { notifyError, notifySuccess } from 'src/utils/notificationFunction';
 import RoleAddAndEditDialog from './RoleAddAndEditDialog';
 import RoleSearch from './RoleSearch';
-
 
 interface MapStyle {
   [key: number]: { label: string, color: "primary" | "secondary" | "error" | "black" | "warning" | "success" | "info" }
@@ -51,6 +51,7 @@ interface RoleData {
 function Role() {
   const intl = useIntl();
   const { actions } = useAlertContext();
+  const languageType = useLanguageContext().state;
   const theme = useTheme();
   const AuthMenu = useAuthMenuContext();
   const { state } = useAuthStateContext();
@@ -454,7 +455,7 @@ function Role() {
     filter: false,
     resizableColumns: true,
 
-    textLabels: getTextLabels(),
+    textLabels: getTextLabelsByLang(languageType),
     serverSide: true,
     count: count,
     rowsPerPage: limit,

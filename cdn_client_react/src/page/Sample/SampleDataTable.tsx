@@ -17,7 +17,7 @@ import { CustomBodyTime } from 'src/components/DataTable/CustomerRender';
 import DataTableDialog from 'src/components/DataTable/DataTableDialog';
 import getDataTableState, { DataTableStatus, PageManagement, Search, setPageManagement } from 'src/components/DataTable/DataTableState';
 import DataTableThemeProvider from 'src/components/DataTable/DataTableThemeProvider';
-import getTextLabels from 'src/components/DataTable/TextLabels';
+import { getTextLabelsByLang } from 'src/components/DataTable/TextLabels';
 import DialogFormat from 'src/components/Dialog/DialogFormat';
 import TextArea from 'src/components/Input/TextArea';
 import Label from 'src/components/Label';
@@ -28,6 +28,7 @@ import SuspenseLoader from 'src/components/SuspenseLoader';
 import Title from 'src/components/Title';
 import { useAlertContext } from "src/contexts/AlertContext";
 import { useAuthStateContext } from 'src/contexts/AuthContext';
+import { useLanguageContext } from 'src/contexts/LanguageContext';
 import { notifyError, notifySuccess } from 'src/utils/notificationFunction';
 
 interface MapStyle {
@@ -64,7 +65,7 @@ interface UserPwd {
 function SampleDataTable() {
   const intl = useIntl();
   const { actions } = useAlertContext();
-
+  const languageType = useLanguageContext().state;
   const theme = useTheme();
   const { state } = useAuthStateContext();
   const [tableState, setTableState] = useState<DataTableStatus>(getDataTableState());
@@ -441,7 +442,7 @@ function SampleDataTable() {
     filter: false,
     resizableColumns: true,
 
-    textLabels: getTextLabels(),
+    textLabels: getTextLabelsByLang(languageType),
     serverSide: true,
     count: count,
     rowsPerPage: limit,

@@ -41,6 +41,7 @@
   "page.name": "名称",
   "page.status": "状态",
   "page.remark": "备注",
+  "page.weight": "权重",
   "page.create.day": "创建日期",
   "page.update.day": "修改日期",
   "//user page": "",
