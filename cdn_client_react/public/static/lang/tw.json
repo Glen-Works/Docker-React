@@ -80,5 +80,13 @@
   "response.logout.success": "登出成功",
   "response.create.success": "新增成功",
   "response.update.success": "修改成功",
-  "response.delete.success": "刪除成功"
+  "response.delete.success": "刪除成功",
+  "//label text": "",
+  "label.disabled": "停用",
+  "label.enable": "啟用",
+  "label.manager": "管理者",
+  "label.user": "一般使用者",
+  "label.title": "標題",
+  "label.page": "頁面",
+  "label.feature": "按鍵功能"
 }

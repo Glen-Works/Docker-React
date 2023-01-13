@@ -3,7 +3,6 @@ import { useIntl } from "react-intl";
 import DataTableDialog from "src/components/DataTable/DataTableDialog";
 import DialogFormat from "src/components/Dialog/DialogFormat";
 import TextArea from "src/components/Input/TextArea";
-import { useLanguageContext } from "src/contexts/LanguageContext";
 import { MapStyleBase } from "src/utils/baseFunction";
 import { RoleListSelect } from ".";
 
@@ -28,7 +27,6 @@ interface UserAddAndEditDialogProp {
 export default function UserAddAndEditDialog(props: UserAddAndEditDialogProp) {
 
   const intl = useIntl();
-  const languageType = useLanguageContext().state;
 
   const {
     selectedId,
@@ -219,7 +217,10 @@ export default function UserAddAndEditDialog(props: UserAddAndEditDialogProp) {
             >
               {Object.keys(userTypeMap).map((value) => (
                 <MenuItem key={value} value={value}>
-                  {userTypeMap[value]["label"][languageType]}
+                  {intl.formatMessage({
+                    id: userTypeMap[value]["label"],
+                    defaultMessage: '',
+                  })}
                 </MenuItem>
               ))
               }

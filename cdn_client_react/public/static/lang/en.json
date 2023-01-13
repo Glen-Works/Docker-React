@@ -80,5 +80,13 @@
   "response.logout.success": "Logout successfully",
   "response.create.success": "Added successfully",
   "response.update.success": "Modified Successfully ",
-  "response.delete.success": "Deleted successfully "
+  "response.delete.success": "Deleted successfully ",
+  "//label text": "",
+  "label.disabled": "disabled",
+  "label.enable": "enable",
+  "label.manager": "manager",
+  "label.user": "user",
+  "label.title": "title",
+  "label.page": "page",
+  "label.feature": "feature"
 }

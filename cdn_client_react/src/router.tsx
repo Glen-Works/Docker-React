@@ -94,11 +94,6 @@ const SampleContent = Loader(
   lazy(() => import('src/page/Sample/SampleContent'))
 );
 
-// SampleDataTable
-const SampleDataTable = Loader(
-  lazy(() => import('src/page/Sample/SampleDataTable'))
-);
-
 const routes: RouteObject[] = [
   {
     path: '',
@@ -185,10 +180,6 @@ const routes: RouteObject[] = [
                   {
                     path: 'samplecontent',
                     element: <SampleContent />
-                  },
-                  {
-                    path: 'sampledatatable',
-                    element: <SampleDataTable />
                   },
                   {
                     path: '500',

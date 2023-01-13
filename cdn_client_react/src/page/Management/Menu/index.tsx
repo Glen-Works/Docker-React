@@ -31,9 +31,9 @@ import MenuAddAndEditDialog from './MenuAddAndEditDialog';
 import MenuSearch from './MenuSearch';
 
 const featureMap: MapStyleBase = {
-  'T': { label: { "es-US": 'title', "zh-CN": '标题', "zh-TW": '標題' }, color: 'black' },
-  'P': { label: { "es-US": 'page', "zh-CN": '页面', "zh-TW": '頁面' }, color: 'primary' },
-  'F': { label: { "es-US": 'feature', "zh-CN": '按键功能', "zh-TW": '按鍵功能' }, color: 'secondary' }
+  'T': { label: 'label.title', color: 'black' },
+  'P': { label: 'label.page', color: 'primary' },
+  'F': { label: 'label.feature', color: 'secondary' }
 }
 
 export interface MenuListSelect {
@@ -365,7 +365,14 @@ function Menu() {
         customBodyRender: (value, tableMeta, updateValue) => (
           <>
             {(featureMap[value]) &&
-              < Label color={featureMap[value].color}>{featureMap[value]["label"][languageType]}</Label>
+              < Label color={featureMap[value].color}>
+                {
+                  intl.formatMessage({
+                    id: featureMap[value]["label"],
+                    defaultMessage: '',
+                  })
+                }
+              </Label>
             }
           </>
         )
@@ -382,7 +389,14 @@ function Menu() {
         customBodyRender: (value, tableMeta, updateValue) => (
           <>
             {(statusMap[value]) &&
-              < Label color={statusMap[value].color}>{statusMap[value]["label"][languageType]}</Label>
+              < Label color={statusMap[value].color}>
+                {
+                  intl.formatMessage({
+                    id: statusMap[value]["label"],
+                    defaultMessage: '',
+                  })
+                }
+              </Label>
             }
           </>
         )

@@ -344,7 +344,14 @@ function Role() {
         customBodyRender: (value, tableMeta, updateValue) => (
           <>
             {(statusMap[value]) &&
-              < Label color={statusMap[value].color}>{statusMap[value]["label"][languageType]}</Label>
+              < Label color={statusMap[value].color}>
+                {
+                  intl.formatMessage({
+                    id: statusMap[value]["label"],
+                    defaultMessage: '',
+                  })
+                }
+              </Label>
             }
           </>
         )

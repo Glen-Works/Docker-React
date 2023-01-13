@@ -34,11 +34,9 @@ import UserSearch from './UserSearch';
 
 
 const userTypeMap: MapStyleBase = {
-  1: { label: { "es-US": 'manager', "zh-CN": '管理者', "zh-TW": '管理者' }, color: 'primary' },
-  2: { label: { "es-US": 'user', "zh-CN": '一般使用者', "zh-TW": '一般使用者' }, color: 'secondary' }
+  1: { label: "label.manager", color: 'primary' },
+  2: { label: "label.user", color: 'secondary' }
 }
-
-
 
 export interface RoleListSelect {
   id: number,
@@ -415,7 +413,14 @@ function User() {
         customBodyRender: (value, tableMeta, updateValue) => (
           <>
             {(statusMap[value]) &&
-              < Label color={statusMap[value].color}>{statusMap[value]["label"][languageType]}</Label>
+              < Label color={statusMap[value].color}>
+                {
+                  intl.formatMessage({
+                    id: statusMap[value]["label"],
+                    defaultMessage: '',
+                  })
+                }
+              </Label>
             }
           </>
         )
@@ -432,7 +437,14 @@ function User() {
         customBodyRender: (value, tableMeta, updateValue) => (
           <>
             {(userTypeMap[value] != undefined) &&
-              < Label color={userTypeMap[value].color}>{userTypeMap[value]["label"][languageType]}</Label>
+              < Label color={userTypeMap[value].color}>
+                {
+                  intl.formatMessage({
+                    id: userTypeMap[value]["label"],
+                    defaultMessage: '',
+                  })
+                }
+              </Label>
             }
           </>
         )
