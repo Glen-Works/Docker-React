@@ -25,23 +25,15 @@ import { useAuthStateContext } from 'src/contexts/AuthContext';
 import { useAuthMenuContext } from 'src/contexts/AuthMenuContext';
 import { useLanguageContext } from 'src/contexts/LanguageContext';
 import { validAuthMenuFeature } from 'src/middleware/authMenuMiddleware';
+import { MapStyleBase, statusMap } from 'src/utils/baseFunction';
 import { notifyError, notifySuccess } from 'src/utils/notificationFunction';
 import MenuAddAndEditDialog from './MenuAddAndEditDialog';
 import MenuSearch from './MenuSearch';
 
-export interface MapStyle {
-  [key: number | string]: { label: string, color: "primary" | "secondary" | "error" | "black" | "warning" | "success" | "info" }
-}
-
-const statusMap: MapStyle = {
-  0: { label: '停用', color: 'error' },
-  1: { label: '啟用', color: 'primary' }
-}
-
-const featureMap: MapStyle = {
-  'T': { label: '標題', color: 'black' },
-  'P': { label: '頁面', color: 'primary' },
-  'F': { label: '按鍵功能', color: 'secondary' }
+const featureMap: MapStyleBase = {
+  'T': { label: { "es-US": 'title', "zh-CN": '标题', "zh-TW": '標題' }, color: 'black' },
+  'P': { label: { "es-US": 'page', "zh-CN": '页面', "zh-TW": '頁面' }, color: 'primary' },
+  'F': { label: { "es-US": 'feature', "zh-CN": '按键功能', "zh-TW": '按鍵功能' }, color: 'secondary' }
 }
 
 export interface MenuListSelect {
@@ -373,7 +365,7 @@ function Menu() {
         customBodyRender: (value, tableMeta, updateValue) => (
           <>
             {(featureMap[value]) &&
-              < Label color={featureMap[value].color}>{featureMap[value].label}</Label>
+              < Label color={featureMap[value].color}>{featureMap[value]["label"][languageType]}</Label>
             }
           </>
         )
@@ -390,7 +382,7 @@ function Menu() {
         customBodyRender: (value, tableMeta, updateValue) => (
           <>
             {(statusMap[value]) &&
-              < Label color={statusMap[value].color}>{statusMap[value].label}</Label>
+              < Label color={statusMap[value].color}>{statusMap[value]["label"][languageType]}</Label>
             }
           </>
         )

@@ -3,12 +3,14 @@ import { useIntl } from "react-intl";
 import DataTableDialog from "src/components/DataTable/DataTableDialog";
 import DialogFormat from "src/components/Dialog/DialogFormat";
 import TextArea from "src/components/Input/TextArea";
-import { MapStyle, MenuListSelect } from ".";
+import { useLanguageContext } from "src/contexts/LanguageContext";
+import { MapStyleBase } from "src/utils/baseFunction";
+import { MenuListSelect } from ".";
 
 
 interface MenuAddAndEditDialogProp {
   menuListMap: MenuListSelect[],
-  featureMap: MapStyle,
+  featureMap: MapStyleBase,
   selectedId: number,
   addAndEditStatus: string,
   addAndEditOpen: boolean,
@@ -23,6 +25,9 @@ interface MenuAddAndEditDialogProp {
 }
 
 export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
+  const intl = useIntl();
+  const languageType = useLanguageContext().state;
+
   const {
     menuListMap,
     featureMap,
@@ -38,8 +43,6 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
     getMenuValue,
     menuErrors,
   } = props;
-
-  const intl = useIntl();
 
   return (
     <DataTableDialog
@@ -144,7 +147,7 @@ export default function MenuAddAndEditDialog(props: MenuAddAndEditDialogProp) {
           >
             {Object.keys(featureMap).map((value) => (
               <MenuItem key={value} value={value}>
-                {featureMap[value].label}
+                {featureMap[value]["label"][languageType]}
               </MenuItem>
             ))
             }

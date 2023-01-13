@@ -1,4 +1,4 @@
-import { laguageMap } from "src/layouts/SidebarLayout/Header/LanguageBox";
+import { LanguageType } from "src/stores/reducer/languageReducer";
 
 const getTextLabelsEn = () => ({
   body: {
@@ -105,12 +105,16 @@ const getTextLabelsCn = () => ({
   }
 });
 
-const datatableLabelsMap = {
-  "en": getTextLabelsEn(),
-  "tw": getTextLabelsTw(),
-  "cn": getTextLabelsCn(),
+type MapStyle = {
+  [key in LanguageType]: (lang: string) => void;
+};
+
+const datatableLabelsMap: MapStyle = {
+  "es-US": getTextLabelsEn,
+  "zh-CN": getTextLabelsCn,
+  "zh-TW": getTextLabelsTw,
 }
 
 export const getTextLabelsByLang = (lang: string) => {
-  return datatableLabelsMap[laguageMap[lang].value];
+  return datatableLabelsMap[lang]();
 }

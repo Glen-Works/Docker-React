@@ -1,3 +1,4 @@
+import { LanguageType } from "src/stores/reducer/languageReducer";
 import Cookies from "universal-cookie";
 
 export function getKeyByValue(object, value) {
@@ -52,3 +53,14 @@ export function validEmail(email: string): boolean {
   const expression: RegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
   return expression.test(email);
 }
+
+
+export interface MapStyleBase {
+  [key: number | string]: { label: { [language in LanguageType]: string }, color: "primary" | "secondary" | "error" | "black" | "warning" | "success" | "info" }
+}
+
+export const statusMap: MapStyleBase = {
+  0: { label: { "es-US": 'disabled', "zh-CN": '停用', "zh-TW": '停用' }, color: 'error' },
+  1: { label: { "es-US": 'enable', "zh-CN": '启用', "zh-TW": '啟用' }, color: 'primary' }
+}
+

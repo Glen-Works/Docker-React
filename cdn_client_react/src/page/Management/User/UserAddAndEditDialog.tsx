@@ -3,7 +3,9 @@ import { useIntl } from "react-intl";
 import DataTableDialog from "src/components/DataTable/DataTableDialog";
 import DialogFormat from "src/components/Dialog/DialogFormat";
 import TextArea from "src/components/Input/TextArea";
-import { MapStyle, RoleListSelect } from ".";
+import { useLanguageContext } from "src/contexts/LanguageContext";
+import { MapStyleBase } from "src/utils/baseFunction";
+import { RoleListSelect } from ".";
 
 interface UserAddAndEditDialogProp {
   selectedId: number,
@@ -12,7 +14,7 @@ interface UserAddAndEditDialogProp {
   setRoleCheckBoxSelected: (value: number[]) => void,
   addAndEditStatus: string,
   addAndEditOpen: boolean,
-  userTypeMap: MapStyle,
+  userTypeMap: MapStyleBase,
   handleAddAndEditClose: () => void,
   submitAddUser: (formObj, event) => void,
   submitEditUser: (formObj, event) => void,
@@ -24,6 +26,10 @@ interface UserAddAndEditDialogProp {
 }
 
 export default function UserAddAndEditDialog(props: UserAddAndEditDialogProp) {
+
+  const intl = useIntl();
+  const languageType = useLanguageContext().state;
+
   const {
     selectedId,
     roleListSelect,
@@ -41,8 +47,6 @@ export default function UserAddAndEditDialog(props: UserAddAndEditDialogProp) {
     getUserValue,
     userErrors,
   } = props;
-
-  const intl = useIntl();
 
   function getOnChange(checked: boolean, id: number) {
     let selectItems = checked
@@ -215,7 +219,7 @@ export default function UserAddAndEditDialog(props: UserAddAndEditDialogProp) {
             >
               {Object.keys(userTypeMap).map((value) => (
                 <MenuItem key={value} value={value}>
-                  {userTypeMap[value].label}
+                  {userTypeMap[value]["label"][languageType]}
                 </MenuItem>
               ))
               }

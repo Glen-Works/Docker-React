@@ -25,19 +25,10 @@ import { useAuthStateContext } from 'src/contexts/AuthContext';
 import { useAuthMenuContext } from 'src/contexts/AuthMenuContext';
 import { useLanguageContext } from 'src/contexts/LanguageContext';
 import { MenuTree, validAuthMenuFeature } from 'src/middleware/authMenuMiddleware';
-import { makeRecursionTree } from 'src/utils/baseFunction';
+import { makeRecursionTree, statusMap } from 'src/utils/baseFunction';
 import { notifyError, notifySuccess } from 'src/utils/notificationFunction';
 import RoleAddAndEditDialog from './RoleAddAndEditDialog';
 import RoleSearch from './RoleSearch';
-
-interface MapStyle {
-  [key: number]: { label: string, color: "primary" | "secondary" | "error" | "black" | "warning" | "success" | "info" }
-}
-
-const statusMap: MapStyle = {
-  0: { label: '停用', color: 'error' },
-  1: { label: '啟用', color: 'primary' }
-}
 
 interface RoleData {
   name: string,
@@ -353,7 +344,7 @@ function Role() {
         customBodyRender: (value, tableMeta, updateValue) => (
           <>
             {(statusMap[value]) &&
-              < Label color={statusMap[value].color}>{statusMap[value].label}</Label>
+              < Label color={statusMap[value].color}>{statusMap[value]["label"][languageType]}</Label>
             }
           </>
         )

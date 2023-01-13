@@ -3,6 +3,8 @@ import { getCookie, setCookie } from 'src/utils/baseFunction';
 const COOKIE_LANGUAGE_TYPE = "LANGUAGE_TYPE";
 export const DEFAULT_LANGUAGE_TYPE = "zh-TW";
 
+export type LanguageType = "es-US" | "zh-CN" | "zh-TW";
+
 //儲存 cookie 語言資訊
 export const setCookieLanguageType = (type: string) => {
     setCookie(COOKIE_LANGUAGE_TYPE, type);

@@ -26,24 +26,19 @@ import { useAuthStateContext } from 'src/contexts/AuthContext';
 import { useAuthMenuContext } from 'src/contexts/AuthMenuContext';
 import { useLanguageContext } from 'src/contexts/LanguageContext';
 import { validAuthMenuFeature } from 'src/middleware/authMenuMiddleware';
+import { MapStyleBase, statusMap } from 'src/utils/baseFunction';
 import { notifyError, notifySuccess } from 'src/utils/notificationFunction';
 import UserAddAndEditDialog from './UserAddAndEditDialog';
 import UserEditPasswordDialog from './UserEditPasswordDialog';
 import UserSearch from './UserSearch';
 
-export interface MapStyle {
-  [key: number]: { label: string, color: "primary" | "secondary" | "error" | "black" | "warning" | "success" | "info" }
+
+const userTypeMap: MapStyleBase = {
+  1: { label: { "es-US": 'manager', "zh-CN": '管理者', "zh-TW": '管理者' }, color: 'primary' },
+  2: { label: { "es-US": 'user', "zh-CN": '一般使用者', "zh-TW": '一般使用者' }, color: 'secondary' }
 }
 
-const userTypeMap: MapStyle = {
-  1: { label: '管理者', color: 'primary' },
-  2: { label: '一般使用者', color: 'secondary' }
-}
 
-const statusMap: MapStyle = {
-  0: { label: '停用', color: 'error' },
-  1: { label: '啟用', color: 'primary' }
-}
 
 export interface RoleListSelect {
   id: number,
@@ -420,7 +415,7 @@ function User() {
         customBodyRender: (value, tableMeta, updateValue) => (
           <>
             {(statusMap[value]) &&
-              < Label color={statusMap[value].color}>{statusMap[value].label}</Label>
+              < Label color={statusMap[value].color}>{statusMap[value]["label"][languageType]}</Label>
             }
           </>
         )
@@ -437,7 +432,7 @@ function User() {
         customBodyRender: (value, tableMeta, updateValue) => (
           <>
             {(userTypeMap[value] != undefined) &&
-              < Label color={userTypeMap[value].color}>{userTypeMap[value].label}</Label>
+              < Label color={userTypeMap[value].color}>{userTypeMap[value]["label"][languageType]}</Label>
             }
           </>
         )
