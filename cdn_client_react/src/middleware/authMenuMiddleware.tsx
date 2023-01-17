@@ -105,7 +105,7 @@ export const validAuthMenuFeature = (menuList: Menu[], key: string): boolean => 
 export const getAuthMenu = async (auth: Auth): Promise<Menu[]> => {
 
     let menuList: Menu[];
-    await api("get", "/api/v1/auth/menu", setAuthHeader(auth), null)
+    await api("get", "/v1/auth/menu", setAuthHeader(auth), null)
         .then(res => {
             menuList = res.data;
         })

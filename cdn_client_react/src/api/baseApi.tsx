@@ -6,7 +6,7 @@ const devBaseURL = process.env.REACT_APP_DEVELOP_BASEURL;
 const proBaseURL = process.env.REACT_APP_PRODUCTION_BASE_URL;
 const baseUrl = process.env.NODE_ENV === 'development' ? devBaseURL : proBaseURL;
 
-export const fileURL = baseUrl + "/file/"
+// export const fileURL = baseUrl + "/file/"
 // export const pageSizeOption = process.env.REACT_APP_PAGE_SIZE.split(",").map(Number);
 
 export const pageSizeOption = () => {

@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useReducer, useState } from "react";
 import { IntlProvider } from "react-intl";
-import api from "src/api/baseApi";
 import { laguageMap } from "src/layouts/SidebarLayout/Header/LanguageBox";
 import { DEFAULT_LANGUAGE_TYPE, initialLanguageState, languageReducer } from "src/stores/reducer/languageReducer";
 
@@ -12,12 +11,19 @@ export default function LanguageState({ children }: any) {
     const [lang, setLang] = useState(null);
     useEffect(() => {
         const fetchData = async () => {
-            const url = process.env.NODE_ENV === 'development' ? process.env.REACT_APP_DYNAMIC_UPDATE_BASEURL : process.env.REACT_APP_PRODUCTION_BASE_URL;
-            await api("get", `${url}/static/lang/${laguageMap[state].value}.json`, {}, null).then(res => {
-                setLang(res);
-            }).catch(error => {
-                console.log("error:" + error.response);
-            });
+            const url = process.env.NODE_ENV === 'development' ? process.env.REACT_APP_DYNAMIC_UPDATE_BASEURL : "";
+            await fetch(`${url}/static/lang/${laguageMap[state].value}.json`)
+                .then(res => res.json())
+                .then(data => {
+                    setLang(data);
+                }).catch(error => {
+                    console.log("error:" + error.response);
+                });
+            // await api("get", `${url}/static/lang/${laguageMap[state].value}.json`, {}, null).then(res => {
+            //     setLang(res);
+            // }).catch(error => {
+            //     console.log("error:" + error.response);
+            // });
         };
         fetchData();
 
