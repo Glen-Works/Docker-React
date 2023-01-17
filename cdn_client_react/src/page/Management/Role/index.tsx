@@ -458,6 +458,7 @@ function Role() {
     count: count,
     rowsPerPage: limit,
     rowsPerPageOptions: pageSizeOption(),
+    jumpToPage: true,
     sortOrder: { name: sortColumn, direction: sort },
 
     onRowsDelete: onMultipleDelete,
