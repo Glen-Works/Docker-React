@@ -8,12 +8,12 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from "react-hook-form";
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useNavigate } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
-import { loginApi } from 'src/api/Login/loginApi';
+import { loginApi, loginCaptchaApi } from 'src/api/Login/loginApi';
 import { useAlertContext } from "src/contexts/AlertContext";
 import { useAuthStateContext } from 'src/contexts/AuthContext';
 import { jwtValidate } from 'src/middleware/jwtAuthMiddleware';
@@ -23,7 +23,15 @@ import { notifyError } from 'src/utils/notificationFunction';
 interface LoginInfo {
   account: string,
   password: string,
+  captcha: string,
+  captchaId: string,
   remember: string
+}
+
+interface CaptchaInfo {
+  sensitive: boolean,
+  key: string,
+  img: string
 }
 
 // todo 記得密碼、註冊
@@ -35,11 +43,18 @@ export default function Login() {
 
   const navigate = useNavigate();
   const { state, dispatch } = useAuthStateContext();
+
+  const [capchaInfo, setCapchaInfo] = useState<CaptchaInfo>({
+    sensitive: false,
+    key: "",
+    img: ""
+  });
   const { register, handleSubmit, setValue, getValues, watch, formState: { errors } } = useForm(
     {
       defaultValues: {
         account: "",
         password: "",
+        captcha: "",
         remember: "",
       }
     });
@@ -58,6 +73,7 @@ export default function Login() {
     };
 
     fetchData().then(async () => {
+      getCaptcha();
       //從Storage 提取帳密與狀態
       const data = secureLocalStorage.getItem(COOKIE_USER_ACCOUNT_REMEMBER);
       if (typeof data === "object" && data != null) {
@@ -70,11 +86,23 @@ export default function Login() {
 
   useEffect(() => { }, [watch()]);
 
+  //
+  function getCaptcha() {
+    loginCaptchaApi()?.then(res => {
+      setCapchaInfo(res.data?.captcha);
+    }).catch(error => {
+      notifyError(intl, actions, error.response?.data?.message);
+      //console.log("error:" + error.response?.data?.message);
+    });
+  }
+
   //login submit 
   const onFormSubmit = (formObj, event) => {
     var loginData: LoginInfo = {
       account: getValues("account"),
       password: getValues("password"),
+      captcha: getValues("captcha"),
+      captchaId: capchaInfo.key,
       remember: getValues("remember"),
     }
 
@@ -188,6 +216,44 @@ export default function Login() {
           error={!!errors?.password}
           helperText={errors?.password ? errors.password.message : null}
         />
+        <Grid container sx={{ mt: 1 }} alignItems="center" columnSpacing={4}>
+          <Grid item xs>
+            <TextField
+              margin="normal"
+              fullWidth
+              name="captcha"
+              id="captcha"
+              value={getValues("captcha")}
+              // autoComplete="current-captcha"
+              label={
+                intl.formatMessage({
+                  id: 'page.login.valid.code',
+                  defaultMessage: '驗證碼',
+                })
+              }
+              {...register("captcha", {
+                required: intl.formatMessage({
+                  id: 'error.required',
+                  defaultMessage: '必填欄位',
+                }),
+              })}
+              error={!!errors?.captcha}
+              helperText={errors?.captcha ? errors.captcha.message : null}
+            />
+          </Grid>
+          <Grid item>
+            <Button
+              onClick={() => { getCaptcha() }}
+              sx={{
+                backgroundImage: `url(${capchaInfo.img})`,
+                height: '45px',
+                width: '125px'
+              }}
+            >
+            </Button>
+          </Grid>
+        </Grid>
+
         <FormControlLabel
           control={
             <Checkbox
